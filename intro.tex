@@ -23,20 +23,20 @@
 
 % from https://hbfs.wordpress.com/2011/01/18/epigraphs-in-latex/
 % epigraph with 3 params: width, text, author
-\newcommand{\epigraph}[3]{
-\vspace{1em}\hfill{}\begin{minipage}{#1}{\begin{spacing}{0.9}
-\small\noindent\textit{#2}\end{spacing}
-\vspace{1em}
-\hfill{}{#3}}\vspace{2em}
-\end{minipage}}
-\epigraph{.8\textwidth}{
-  I regard as quite useless the reading of
-  large treatises of pure analysis:
-  too large a number of methods pass at once before the eyes.
-  It is in the works of applications that one must study them;
-  one judges their ability there and
-  one apprises the manner of making use of them.}{
-  --- Joseph Louis Lagrange}
+% \newcommand{\epigraph}[3]{
+% \vspace{1em}\hfill{}\begin{minipage}{#1}{\begin{spacing}{0.9}
+% \small\noindent\textit{#2}\end{spacing}
+% \vspace{1em}
+% \hfill{}{#3}}\vspace{2em}
+% \end{minipage}}
+% \epigraph{.8\textwidth}{
+%   I regard as quite useless the reading of
+%   large treatises of pure analysis:
+%   too large a number of methods pass at once before the eyes.
+%   It is in the works of applications that one must study them;
+%   one judges their ability there and
+%   one apprises the manner of making use of them.}{
+%   --- Joseph Louis Lagrange}
 
 \noindent
 In the history of natural sciences,
@@ -68,8 +68,7 @@ is contained in the energy function.
 This approach first appeared in the work of
 \citet{lagrange2} and \citet{hamilton}.
 It endowed the description of a dynamical system in classical mechanics
-with a remarkable conciseness, simplicity and elegance. % :
-% just one function could describe the entirety of the system.
+with a remarkable conciseness, simplicity and elegance.
 The kinetic description can then be derived from this energy function.
 However the opposite is not true:
 in general a kinetic description might not have an energy function
