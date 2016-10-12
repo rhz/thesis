@@ -1,0 +1,46 @@
+% this needs package epigraph
+% \setlength{\epigraphwidth}{.8\textwidth}
+% \setlength{\epigraphrule}{0pt}
+% \epigraph{
+%   I regard as quite useless the reading of
+%   large treatises of pure analysis:
+%   too large a number of methods pass at once before the eyes.
+%   It is in the works of applications that one must study them;
+%   one judges their ability there and
+%   one apprises the manner of making use of them.}{
+%   --- Joseph Louis Lagrange}
+
+% \begin{quotation}
+%   \textit{
+%     ``I regard as quite useless the reading of
+%     large treatises of pure analysis:
+%     too large a number of methods pass at once before the eyes.
+%     It is in the works of applications that one must study them;
+%     one judges their ability there and
+%     one apprises the manner of making use of them.''} \\
+%   \par\raggedleft--- Joseph Louis Lagrange
+% \end{quotation}
+
+% from https://hbfs.wordpress.com/2011/01/18/epigraphs-in-latex/
+% epigraph with 3 params: width, text, author
+\newcommand{\epigraph}[3]{
+\vspace{1em}\hfill{}\begin{minipage}{#1}{\begin{spacing}{0.9}
+\small\noindent\textit{#2}\end{spacing}
+\vspace{1em}
+\hfill{}{#3}}\vspace{2em}
+\end{minipage}}
+\epigraph{.8\textwidth}{
+  I regard as quite useless the reading of
+  large treatises of pure analysis:
+  too large a number of methods pass at once before the eyes.
+  It is in the works of applications that one must study them;
+  one judges their ability there and
+  one apprises the manner of making use of them.}{
+  --- Joseph Louis Lagrange}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
+
