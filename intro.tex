@@ -1,0 +1,158 @@
+% this needs package epigraph
+% \setlength{\epigraphwidth}{.8\textwidth}
+% \setlength{\epigraphrule}{0pt}
+% \epigraph{
+%   I regard as quite useless the reading of
+%   large treatises of pure analysis:
+%   too large a number of methods pass at once before the eyes.
+%   It is in the works of applications that one must study them;
+%   one judges their ability there and
+%   one apprises the manner of making use of them.}{
+%   --- Joseph Louis Lagrange}
+
+% \begin{quotation}
+%   \textit{
+%     ``I regard as quite useless the reading of
+%     large treatises of pure analysis:
+%     too large a number of methods pass at once before the eyes.
+%     It is in the works of applications that one must study them;
+%     one judges their ability there and
+%     one apprises the manner of making use of them.''} \\
+%   \par\raggedleft--- Joseph Louis Lagrange
+% \end{quotation}
+
+% from https://hbfs.wordpress.com/2011/01/18/epigraphs-in-latex/
+% epigraph with 3 params: width, text, author
+\newcommand{\epigraph}[3]{
+\vspace{1em}\hfill{}\begin{minipage}{#1}{\begin{spacing}{0.9}
+\small\noindent\textit{#2}\end{spacing}
+\vspace{1em}
+\hfill{}{#3}}\vspace{2em}
+\end{minipage}}
+\epigraph{.8\textwidth}{
+  I regard as quite useless the reading of
+  large treatises of pure analysis:
+  too large a number of methods pass at once before the eyes.
+  It is in the works of applications that one must study them;
+  one judges their ability there and
+  one apprises the manner of making use of them.}{
+  --- Joseph Louis Lagrange}
+
+\noindent
+In the history of natural sciences,
+there has been two main approaches to describe dynamical systems:
+\emph{Kinetics} and \emph{Thermodynamics}.
+The former goes all the way back to
+Newton's laws of motion~\citep{newton}.
+% In particular, the second law of motion describes
+% how these forces translate into the second derivative of
+% the position of the particles over time, \ie their acceleration.
+Broadly speaking, in the kinetic approach we describe the forces
+acting on each particle at every point in time.
+The net force determines how
+the position of the particle changes over time.
+The fact this net force can be decomposed into separate forces
+that can be measured independently is very useful in practice,
+\eg the gravitational force on an object does not depend on
+the other forces acting on that object.
+% In a way this is the most detailed description
+% that we can have at the level of point particles.
+
+% On the other hand,
+In the thermodynamic approach
+% the movement and transformation of particles
+% is represented in the energy function of the system.
+% is seen as a consequence of the minimisation of the energy of the system.
+all information concerning the system and the forces acting on it
+is contained in the energy function.
+This approach first appeared in the work of
+\citet{lagrange2} and \citet{hamilton}.
+It endowed the description of a dynamical system in classical mechanics
+with a remarkable conciseness, simplicity and elegance. % :
+% just one function could describe the entirety of the system.
+The kinetic description can then be derived from this energy function.
+However the opposite is not true:
+in general a kinetic description might not have an energy function
+from which it can be derived in the classical framework.
+This is because thermodynamics puts restrictions on possible processes.
+The specifics of this correspondence have been described
+in detail by . % FIXME: cite
+
+Later on in the history of natural sciences,
+% when chemistry started to become a quantitative science,
+the dynamics of gas compression and expansion
+and its relation to heat was established.
+% also came in the two variants.
+First came the Kinetic theory of gases by . % FIXME: cite
+% First the Kinetic theory of gases was developed by .
+This theory single-handledly gave birth to
+the field of statistical mechanics. % TODO: check stat mech wiki page
+% Is the kinetic theory of gases the one that has two sides?
+% The equations that link energy, entropy, temperature, pressure,
+% volume and so on are part of that theory?
+Then the laws of thermodynamics came about
+to describe the macro behaviour of systems
+with an underlying energy function. % TODO: check this please
+Similarly to classical mechanics,
+in the thermodynamic approach to statistical mechanics
+some processes are improbable and some outright impossible.
+
+% Later still,
+Half a century had passed since the publication of
+the Kinetic theory of gases and 
+a formal language to describe chemical reaction systems
+% came to be by the hand of Petri
+was invented by Petri. % FIXME: cite
+% the description of dynamical reaction systems
+% was also done in both ways.
+This language, later called Petri nets,
+would define a reaction as a transformation of
+multisets of chemical species.
+% What happens historically between the invention of Petri nets
+% and an algorithm to simulate them?
+% When can we start talking about the two approaches in Petri nets?
+In this framework we find the two approaches too:
+SSA and Metropolis-Hastings...
+
+However, Petri nets as a language for describing chemical reactions
+has limitations when we take into consideration
+how chemistry actually works.
+It's an abstraction that leaks because it doesn't fully cover
+the underlying phenomena.
+In the world of (non-radioactive) chemical reactions
+atoms do not transform,
+they just change their partners with whom they share their electrons.
+It's all about atom binding and unbinding,
+establishing connections and breaking them.
+
+More recently,
+a formal language to describe biochemical interactions
+where molecules not just react but can also bind other molecules
+non-covalently has been created by . % FIXME: cite
+
+In this work, we are interested in the correspondence between
+the kinetic and thermodynamic descriptions of graph rewriting.
+Graph rewriting is ...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
+

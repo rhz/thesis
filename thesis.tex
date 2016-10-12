@@ -1,0 +1,363 @@
+\documentclass[phd,lfcs]{infthesis}
+% \documentclass[phd,lfcs,twoside]{infthesis}
+% \documentclass{report}
+
+% \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[british]{babel}
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+% \usepackage{natbib}
+\usepackage[natbibapa]{apacite}
+\usepackage{hyperref}
+\usepackage{mathcommon}
+\usepackage{wrapfig}
+\usepackage{graphicx}
+\usepackage{xfrac}
+\usepackage{textcomp}
+\usepackage{spacing}
+% \usepackage{epigraph}
+% \usepackage{gnuplot-lua-tikz}
+% \usepackage{kappa}
+% \usepackage{kappalistings}
+
+% Text
+\newcommand{\ie}{i.e.}
+\newcommand{\eg}{e.g.}
+
+% Referencing
+\newcommand{\chp}[1]{\S\ref{chp:#1}}
+\newcommand{\sct}[1]{\S\ref{sec:#1}}
+\newcommand{\subsct}[1]{\S\ref{subsec:#1}}
+\newcommand{\eqn}[1]{Eq.~\ref{eq:#1}}
+\newcommand{\eqns}[2]{Eq. \ref{eq:#1} and \ref{eq:#2}}
+\newcommand{\lem}[1]{Lemma~\ref{lemma:#1}}
+\newcommand{\lems}[2]{Lemmas \ref{lemma:#1} and \ref{lemma:#2}}
+\newcommand{\thm}[1]{Th.~\ref{thm:#1}}
+\newcommand{\fig}[1]{Fig.~\ref{fig:#1}}
+\newcommand{\diagram}[1]{diagram~\ref{eq:#1}}
+\newcommand{\app}[1]{Appendix~\ref{app:#1}}
+\newcommand{\mcite}[1]{\textcolor{gray}{#1}} % missing cite
+
+% Thermodynamic graph rewriting
+\newcommand{\rules}{\mathcal{R}}
+\newcommand{\generators}{\mathcal{G}}
+\newcommand{\shapes}{\mathcal{P}}
+\newcommand{\cost}{\epsilon} % \varepsilon is the same with this font
+% TODO: should I enclose the result of \refinedrules in parenthesis?
+\newcommand{\refinedrules}{\generators_\shapes}
+\newcommand{\gp}{\Gamma}
+
+% Labelled transition systems
+\newcommand{\LTS}{\mathcal{L}}
+
+% Markov chains
+% \newcommand{\statespace}{\mathcal{S}}
+% \newcommand{\M}{P} % discrete-time probability matrix
+% \newcommand{\Mrev}{P_\pi} % reversible probability matrix
+% \newcommand{\MC}{\mathcal{M}} % Markov chain
+
+% Petri nets
+\newcommand{\species}{\mathcal{A}}
+\newcommand{\reactions}{\mathcal{R}}
+
+% Cooperative assembly systems
+\newcommand{\valence}{\nu} %\upsilon}
+\newcommand{\types}{\mathcal{T}} % set of types
+\newcommand{\type}{t} % a type (variable)
+\newcommand{\typeof}{\tau} % map from nodes to types
+\newcommand{\degree}{d}
+
+% FB-systems
+\newcommand{\sitesof}{\sigma}
+\newcommand{\emptyvec}{\varnothing}
+\newcommand{\neighbours}{\vec{n}}
+\newcommand{\sitestates}{\vec{s}}
+\newcommand{\sitestatesof}{\iota}
+\newcommand{\neighboursof}{\eta}
+
+% Kappa
+\newcommand{\edges}{\mathcal{E}}
+\newcommand{\SG}{\mathbf{SG}}
+\newcommand{\SGe}{\mathbf{SGe}}
+\newcommand{\rSGe}{\mathbf{rSGe}}
+\newcommand{\anon}[1]{\left|#1\right|}
+
+% Category theory
+\newcommand{\homset}{\Upsilon}
+\newcommand{\mSet}{\mathbf{mSet}}
+\newcommand{\Set}{\mathbf{Set}}
+\newcommand{\iso}{\simeq}
+
+% Triangles
+\newcommand{\cyc}[1]{{}\cdot #1 \cdot{}}
+
+% Math
+\renewcommand{\tuple}[1]{\left(#1\right)}
+\DeclareMathOperator*{\expn}{exp}
+\renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
+\newcommand{\partialto}{\rightharpoonup}
+\newcommand{\id}{\vec{1}} % identity function
+
+% Other stuff
+\newcommand{\maybe}[1]{\textcolor{gray}{#1}}
+% \renewcommand{\maybe}[1]{}
+\newcommand{\todo}[1]{\textcolor{red}{TODO: #1}}
+% \renewcommand{\todo}[1]{}
+
+% Styles for nodes
+\tikzstyle{n}=[circle,draw=Black] %,thick,minimum size=6pt,inner sep=0pt]
+\tikzstyle{n1}=[n,fill=Orange]
+\tikzstyle{n2}=[n,fill=Blue!60!White]
+\tikzstyle{n3}=[n,fill=Green!40!White] % Green!40!Ocre?
+\tikzstyle{n4}=[n,fill=White!95!Black]
+\tikzstyle{n5}=[n,fill=White]
+\tikzstyle{n6}=[n,fill=Black]
+\tikzstyle{n7}=[n,fill=Yellow!50!White]
+\tikzstyle{p}=[n,draw=none] % phantom
+\tikzstyle{e}=[thick]
+\tikzstyle{rule}=[thick,->,>=angle 90]
+\tikzstyle{onarrow}=[fill=White,inner sep=2pt]
+\tikzstyle{site}=[n7,inner sep=1.5pt]
+
+% Binding types
+\tikzstyle{bt1}=[n1,dashed,inner sep=3.5pt]
+\tikzstyle{bt2}=[n2,dashed,inner sep=3.5pt]
+\tikzstyle{bt3}=[n3,dashed,inner sep=3.5pt]
+
+% Background box for graph diagrams
+\tikzstyle{grphdiag-bg}=[rounded corners,fill=White!85!Black]
+
+% Graph diagrams
+\tikzstyle{grphnode}=[rectangle,grphdiag-bg]
+% \tikzstyle{ingrphdiag}=[>=stealth,thick,semithick,
+%   n/.append style={semithick,minimum size=4pt}]
+\tikzstyle{ingrphdiag}=[thick,anchor=center]
+
+% Use different arrow tips to distinguish edges from morphism
+% and a light gray backdrop.
+\usetikzlibrary{backgrounds}
+\tikzstyle{grphdiag}=[>=stealth,framed,thick,%
+  background rectangle/.style=grphdiag-bg]
+
+% Draw a node
+\newcommand{\n}[3][n]{\node[inner sep=5pt,#1] (#2) at (#3) {}}
+\newcommand{\nn}[4][n]{\node[inner sep=3.5pt,#1] (#2) at (#3) {#4}}
+% \renewcommand{\site}[3][n7]{\node[inner sep=1.5pt,#1] (#2) at (#3) {}}
+
+% Draw an edge
+\newcommand{\e}[3][e]{\draw[#1] (#2) -- (#3)}
+
+% Draw a directed edge
+\newcommand{\de}[3][e]{\draw (#2) edge[->,#1] (#3)}
+
+% Draw a bi-directional rule
+\newcommand{\birulearrow}[2]{\hspace{1ex}\tikz{%
+  \draw[rule] (0, .15) -- node[above] {#1} ++( .5, 0);
+  \draw[rule] (.5,  0) -- node[below] {#2} ++(-.5, 0);
+}\hspace{1ex}}
+
+% Arrows in minimal gluings diagram
+\newcommand{\arrsn}[3][]{\arr[#1]{#2.south}{#3.north}}
+\newcommand{\arr}[3][]{%
+  \draw[-bigto,#1] ($(#2)!.1!(#3)$) -- ($(#2)!.9!(#3)$);}
+
+% Header
+\title{Thermodynamic graph rewriting}
+\author{Ricardo Honorato-Zimmer}
+
+% Abstract
+\abstract{
+  We develop a new thermodynamic approach to stochastic graph rewriting.
+  The ingredients are a finite set of reversible
+  graph rewriting rules $\generators$ (called generating rules),
+  a finite set of connected graphs $\shapes$ (called energy patterns),
+  and an energy cost function $\cost$
+  which associates real values to each of these energy patterns.
+  % 
+  The idea is that $\generators$ defines the qualitative dynamics,
+  by showing which transformations are possible,
+  while $\shapes$ and $\cost$ allow one to attach an energy
+  to the reachable graphs and, thereby,
+  describe their long-term probability distribution $\pi$.
+  % 
+  Given $\generators$ and $\shapes$,
+  we construct a finite set of rules $\generators_{\shapes}$ which
+  (i) has the same qualitative transition system as $\generators$; and
+  (ii) when equipped with rates according to $\cost$,
+  defines a continuous-time Markov chain of which $\pi$ is
+  the \emph{stationary} and \emph{limiting} probability distribution.
+  % 
+  The construction relies on the use of site graphs and
+  a technique of `growth policy' for quantitative rule refinement.
+  % which is of independent interest.
+  % 
+  % Nothing else is assumed of $\generators$ or $\shapes$,
+  % and only the rates on the generated rule set $\generators_{\shapes}$
+  % depend on $\cost$.
+
+  This division of labour between the qualitative and long-term
+  quantitative aspects of the dynamics leads to intuitive and concise
+  descriptions for realistic models.
+  % 
+  It also guarantees thermodynamical consistency
+  (\emph{aka} detailed balance),
+  otherwise known to be undecidable.
+  % which is important for some applications.
+  % 
+  Finally, it leads to parsimonious parameterisations of models,
+  % again an important point in some applications.
+  an important point in the application of stochastic graph rewriting
+  to the modelling of biochemical interaction networks.
+}
+
+\begin{document}
+
+%% First, the preliminary pages
+\begin{preliminary}
+
+\maketitle
+
+\if0
+\begin{acknowledgements}
+  I'm really thankful to everyone that's helped me along the way.
+  It's been a marvelous journey with all its highs and lows and so much learning.
+  This experience has made me feel alive and transformed me in so many ways.
+
+  Vincent, I'd like to thank you first for having me in your group.
+  For having patiently taught me so many things from math to good life lessons.
+  Thank you for blowing my mind so many times
+  with your brilliant ideas and ways to look at things.
+  Thank you for sharing your time with me
+  and having faith in me even when things didn't look good.
+
+  Renate y Ricardo, muchas gracias por haberme dado la vida, por haberme criado,
+  por haberme enseñado y nutrido de tan buenas ideas, creencias y alimentos.
+  Muchas gracias por haberse preocupado por mi en todo momento,
+  tanto por mi salud, como bienestar y desarrollo.
+  De m\'as est\'a decir, sin uds nada de esto habr\'ia sido posible.
+  Muchas gracias por ser los maravillosos padres que son.
+
+  Dani, muchas gracias por ser la maravillosa hermana que eres.
+  Como poner en palabras todas las cosas que hemos compartido
+  y todas las cosas que me has enseñado en toda esta vida juntos,
+  que me han formado y me han hecho en lo que soy.
+  Muchas gracias por tu eterna y sincera preocupacion por mi.
+  Te llevo siempre en mi corazon.
+
+  Froko, muchas gracias mi compañero de la vida
+  por todo el tiempo que hemos compartido,
+  por toda la invaluable compañia,
+  por todo el amor en los momentos dificiles
+  y por todas las cosas que gracias a ti he logrado comprender.
+  No hay suficientes palabras para decirte todo lo que te aprecio.
+
+  An\'ibal and Gr\'ainne, thank you so much guys for all the love
+  and good vibes in the good and bad moments of this journey.
+  It was amazing to share this time together
+  and having the comfort of your words and hugs with me.
+  Without your reassuring empathy I wouldn't have made it.
+
+  Mark, thank you so much
+  % for teaching me the good lessons and what life ultimately is all about.
+  for showing me the tools and techniques to open the heart
+  to the expected as well as the unexpected
+  and naturally find peace in doing so.
+  I could see all along how you embody this compassionate way of being
+  and that gave me the strength to start softening my own heart.
+  % for giving me tools that have given me some much needed space and freedom.
+  % Listening to you was challenging at the beginning
+  % but I could see all the time how you embody this compassionate way of being.
+  % but slowly started changing my life.
+
+  Sophie, Stuart, Ayleen and Susan, thank you so much guys for
+  being the great friends and flatmates that you were.
+  Thank you for the countless laughs and the support and love.
+  I'm so happy to have you guys in my life.
+
+  Philipp, thank you so much for the wonderful time together.
+
+  Seba,
+
+  Alejandro,
+
+  Claudia,
+
+  Sandro, thank you for patiently explaining me so many important things
+  and thank you for sharing your bright ideas with me.
+  Thank you so much for all the honest love.
+
+  Tobias, thank you so much for being so nice, soft and caring to me. % I needed it.
+  Thank you so much also for showing me some of your math wizardry,
+  I really appreaciate it.
+
+  William, thank you for the wonderful and insightful conversations. % sharing your knowledge and opinions
+  I really like having met you, having you in the group
+  and having you as one of my friends.
+
+  Illias,
+
+  Thank you very much to all the other people in the group
+  for the good vibes and good advise,
+  Milana, Andrea, Guoli, Matteo, Guillaume, Fredrik, Matthias, Nick,
+  Katharina, Emilia, David, Oksana, John, Hristiana,
+  Argyris, Andreea, Simon, Jean and J\'er\^ome.
+  Thanks also to Dr Alfred Hofmann and Dr Alexander Shulgin
+  for their life-changing inventions.
+\end{acknowledgements}
+\fi
+
+%% Next we need to have the declaration.
+\standarddeclaration
+
+%% Finally, a dedication (this is optional -- uncomment the following line if
+%% you want one).
+% \dedication{To my mummy.}
+
+%% Create the table of contents
+\tableofcontents
+
+%% If you want a list of figures or tables, uncomment the appropriate line(s)
+% \listoffigures
+% \listoftables
+
+\end{preliminary}
+
+\chapter{Introduction}
+\label{ch:intro}
+\input{intro}
+
+% \chapter{An energy function by design}
+% \chapter{Imposing an energy function}
+\if0
+\chapter{Energy-driven rewriting} % by design}
+\label{ch:energy}
+\input{energy}
+
+\chapter{Conclusions}
+\label{ch:conclusions}
+\input{conclusions}
+
+%% Appendix
+\appendix
+\chapter{Model: Assembling triangles}
+\label{app:triangles}
+\include{model}
+\fi
+
+%% Choose your favourite bibliography style here.
+\bibliographystyle{apacite}
+
+%% If you want the bibliography single-spaced (which is allowed), uncomment
+%% the next line.
+\singlespace
+
+%% Specify the bibliography file. Default is thesis.bib.
+\bibliography{thesis}
+
+%% ... that's all, folks!
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
