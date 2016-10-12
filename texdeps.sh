@@ -128,6 +128,8 @@ extract_filenames "${texfile}" 'includegraphics'  # Images
 imgs="${files}"
 extract_filenames "${texfile}" 'bibliography'     # Bibliography files
 bibs="${files}"
+extract_filenames "${texfile}" 'addbibresource'   # Bibliography files
+bibls="${files}"
 
 # Init the list of dependencies
 deps=""
@@ -145,6 +147,7 @@ for dir in "" "${texdir}/"; do
     filter_filelist "${dir}" "${imgs}" "" ".pdf" ".eps" ".jpg" \
         ".jpeg" ".png"
     filter_filelist "${dir}" "${bibs}" "" ".bib"
+    filter_filelist "${dir}" "${bibls}" "" ".bib"
 done
 
 # Output the dependency list in Makefile-format
