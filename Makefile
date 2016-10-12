@@ -27,8 +27,8 @@ PDFS = thesis.pdf
 DEPSDIR = .deps
 
 # Commands
-LATEX = xelatex
-BIBTEX = bibtex
+LATEX = pdflatex
+BIBTEX = biber
 MAKEDEPS = ./texdeps.sh
 
 
@@ -47,13 +47,13 @@ all: $(PDFS)
 	&& $(MAKEDEPS) "$@" "$<" > "$(DEPSDIR)/$*.P"
 	$(RM) "$*.aux" "$*.bbl" \
 	&& $(LATEX) "$*" \
-	&& if grep -qE '\\bibdata' "$*.aux" ; \
-	then $(BIBTEX) "$*" && $(LATEX) "$*"; fi \
+	&& $(BIBTEX) "$*" \
+	&& $(LATEX) "$*" \
 	&& $(LATEX) "$*"
 
 # Clean up build files.
 clean:
-	$(RM) $(PDFS) *.aux *.bbl *.blg *.log *.out *.nav *.snm *.toc
+	$(RM) $(PDFS) *.aux *.bbl *.blg *.bcf *.log *.out *.nav *.snm *.toc
 
 
 # Include dependency files.

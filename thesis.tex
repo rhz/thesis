@@ -2,11 +2,14 @@
 % \documentclass[phd,lfcs,twoside]{infthesis}
 % \documentclass{report}
 
-% \usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
 \usepackage[british]{babel}
 \usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
 % \usepackage{natbib}
-\usepackage[natbibapa]{apacite}
+% \usepackage[natbibapa]{apacite}
+\usepackage{csquotes}
+\usepackage[natbib=true,style=authoryear]{biblatex}
 \usepackage{hyperref}
 \usepackage{wrapfig}
 \usepackage{graphicx}
@@ -18,6 +21,9 @@
 \usepackage{mathcommon}
 % \usepackage{kappa}
 % \usepackage{kappalistings}
+
+% Bibliography
+\addbibresource{thesis.bib}
 
 % Text
 \newcommand{\ie}{i.e.}
@@ -344,14 +350,16 @@
 \fi
 
 %% Choose your favourite bibliography style here.
-\bibliographystyle{apacite}
+% \bibliographystyle{apacite}
 
 %% If you want the bibliography single-spaced (which is allowed), uncomment
 %% the next line.
 \singlespace
 
 %% Specify the bibliography file. Default is thesis.bib.
-\bibliography{thesis}
+% \bibliography{thesis}
+
+\printbibliography
 
 %% ... that's all, folks!
 \end{document}
