@@ -1,64 +1,56 @@
 % \input{epigraph}
 % \noindent
 In the history of natural sciences,
-there has been two main approaches to describe dynamical systems:
+there has been two main approaches to describe dynamical systems,
+which I call here
 \emph{Kinetics} and \emph{Thermodynamics}.
-The former goes all the way back to
+Broadly speaking, in the kinetic approach
+the system is described by the positions and velocities
+(or rather, momenta)
+of each particle.
+This is a ``ground'' description in the sense that
+it is as explicit and detailed as possible.
+If a mechanical system has $N$ particles
+then a state of the system is described by
+a vector in $\RR^{2 \cdot 3 \cdot N}$.
+This approach goes all the way back to
 Newton's laws of motion~\citep{newton}.
-% In particular, the second law of motion describes
-% how these forces translate into the second derivative of
-% the position of the particles over time, \ie their acceleration.
-Broadly speaking, in the kinetic approach we describe the forces
-acting on each particle at every point in time.
-The net force determines how
-the position of the particle changes over time.
-The fact this net force can be decomposed into separate forces
-that can be measured independently is very useful in practice,
-\eg the gravitational force on an object does not depend on
-the other forces acting on that object.
-% In a way this is the most detailed description
-% that we can have at the level of point particles.
+% Regarding the role of forces in Newtonian mechanics:
+% Interactions producing a change of momentum on a particle
+% that can be measured independently do not interact between them
+% and thus the resulting derivative of the momentum (force)
+% is just the sum of the forces as measured independently.
 
-% On the other hand,
 In the thermodynamic approach
-% the movement and transformation of particles
-% is represented in the energy function of the system.
-all information concerning the system and the forces acting on it
+all information about the change of the system in time
 is contained in the energy function.
-This approach first appeared in the work of
-\citet{lagrange2} and \citet{hamilton}.
-It endowed the description of a dynamical system in classical mechanics
+Given a set of states $\statespace$ for the system,
+an energy function $E: \statespace \to \RR$ maps a state to its energy.
+In this way, a state of the system is described by a single scalar
+regardless of how many particles it comprises.
+Naturally, this approach endowed the description of
+a dynamical system in classical mechanics
 with a remarkable conciseness, simplicity and elegance.
+It first appeared in the work of
+\citet{lagrange2} and \citet{hamilton},
+and has been subsequently used as the basis for most of modern physics.
 The kinetic description can then be derived from this energy function.
-However the opposite is not true:
+However the converse is not true:
 in general a kinetic description might not have an energy function
-from which it can be derived in the classical framework.
-This is because thermodynamics puts restrictions on possible processes.
-The specifics of this correspondence have been described
-in detail by . % FIXME: cite
+from which it can be derived. % in the classical framework.
+% This is because thermodynamics puts restrictions on possible processes.
+This is called the \emph{inverse problem} in classical mechanics
+\citep{santilli} and it was first attended to by \citet{helmholtz}.
+I call this approach `thermodynamic' not because of thermodynamics,
+the science that deals with heat and temperature,
+but because energy drives the time evolution
+of the system under this approach.
+% it gives an energy-based representation of dynamical systems.
+Certainly, there are connections to thermodynamics
+that will be highlighted as they arise.
 
-Later on in the history of natural sciences,
-% when chemistry started to become a quantitative science,
-the dynamics of gas compression and expansion
-and its relation to heat was established.
-% also came in the two variants.
-First came the Kinetic theory of gases by . % FIXME: cite
-% First the Kinetic theory of gases was developed by .
-This theory single-handledly gave birth to
-the field of statistical mechanics. % TODO: check stat mech wiki page
-% Is the kinetic theory of gases the one that has two sides?
-% The equations that link energy, entropy, temperature, pressure,
-% volume and so on are part of that theory?
-Then the laws of thermodynamics came about
-to describe the macro behaviour of systems
-with an underlying energy function. % TODO: check this please
-Similarly to classical mechanics,
-in the thermodynamic approach to statistical mechanics
-some processes are improbable and some outright impossible.
-
-% Later still,
-Half a century had passed since the publication of
-the Kinetic theory of gases and 
+% Later on in the history of natural sciences,
+A century after Hamilton's paper
 a formal language to describe chemical reaction systems
 % came to be by the hand of Petri
 was invented by Petri. % FIXME: cite
