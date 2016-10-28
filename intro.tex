@@ -1,32 +1,32 @@
 % \input{epigraph}
 % \noindent
+\section{Historical background}
 In the history of natural sciences,
 there has been two main approaches to describe dynamical systems,
 which I call here
 \emph{Kinetics} and \emph{Thermodynamics}.
-Broadly speaking, in the kinetic approach
-the system is described by the positions and velocities
-(or rather, momenta)
-of each particle.
-This is a ``ground'' description in the sense that
-it is as explicit and detailed as possible.
-If a mechanical system has $N$ particles
-then a state of the system is described by
-a vector in $\RR^{2 \cdot 3 \cdot N}$.
+Broadly speaking, in the kinetic approach the system is
+described by the positions and momenta of each particle.
 This approach goes all the way back to
 Newton's laws of motion~\citep{newton}.
+Intuitively, it is a ``ground'' description in the sense that
+it is as explicit and detailed as possible.
+If a (classical) mechanical system has $N$ particles
+then a state of the system is described by
+a vector in $\RR^{2 \cdot 3 \cdot N}$.
 % Regarding the role of forces in Newtonian mechanics:
 % Interactions producing a change of momentum on a particle
 % that can be measured independently do not interact between them
 % and thus the resulting derivative of the momentum (force)
 % is just the sum of the forces as measured independently.
 
-In the thermodynamic approach
+On the other hand,
+the thermodynamic approach shows how
 all information about the change of the system in time
-is contained in the energy function.
+is contained in the energy function (for conservative systems).
 Given a set of states $\statespace$ for the system,
 an energy function $E: \statespace \to \RR$ maps a state to its energy.
-In this way, a state of the system is described by a single scalar
+In this way a state is described by a single scalar
 regardless of how many particles it comprises.
 Naturally, this approach endowed the description of
 a dynamical system in classical mechanics
@@ -34,57 +34,86 @@ with a remarkable conciseness, simplicity and elegance.
 It first appeared in the work of
 \citet{lagrange2} and \citet{hamilton},
 and has been subsequently used as the basis for most of modern physics.
-The kinetic description can then be derived from this energy function.
+Once in possession of the energy function,
+the kinetic description (\ie the equations of motion)
+can then be derived from it. % this energy function.
 However the converse is not true:
 in general a kinetic description might not have an energy function
-from which it can be derived. % in the classical framework.
-% This is because thermodynamics puts restrictions on possible processes.
-This is called the \emph{inverse problem} in classical mechanics
+from which it can be derived, % in the classical framework.
+partly because of non-conservative (\eg dissipative) forces.
+Obtaining an energy function from the equations of motion
+is called the \emph{inverse problem} in classical mechanics
 \citep{santilli} and it was first attended to by \citet{helmholtz}.
-I call this approach `thermodynamic' not because of thermodynamics,
-the science that deals with heat and temperature,
-but because energy drives the time evolution
-of the system under this approach.
-% it gives an energy-based representation of dynamical systems.
+Both the direct and the inverse problem are the interest of this thesis.
+Note that this approach has been given the name `thermodynamic'
+not because of thermodynamics,
+the science that studies the dynamics of heat and temperature,
+but because of the protagonical role of energy
+driving the system's evolution.
 Certainly, there are connections to thermodynamics
 that will be highlighted as they arise.
 
-% Later on in the history of natural sciences,
-A century after Hamilton's paper
-a formal language to describe chemical reaction systems
+Half a century after Hamilton's work
+researchers like Maxwell, Boltzmann, and Gibbs % several researchers
+applied the ideas of classical mechanics to \emph{atoms}
+in order to describe physical properties of matter like pressure,
+the capacity to transfer heat, and others.
+This body of work came to be known as \emph{statistical mechanics}
+and was used to explain Brownian motion by \citet{einstein-brownian},
+which after its experimental verification \citep{perrin}
+settled the debate about the existence of atoms.
+This work however did not attempt to explain
+the chemical interactions and reactions molecules undergo.
+That would have to wait yet half a century
+for the axiomatisation of \citet{kolmogorov} of probability theory
+and the further developments of \citet{feller} and \citet{doob},
+who, among others, established the theoretical framework
+for continuous-time Markov chains (CTMCs).
+
+\begin{definition}[CTMC]%[continuous-time Markov chain]
+  A \emph{continuous-time Markov chain} is ...
+\end{definition}
+
+This theory would permit the framing of the dynamics of
+chemical reaction systems using mathematics
+while the physical validity of using this stochastic approach
+was established by \citet{gillespie76}.
+% and gave a method, later popularised by \citet{gillespie77}
+% in the chemistry and biology communities,
+% to realise path-samples of the evolving probability distributions.
+As we will see, the approach used by Gillespie falls squarely
+in our broad kinetic approach.
+However, we should first survey two contributions
+that precede Gillespie's work and are important
+for our presentation.
+
+Metropolis and Hastings
+
+Petri
+
+A formal language to describe chemical reaction systems
 % came to be by the hand of Petri
-was invented by Petri. % FIXME: cite
-% the description of dynamical reaction systems
-% was also done in both ways.
+was invented by \citet{petri}.
 This language, later called Petri nets,
 would define a reaction as a transformation of
 multisets of chemical species.
-% What happens historically between the invention of Petri nets
-% and an algorithm to simulate them?
-% When can we start talking about the two approaches in Petri nets?
-In this framework we find the two approaches too:
-SSA and Metropolis-Hastings...
 
 However, Petri nets as a language for describing chemical reactions
 has limitations when we take into consideration
 how chemistry actually works.
-It's an abstraction that leaks because it doesn't fully cover
-the underlying phenomena.
-In the world of (non-radioactive) chemical reactions
-atoms do not transform,
-they just change their partners with whom they share their electrons.
+When we look at what happens during chemical reactions
+inside molecules, the chemical transformation amounts to
+a change in the way electrons are shared by atoms
+resulting in a relocation of chemical bonds.
 It's all about atom binding and unbinding,
 establishing connections and breaking them.
+This is poorly captured by a change  of identity
+as it is modelled in Petri nets.
 
 More recently,
 a formal language to describe biochemical interactions
 where molecules not just react but can also bind other molecules
-non-covalently has been created by . % FIXME: cite
-
-In this work, we are interested in the correspondence between
-the kinetic and thermodynamic descriptions of graph rewriting.
-Graph rewriting is ...
-
+non-covalently has been created by \citet{danoslaneve2002a}.
 
 
 
