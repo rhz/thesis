@@ -59,10 +59,9 @@
 \newcommand{\LTS}{\mathcal{L}}
 
 % Markov chains
-\newcommand{\statespace}{\mathcal{S}}
-\newcommand{\M}{P} % discrete-time probability matrix
-\newcommand{\Mrev}{P_\pi} % reversible probability matrix
-\newcommand{\MC}{\mathcal{M}} % Markov chain
+\newcommand{\states}{\mathcal{S}} % state space
+\newcommand{\qm}{Q} % q matrix
+\newcommand{\ip}{\pi} % invariant probability
 
 % Petri nets
 \newcommand{\species}{\mathcal{A}}
@@ -186,13 +185,13 @@
   by showing which transformations are possible,
   while $\shapes$ and $\cost$ allow one to attach an energy
   to the reachable graphs and, thereby,
-  describe their long-term probability distribution $\pi$.
+  describe their long-term probability distribution $\ip$.
   % 
   Given $\generators$ and $\shapes$,
   we construct a finite set of rules $\generators_{\shapes}$ which
   (i) has the same qualitative transition system as $\generators$; and
   (ii) when equipped with rates according to $\cost$,
-  defines a continuous-time Markov chain of which $\pi$ is
+  defines a continuous-time Markov chain of which $\ip$ is
   the \emph{stationary} and \emph{limiting} probability distribution.
   % 
   The construction relies on the use of site graphs and

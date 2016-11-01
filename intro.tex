@@ -5,7 +5,7 @@ In the history of natural sciences,
 there has been two main approaches to describe dynamical systems,
 which I call here
 \emph{Kinetics} and \emph{Thermodynamics}.
-Broadly speaking, in the kinetic approach the system is
+Loosely speaking, in the kinetic approach the system is
 described by the positions and momenta of each particle.
 This approach goes all the way back to
 Newton's laws of motion~\citep{newton}.
@@ -24,8 +24,8 @@ On the other hand,
 the thermodynamic approach shows how
 all information about the change of the system in time
 is contained in the energy function (for conservative systems).
-Given a set of states $\statespace$ for the system,
-an energy function $E: \statespace \to \RR$ maps a state to its energy.
+Given a set of states $\states$ for the system,
+an energy function $E: \states \to \RR$ maps a state to its energy.
 In this way a state is described by a single scalar
 regardless of how many particles it comprises.
 Naturally, this approach endowed the description of
@@ -48,8 +48,8 @@ Both the direct and the inverse problem are the interest of this thesis.
 Note that this approach has been given the name `thermodynamic'
 not because of thermodynamics,
 the science that studies the dynamics of heat and temperature,
-but because of the protagonical role of energy
-driving the system's evolution.
+but because of the protagonical role of the energy
+in driving the system's evolution.
 Certainly, there are connections to thermodynamics
 that will be highlighted as they arise.
 
@@ -63,29 +63,72 @@ and was used to explain Brownian motion by \citet{einstein-brownian},
 which after its experimental verification \citep{perrin}
 settled the debate about the existence of atoms.
 This work however did not attempt to explain
-the chemical interactions and reactions molecules undergo.
+the chemical interactions and reactions that molecules undergo.
 That would have to wait yet half a century
-for the axiomatisation of \citet{kolmogorov} of probability theory
-and the further developments of \citet{feller} and \citet{doob},
+for the axiomatisation of probability theory by \citet{kolmogorov}
+and the further developments by \citet{doob} and \citet{feller},
 who, among others, established the theoretical framework
 for continuous-time Markov chains (CTMCs).
+We present here the definitions for a CTMC
+and its infinitesimal generator that will be used in this thesis.
 
-\begin{definition}[CTMC]%[continuous-time Markov chain]
-  A \emph{continuous-time Markov chain} is ...
+\begin{definition}[Infinitesimal generator]
+  An \emph{infinitesimal generator} $\qm$
+  on an at most countable set of states $\states$
+  is an $\states \times \states$ matrix
+  with elements $q_{ij} \in \RR$ ($i,j \in \states$)
+  such that $0 \leqslant q_{ij} < \infty$ when $i \neq j$
+  and $q_{ii} = - \sum_{j \neq i} q_{ij}$.
 \end{definition}
 
-This theory would permit the framing of the dynamics of
-chemical reaction systems using mathematics
-while the physical validity of using this stochastic approach
-was established by \citet{gillespie76}.
-% and gave a method, later popularised by \citet{gillespie77}
-% in the chemistry and biology communities,
-% to realise path-samples of the evolving probability distributions.
-As we will see, the approach used by Gillespie falls squarely
-in our broad kinetic approach.
-However, we should first survey two contributions
-that precede Gillespie's work and are important
-for our presentation.
+\begin{definition}[CTMC]%[continuous-time Markov chain]
+  A \emph{continuous-time Markov chain} is a tuple
+  $\tuple{\states, p_0, \qm}$ with
+  $\states$ an at most countable set of states,
+  $p_0$ a probability mass function on $\states$
+  representing the initial probabilistic state and
+  $\qm$ the infinitesimal generator of the Markov chain.
+\end{definition}
+
+An important property of CTMCs for the present work is that of
+\emph{time reversibility}, also known as \emph{detailed balance}:
+
+\begin{definition}
+  An infinitesimal generator $\qm$ on $\states$ is said to be
+  \emph{time reversible}, or to have \emph{detailed balance}, iff
+  there is a probability mass function $\ip$ on $\states$ such that
+  \begin{equation}
+    \label{eq:detailed-balance}
+    \ip_i q_{ij} = \ip_j q_{ji}
+  \end{equation}
+\end{definition}
+
+This property is related to the existence of a
+\emph{stationary} probability distributions for the Markov chain.
+
+\begin{definition}
+  A probability mass function $\ip$ on $states$ is
+  a \emph{stationary} probability distribution of
+  the infinitesimal generator $\qm$ iff $\ip \qm = 0$, \ie
+  \[ \ip_i \sum_{j \neq i} q_{ij} = \sum_{j \neq i} \ip_j q_{ji} \]
+\end{definition}
+
+Whenever a CTMC is irreducible and has detailed balance,
+it has a stationary probability distribution
+to which it converges as $t \to \infty$.
+
+\begin{lemma}
+\end{lemma}
+\begin{proof}
+\end{proof}
+
+The theory of CTMCs allows one to frame the dynamics of
+chemical reaction systems.
+The physical validity of using this stochastic approach
+was argued by \citet{gillespie76}.
+% However, we should first survey two contributions
+% that precede Gillespie's work and are important
+% for our presentation.
 
 Metropolis and Hastings
 
