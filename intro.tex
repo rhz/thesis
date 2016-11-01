@@ -36,14 +36,14 @@ It first appeared in the work of
 and has been subsequently used as the basis for most of modern physics.
 Once in possession of the energy function,
 the kinetic description (\ie the equations of motion)
-can then be derived from it. % this energy function.
+can then be derived from it.
 However the converse is not true:
 in general a kinetic description might not have an energy function
-from which it can be derived, % in the classical framework.
+from which it can be derived \citep{santilli},
 partly because of non-conservative (\eg dissipative) forces.
 Obtaining an energy function from the equations of motion
 is called the \emph{inverse problem} in classical mechanics
-\citep{santilli} and it was first attended to by \citet{helmholtz}.
+and it was first attended to by \citet{helmholtz}.
 Both the direct and the inverse problem are the interest of this thesis.
 Note that this approach has been given the name `thermodynamic'
 not because of thermodynamics,
@@ -78,7 +78,7 @@ and its infinitesimal generator that will be used in this thesis.
   is an $\states \times \states$ matrix
   with elements $q_{ij} \in \RR$ ($i,j \in \states$)
   such that $0 \leqslant q_{ij} < \infty$ when $i \neq j$
-  and $q_{ii} = - \sum_{j \neq i} q_{ij}$.
+  and $q_{ii} = - \sum_{j \neq i} q_{ij} < \infty$.
 \end{definition}
 
 \begin{definition}[CTMC]%[continuous-time Markov chain]
@@ -88,6 +88,8 @@ and its infinitesimal generator that will be used in this thesis.
   $p_0$ a probability mass function on $\states$
   representing the initial probabilistic state and
   $\qm$ the infinitesimal generator of the Markov chain.
+  % The Markov chain can be presented as a time-indexed family
+  % of random variables $X_t$.
 \end{definition}
 
 An important property of CTMCs for the present work is that of
@@ -110,12 +112,15 @@ This property is related to the existence of a
   A probability mass function $\ip$ on $states$ is
   a \emph{stationary} probability distribution of
   the infinitesimal generator $\qm$ iff $\ip \qm = 0$, \ie
-  \[ \ip_i \sum_{j \neq i} q_{ij} = \sum_{j \neq i} \ip_j q_{ji} \]
+  \[ -\ip_i q_{ii} = \ip_i \sum_{j \neq i} q_{ij}
+                  = \sum_{j \neq i} \ip_j q_{ji} \]
 \end{definition}
 
-Whenever a CTMC is irreducible and has detailed balance,
+% FIXME: define irreducible before use
+Whenever a CTMC has detailed balance,
 it has a stationary probability distribution
-to which it converges as $t \to \infty$.
+to which it converges as $t \to \infty$
+(given it is irreducible, see below).
 
 \begin{lemma}
 \end{lemma}
