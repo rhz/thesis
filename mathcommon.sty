@@ -112,7 +112,7 @@
 \fi% End of \ifcsnamenewtheorem\endcsname
 
 
-%%% Probability theory symbols %%%
+%%% Probability theory %%%
 
 % Simple bold versions
 \DeclareMathOperator*{\pr}{\mathbf{P}}     % Probability
@@ -131,8 +131,11 @@
 \DeclareMathOperator*{\Var}{\mathbf{Var}}  % Variance
 \DeclareMathOperator*{\Cov}{\mathbf{Cov}}  % Covariance
 
+% Average
+\newcommand{\avg}[1]{\langle #1 \rangle}
 
-%%% Sets and macros for set definitions %%%
+
+%%% Sets %%%
 
 % Common sets
 \renewcommand{\emptyset}{\varnothing}  % Empty set
@@ -199,6 +202,9 @@
 % Cardinality of a set
 \DeclareMathOperator*{\card}{Card}
 
+
+%%% Functions %%%
+
 % Symbols for domain, co-domain and image of functions
 \DeclareMathOperator*{\dom}{dom}    % Domain of a (partial) function
 \DeclareMathOperator*{\cod}{cod}    % Co-domain of a function
@@ -213,8 +219,27 @@
 % Restriction of a function #1 to domain #2 (for big #1's)
 \newcommand{\bigrest}[2]{\left.#1\right|_{#2}}
 
+% Symbols for argmax/argmin
+\DeclareMathOperator*{\argmax}{argmax}
+\DeclareMathOperator*{\argmin}{argmin}
 
-%% Logic
+% Derivatives
+\newcommand{\ddt}{\frac{d}{dt}}
+
+
+%%% Vectors %%%
+
+% Typeset vectors using a bold, regular math font
+\renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}
+
+% Vector norm
+\newcommand{\vnorm}[1]{\lvert #1 \rvert}
+
+% Inner product
+\newcommand{\innerprod}[2]{\langle #1, #2 \rangle}
+
+
+%%% Logic %%%
 
 % Boolean constants
 \newcommand{\false}{\mathbf{false}}
@@ -239,6 +264,7 @@
 
 
 %% Objects
+
 \newcommand{\init}{\mathbf{0}} % Initial object
 \newcommand{\term}{\mathbf{1}} % Terminal object
 
@@ -379,11 +405,11 @@
 \tikzstyle{ontop}=[fill=white, inner sep=3pt]
 
 
-%% Commands
+%% Commutative diagrams
 
-% Commands for drawing pushout/pullback corners next to a node.  The
-% only parameter specifies the name of the node next to which the
-% corner should be drawn.
+% Commands for drawing pushout/pullback corners next to a node.
+% The only parameter specifies the name of the node next to which
+% the corner should be drawn.
 \newcommand{\cornersize}{.6em}
 \newcommand{\cornerNW}[1]{
   \draw[hom,-] #1 ++($(-2*\cornersize, \cornersize)$) --
@@ -410,32 +436,4 @@
 \newcommand{\fpbcSE}[1]{
   \draw[hom,-] #1 ++($( 2*\cornersize,-\cornersize)$) --
     ++($(0,-.7*\cornersize)$) -- ++($(-.8*\cornersize,0)$);}
-
-
-
-
-%%% Vector notation %%%
-
-% Typeset vectors using a bold, regular math font
-\renewcommand{\vec}[1]{\boldsymbol{\mathbf{#1}}}
-
-% Vector norm
-\newcommand{\vnorm}[1]{\lvert #1 \rvert}
-
-% Inner product
-\newcommand{\innerprod}[2]{\langle #1, #2 \rangle}
-
-
-%%% Other symbols %%%
-
-% Symbols for argmax/argmin
-\DeclareMathOperator*{\argmax}{argmax}
-\DeclareMathOperator*{\argmin}{argmin}
-
-% Symbols for max/min... not necessary, already defined in LaTeX
-% \DeclareMathOperator*{\max}{max}
-% \DeclareMathOperator*{\min}{min}
-
-% Average
-\newcommand{\avg}[1]{\langle #1 \rangle}
 
