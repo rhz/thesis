@@ -69,7 +69,7 @@ for the axiomatisation of probability theory by \citet{kolmogorov}
 and the further developments by \citet{doob} and \citet{feller},
 who, among others, established the theoretical framework
 for continuous-time Markov chains (CTMCs).
-We present here the definitions for a CTMC
+Below you can find the definitions for a CTMC
 and its infinitesimal generator that will be used in this thesis.
 
 \begin{definition}[Infinitesimal generator]
@@ -92,39 +92,65 @@ and its infinitesimal generator that will be used in this thesis.
   % of random variables $X_t$.
 \end{definition}
 
+% TODO: maybe say a few words about how the infinitesimal generator
+% is the time derivative of the jump probability and how it induces
+% the evolution of the initial probabilistic state.
+
 An important property of CTMCs for the present work is that of
-\emph{time reversibility}, also known as \emph{detailed balance}:
+\emph{time reversibility}, also known as \emph{detailed balance}.
 
 \begin{definition}
-  An infinitesimal generator $\qm$ on $\states$ is said to be
-  \emph{time reversible}, or to have \emph{detailed balance}, iff
+  An infinitesimal generator $\qm$ on $\states$
+  is said to be \emph{time reversible} iff
   there is a probability mass function $\ip$ on $\states$ such that
   \begin{equation}
     \label{eq:detailed-balance}
     \ip_i q_{ij} = \ip_j q_{ji}
   \end{equation}
+  Then $\qm$ is said to have \emph{detailed balance}
+  with respect to $\ip$.
 \end{definition}
 
 This property is related to the existence of a
-\emph{stationary} probability distributions for the Markov chain.
+\emph{stationary} probability distribution for the Markov chain.
 
 \begin{definition}
-  A probability mass function $\ip$ on $states$ is
-  a \emph{stationary} probability distribution of
+  A probability mass function $\ip$ on $\states$ is
+  a \emph{stationary probability distribution} of
   the infinitesimal generator $\qm$ iff $\ip \qm = 0$, \ie
   \[ -\ip_i q_{ii} = \ip_i \sum_{j \neq i} q_{ij}
                   = \sum_{j \neq i} \ip_j q_{ji} \]
 \end{definition}
 
-% FIXME: define irreducible before use
-Whenever a CTMC has detailed balance,
-it has a stationary probability distribution
-to which it converges as $t \to \infty$
-(given it is irreducible, see below).
-
 \begin{lemma}
+  Suppose the infinitesimal generator $\qm$
+  has detailed balance with respect to $\ip$
+  and is irreducible, \ie ... % FIXME
+  Then $\qm$ has a unique stationary probability distribution $\ip$.
 \end{lemma}
 \begin{proof}
+  From \eqn{detailed-balance} we obtain
+  \[ \sum_{i \in \states} \ip_i q_{ij} =
+     \sum_{i \in \states} \ip_j q_{ji} = -\ip_j q_{jj}, \]
+  as $\sum_{i \in \states} q_{ji} = -q_{jj}$ for any fixed state $j$.
+\end{proof}
+
+Moreover, whenever a CTMC has detailed balance,
+it will converge to its unique stationary probability distribution
+as $t \to \infty$ (given some extra assumptions, see below).
+
+\begin{lemma}
+  Let $\tuple{\states, \rho, \qm}$ be a CTMC.
+  Suppose $\qm$ has detailed balance and is irreducible.
+  If $\qm$ is aperiodic, that is,
+  if $\qm$ ..., % FIXME
+  then it converges to its unique stationary distribution $\ip$.
+  \[ \lim_{t \to \infty} \rho P_t = \ip \]
+\end{lemma}
+\begin{proof}
+  The time derivative of the probability $s_i$ that the Markov chain
+  is in state $i$ at time $t$ is
+  \[ \ddt s_i(t) = \sum_{j \in \states} q_{ji}s_j(t) \]
 \end{proof}
 
 The theory of CTMCs allows one to frame the dynamics of
