@@ -54,7 +54,7 @@ Certainly, there are connections to thermodynamics
 that will be highlighted as they arise.
 
 Half a century after Hamilton's work
-researchers like Maxwell, Boltzmann, and Gibbs % several researchers
+researchers like Maxwell, Boltzmann, and Gibbs
 applied the ideas of classical mechanics to \emph{atoms}
 in order to describe physical properties of matter like pressure,
 the capacity to transfer heat, and others.
@@ -71,61 +71,97 @@ who, among others, established the theoretical framework
 for continuous-time Markov chains (CTMCs).
 Below you can find the definitions for a CTMC
 and its infinitesimal generator that will be used in this thesis.
+In particular, we work with time-homogeneous CTMCs.
 
 \begin{definition}[Infinitesimal generator]
   An \emph{infinitesimal generator} $\qm$
   on an at most countable set of states $\states$
   is an $\states \times \states$ matrix
-  with elements $q_{ij} \in \RR$ ($i,j \in \states$)
+  with elements $q_{ij} \in \RR$, $i,j \in \states$
   such that $0 \leqslant q_{ij} < \infty$ when $i \neq j$
   and $q_{ii} = - \sum_{j \neq i} q_{ij} < \infty$.
 \end{definition}
 
 The infinitesimal generator plays the role of
-the time derivative of the jump probability and
-induces the evolution of a probabilistic state.
+the time derivative of the transition probabilities at time $0$
+and induces the evolution of a probabilistic state
+according to the Kolmogorov backward equation,
+\begin{equation}
+  \label{eq:transition-function}
+  \ddt P(t) = Q P(t), \quad P(0) = I
+\end{equation}
+where $P(t)$ is the $\states \times \states$ matrix
+with elements $p_{ij}(t) \in \RR$ the probability that
+we were in state $i$ at time $0$ and are in state $j$ at time $t$.
+% transition probability from state $i$ to $j$ at time $t$.
+When the infinitesimal generator is stable and conservative
+there is a unique minimal solution to \eqn{transition-function}
+\citep{anderson}.
+We shall work with this type of infinitesimal generators
+and assume there is a transition function $P(t)$
+whenever we have an infinitesimal generator $\qm$ and vice versa.
+
+Given a \pmf $s(0)$ on $\states$ (seen as a row vector)
+as an initial probabilistic state,
+the probability distribution $s(t)$ after time $t$
+is given by $s(t) = s(0) P(t)$.
+% We can obtain the time derivative of this distribution
+% from \eqn{transition-function}.
+% % $s_i(t)$ that the Markov chain is in state $i$ at time $t$.
+% In coordinate form, we have
+% \begin{equation} % TODO: is this equation correct?
+%   \label{eq:prob-deriv}
+%   \ddt s_i(t) = \sum_{j \in \states} q_{ji} s_j(t)
+% \end{equation}
+We say the infinitesimal generator is \emph{irreducible}
+if every state is reachable regardless of the initial state,
+\ie $p_{ij}(t) > 0$ for all $i,j \in \states$
+and some $t \geqslant 0$.
 
 \begin{definition}[CTMC]%[continuous-time Markov chain]
   A \emph{continuous-time Markov chain} is a tuple
-  $\tuple{\states, p_0, \qm}$ with
+  $\tuple{\states, s(0), \qm}$ with
   $\states$ an at most countable set of states,
-  $p_0$ a probability mass function on $\states$
+  $s(0)$ a \pmf on $\states$
   representing the initial probabilistic state and
   $\qm$ the infinitesimal generator of the Markov chain.
   % The Markov chain can be presented as a time-indexed family
   % of random variables $X_t$.
 \end{definition}
 
+% TODO: Am I here introducing something after using/mentioning it?
 An important property of CTMCs for the present work is that of
 \emph{time reversibility}, also known as \emph{detailed balance}.
 
 \begin{definition}
   An infinitesimal generator $\qm$ on $\states$
   is said to be \emph{time reversible} iff
-  there is a probability mass function $\ip$ on $\states$ such that
+  there is a \pmf $\ip$ on $\states$ such that
   \begin{equation}
     \label{eq:detailed-balance}
     \ip_i q_{ij} = \ip_j q_{ji}
   \end{equation}
+  for all $i,j \in \states$.
   Then $\qm$ is said to have \emph{detailed balance}
   with respect to $\ip$.
 \end{definition}
 
-This property is related to the existence of a
-\emph{invariant} probability measure for the infinitesimal generator.
+This property is related to the existence of an \emph{invariant}
+probability measure for the infinitesimal generator.
 
 \begin{definition}
-  A probability mass function $\ip$ on $\states$ is
+  A \pmf $\ip$ on $\states$ is
   \emph{invariant} for an infinitesimal generator $\qm$
   iff $\ip \qm = 0$, \ie
   \[ -\ip_i q_{ii} = \ip_i \sum_{j \neq i} q_{ij}
                   = \sum_{j \neq i} \ip_j q_{ji} \]
+  In other words,
+  whenever the action of $\qm$ on it does not change it.
 \end{definition}
 
 \begin{lemma}
   Suppose the infinitesimal generator $\qm$
-  has detailed balance with respect to $\ip$
-  and is irreducible, \ie ... % FIXME
+  has detailed balance with respect to $\ip$.
   Then $\ip$ is invariant for $\qm$.
 \end{lemma}
 \begin{proof}
@@ -135,23 +171,22 @@ This property is related to the existence of a
   as $\sum_{i \in \states} q_{ji} = -q_{jj}$ for any fixed state $j$.
 \end{proof}
 
-Moreover, whenever a CTMC has detailed balance with respect to $\ip$,
-it will converge to this probability measure
-as $t \to \infty$ (given some extra assumptions, see below).
+Moreover, whenever an infinitesimal generator
+is irreducible and has detailed balance with respect to $\ip$,
+it will converge to this probability measure as $t \to \infty$.
+This property is called \emph{ergodicity}.
 
 \begin{lemma}
-  Let $\tuple{\states, \rho, \qm}$ be a CTMC.
-  Suppose $\qm$ has detailed balance with respect to $\ip$.
-  If $\qm$ is irreducible and aperiodic, that is,
-  if $\qm$ ..., % FIXME
-  then it converges to $\ip$ as $t \to \infty$, \ie
-  \[ \lim_{t \to \infty} \rho P_t = \ip \]
+  Suppose $\qm$ is irreducible and
+  has detailed balance with respect to $\ip$.
+  Then it converges to $\ip$ as $t \to \infty$, \ie
+  \[ \lim_{t \to \infty} s(0) P(t) = \ip \]
+  for any $s(0)$.
 \end{lemma}
 \begin{proof}
-  The time derivative of the probability $s_i$ that the Markov chain
-  is in state $i$ at time $t$ is
-  \[ \ddt s_i(t) = \sum_{j \in \states} q_{ji}s_j(t) \]
 \end{proof}
+
+Metropolis and Hastings
 
 The theory of CTMCs allows one to frame the dynamics of
 chemical reaction systems.
@@ -160,8 +195,6 @@ was argued by \citet{gillespie76}.
 % However, we should first survey two contributions
 % that precede Gillespie's work and are important
 % for our presentation.
-
-Metropolis and Hastings
 
 Petri
 
