@@ -197,12 +197,18 @@ in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
 CTMCs have a strong kinetic flavour as they describe
 stochastic processes in terms of probability flows
 happening at a certain rate.
-They are a ``ground'' description in the stochastic world
-and all approaches to describe these processes finally
-% express the semantics of their execution in terms of them.
+They are the ``ground'' description in the stochastic world
+and all approaches to describe these processes
 are interpreted in terms of them.
 
+
+
 Metropolis and Hastings
+
+The transition rates themselves are random variables.
+The fact that the Metropolis algorithm does not give us
+back a standard, real-valued transition matrix
+leaves us with an unsatisfactory feeling.
 
 The theory of CTMCs allows one to frame
 the dynamics of chemical reaction systems.
@@ -210,7 +216,7 @@ However, since the number of molecules of a species
 is a priori unbounded and thus $\states$ is infinite,
 one would like to have a way to express these systems
 in a finite and simple form.
-A language that could do this % was invented by \citet{petri}.
+A language that could do this
 came to be in the work of \citet{petri}.
 This language, later called \emph{Petri nets},
 sees reactions as transformations of
@@ -226,6 +232,8 @@ multisets of chemical species.
 There is a natural partial order $\leqslant$ on multisets over $X$.
 We say $M \leqslant N$ if for each element $x \in X$,
 $M(x) \leqslant N(x)$.
+We write $\MM(X)$ for the set of all multisets over $X$.
+
 
 \begin{definition}
   Given a set of species $\species$,
@@ -256,32 +264,44 @@ We write $\matches{L}{M}$ for the set of matches from $L$ to $M$.
 From this definition we have that the number of matches
 $\abs{\matches{L}{M}}$ from $L$ to $M$ is
 \[ \abs{\matches{L}{M}} = \prod_{a \in \species} \binom{L(a)}{M(a)} \]
-A reaction is said to be \emph{elementary} iff its rate is
+A reaction is said to be elementary iff its rate is
 proportional to the number of matches of its left-hand side.
-This is known as the law of mass action in chemistry.
+This is known as the \emph{law of mass action} in chemistry.
 Here we consider only elementary reactions.
 
 Petri nets can be given a stochastic interpretation
 in terms of a CTMC.
+Given a Petri net $\tuple{\species, \reactions}$,
+an initial marking $M_0$ and
+a kinetic map $k: \reactions \to \RR^+$ that assigns
+kinetic rates $k(r)$ to reactions $r \in \reactions$,
+we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
 
-
-
-  $k: \reactions \to \RR^+$ a kinetic map that assigns
-  a kinetic rate $k(r)$ to each reaction $r \in \reactions$.
-
-
+\begin{align*}
+  \states &{} = \MM(\species) \\
+  s(0)(x) &{} = \begin{cases}
+    1 \quad\text{if } x = M_0 \\
+    0 \quad\text{if } x \neq M_0
+  \end{cases} \\
+  q_{MN} &{} = \sum_{\tuple{L,R} \in \reactions} n_{MN}(L,R)
+\end{align*}
+with
+\begin{equation*}
+  n_{MN}(L,R) = \left\{\begin{array}{ll}
+    \abs{\matches{L}{M}} & \text{if } M - L + R = N \\
+    0 & \text{otherwise}
+  \end{array}\right.
+\end{equation*}
 
 The physical validity of this stochastic approach
 and the physical conditions under which
 it can be used has been argued by \citet{gillespie76}.
-% The physical conditions under which this stochastic approach
-% is valid has been argued by \citet{gillespie76}.
+Interestingly, \citet{et2} have solved
+the \emph{direct} and \emph{inverse} problem for Petri nets,
+that is, the problem of constructing a Petri net
+from an energy function on $\states$ and vice versa.
 
-% However,
-Petri nets % as a language for describing chemical reactions
-have limitations when we take into consideration
-% how chemistry actually works.
-% consider what takes place in chemical processes.
+Petri nets have limitations when we take into consideration
 what happens inside molecules in a chemical reaction.
 The chemical transformation taking place amounts to
 a change in the way electrons are shared by atoms
