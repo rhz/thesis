@@ -195,38 +195,70 @@ regardless of the initial state $s(0)$.
 The proof for this lemma can be found in part 2 of theorem 1.6
 in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
 
+Say something about the kinetic feeling of CTMCs.
+
 Metropolis and Hastings
 
-The theory of CTMCs allows one to frame the dynamics of
-chemical reaction systems.
-The physical validity of using this stochastic approach
-was argued by \citet{gillespie76}.
-% However, we should first survey two contributions
-% that precede Gillespie's work and are important
-% for our presentation.
-
-Petri
-
-A formal language to describe chemical reaction systems
-% came to be by the hand of Petri
-was invented by \citet{petri}.
-This language, later called Petri nets,
-would define a reaction as a transformation of
+The theory of CTMCs allows one to frame
+the dynamics of chemical reaction systems.
+However, since the number of molecules of a species
+is a priori unbounded and thus $\states$ is infinite,
+one would like to have a way to express these systems
+in a finite and simple form.
+A language that could do this % was invented by \citet{petri}.
+came to be in the work of \citet{petri}.
+This language, later called \emph{Petri nets},
+sees reactions as transformations of
 multisets of chemical species.
 
-However, Petri nets as a language for describing chemical reactions
-has limitations when we take into consideration
-how chemistry actually works.
-When we look at what happens during chemical reactions
-inside molecules, the chemical transformation amounts to
+\begin{definition}
+  A \emph{multiset} $M$ over a set $X$ is a map from $X$ to
+  the positive integers assigning to each element $x \in X$
+  the number of copies $M(x) \in \ZZ^+$ of that element
+  in the multiset.
+\end{definition}
+
+\begin{definition}
+  Given a set of species $\species$,
+  a \emph{reaction} $r$ is a pair $\tuple{L,R}$
+  with $L$ and $R$ multisets over $\species$.
+  We refer to $L$ and $R$ as the left- and right-hand side of $r$
+  and write $L \to R$ for the reaction.
+\end{definition}
+
+\begin{definition}%[PN]%[Petri net]
+  A \emph{Petri net} is a tuple $\tuple{\species, \reactions, k}$
+  with $\species$ a set of species,
+  $\reactions$ a set of reactions and
+  $k: \reactions \to \RR^+$ a kinetic map that assigns
+  a rate $k(r)$ to each reaction $r \in \reactions$.
+\end{definition}
+
+The physical validity of this stochastic approach
+together with the physical conditions under which
+it can be used has been argued by \citet{gillespie76}.
+% The physical conditions under which this stochastic approach
+% is valid has been argued by \citet{gillespie76}.
+
+% However,
+Petri nets % as a language for describing chemical reactions
+have limitations when we take into consideration
+% how chemistry actually works.
+% consider what takes place in chemical processes.
+what happens inside molecules in a chemical reaction.
+The chemical transformation taking place amounts to
 a change in the way electrons are shared by atoms
 resulting in a relocation of chemical bonds.
-It's all about atom binding and unbinding,
-establishing connections and breaking them.
-This is poorly captured by a change  of identity
-as it is modelled in Petri nets.
+It is all about atom binding and unbinding,
+\ie how they establish connections and break them.
+This is poorly captured by a change of species,
+as it is modelled by Petri nets.
+A consequence of this lack of a formal representation for
+molecular bonds is that certain systems of chemical reactions
+cannot be described in a finite way using Petri nets,
+\eg unbounded polymerisation.
 
-More recently,
+Recently,
 a formal language to describe biochemical interactions
 where molecules not just react but can also bind other molecules
 non-covalently has been created by \citet{danoslaneve2002a}.
