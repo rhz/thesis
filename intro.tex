@@ -201,9 +201,17 @@ They are the ``ground'' description in the stochastic world
 and all approaches to describe these processes
 are interpreted in terms of them.
 
-
-
-Metropolis and Hastings
+It is natural to wonder then what the thermodynamic approach
+has to say in the stochastic world.
+First, we need a stochastic interpretation for the energy.
+We define the energy function $E: \states \to \RR$
+% We define the energy $E(i)$ of a state $x \in \states$
+as the real-valued function that determines the probability $\ip_i$
+that the system finds itself in that state $i \in \states$
+according to the Boltzmann distribution, \ie
+\begin{equation}
+  \ip_i = \frac{e^{-E(i)}}{\sum_{j \in \states} e^{-E(j)}}
+\end{equation}
 
 The transition rates themselves are random variables.
 The fact that the Metropolis algorithm does not give us
