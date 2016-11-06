@@ -73,7 +73,7 @@ Below you can find the definitions for a CTMC
 and its infinitesimal generator that will be used in this thesis.
 In particular, we work with time-homogeneous CTMCs.
 
-\begin{definition}[Infinitesimal generator]
+\begin{definition}%[Infinitesimal generator]
   An \emph{infinitesimal generator} $\qm$
   on an at most countable set of states $\states$
   is an $\states \times \states$ matrix
@@ -131,9 +131,10 @@ and some $t \geqslant 0$.
 
 % TODO: Am I here introducing something after using/mentioning it?
 An important property of CTMCs for the present work is that of
-\emph{time reversibility}, also known as \emph{detailed balance}.
+\emph{time reversibility}, also known as \emph{detailed balance},
+which we introduce below.
 
-\begin{definition}
+\begin{definition}[detailed balance]
   An infinitesimal generator $\qm$ on $\states$
   is said to be \emph{time reversible} iff
   there is a \pmf $\ip$ on $\states$ such that
@@ -146,8 +147,8 @@ An important property of CTMCs for the present work is that of
   with respect to $\ip$.
 \end{definition}
 
-This property is related to the existence of an \emph{invariant}
-probability measure for the infinitesimal generator.
+Intuitively, this property is related to the existence of an
+\emph{invariant} probability measure for the infinitesimal generator.
 
 \begin{definition}
   A \pmf $\ip$ on $\states$ is
@@ -171,20 +172,28 @@ probability measure for the infinitesimal generator.
   as $\sum_{i \in \states} q_{ji} = -q_{jj}$ for any fixed state $j$.
 \end{proof}
 
-Moreover, whenever an infinitesimal generator
-is irreducible and has detailed balance with respect to $\ip$,
-it will converge to this probability measure as $t \to \infty$.
-This property is called \emph{ergodicity}.
+Moreover, we would like to know when this invariant
+probability measure is realised by the Markov chain.
+
+\begin{definition}[ergodicity]
+  An infinitesimal generator $\qm$ is \emph{ergodic} when
+  there is a probability measure $\ip$ on $\states$ such that
+  \[ \lim_{t \to \infty} P_{ij}(t) = \ip_j \]
+  for all $i,j \in \states$.
+\end{definition}
+
+This is equivalent to say that the Markov chain
+will converge to the probability measure $\ip$
+regardless of the initial state $s(0)$.
 
 \begin{lemma}
-  Suppose $\qm$ is irreducible and
-  has detailed balance with respect to $\ip$.
-  Then it converges to $\ip$ as $t \to \infty$, \ie
-  \[ \lim_{t \to \infty} s(0) P(t) = \ip \]
-  for any $s(0)$.
+  Suppose the infinitesimal generator $\qm$ is irreducible
+  and has an invariant probability measure $\ip$.
+  Then $\qm$ is ergodic and converges to $\ip$.
 \end{lemma}
-\begin{proof}
-\end{proof}
+
+The proof for this lemma can be found in part 2 of theorem 1.6
+in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
 
 Metropolis and Hastings
 
