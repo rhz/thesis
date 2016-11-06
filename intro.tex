@@ -194,8 +194,13 @@ regardless of the initial state $s(0)$.
 
 The proof for this lemma can be found in part 2 of theorem 1.6
 in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
-
-Say something about the kinetic feeling of CTMCs.
+CTMCs have a strong kinetic flavour as they describe
+stochastic processes in terms of probability flows
+happening at a certain rate.
+They are a ``ground'' description in the stochastic world
+and all approaches to describe these processes finally
+% express the semantics of their execution in terms of them.
+are interpreted in terms of them.
 
 Metropolis and Hastings
 
@@ -213,10 +218,14 @@ multisets of chemical species.
 
 \begin{definition}
   A \emph{multiset} $M$ over a set $X$ is a map from $X$ to
-  the positive integers assigning to each element $x \in X$
-  the number of copies $M(x) \in \ZZ^+$ of that element
+  the naturals assigning to each element $x \in X$
+  the number of copies $M(x) \in \NN$ of that element
   in the multiset.
 \end{definition}
+
+There is a natural partial order $\leqslant$ on multisets over $X$.
+We say $M \leqslant N$ if for each element $x \in X$,
+$M(x) \leqslant N(x)$.
 
 \begin{definition}
   Given a set of species $\species$,
@@ -227,15 +236,43 @@ multisets of chemical species.
 \end{definition}
 
 \begin{definition}%[PN]%[Petri net]
-  A \emph{Petri net} is a tuple $\tuple{\species, \reactions, k}$
-  with $\species$ a set of species,
-  $\reactions$ a set of reactions and
-  $k: \reactions \to \RR^+$ a kinetic map that assigns
-  a rate $k(r)$ to each reaction $r \in \reactions$.
+  A \emph{Petri net} is a pair $\tuple{\species, \reactions}$ with
+  a set of species $\species$ and a set of reactions $\reactions$.
 \end{definition}
 
+A state of a Petri net is a multiset over $\species$,
+usually called a \emph{marking}.
+A reaction can occur in a given state $M$ only if
+its left-hand side $L \leqslant M$.
+
+\begin{definition}
+  A \emph{match} $m$ of the left-hand side $L$ of a reaction
+  on a state $M$ is an injective function from $L$ to $M$,
+  \ie a map that identifies each copy of $a \in \species$ in $L$
+  with a copy of $a$ in $M$.
+\end{definition}
+
+We write $\matches{L}{M}$ for the set of matches from $L$ to $M$.
+From this definition we have that the number of matches
+$\abs{\matches{L}{M}}$ from $L$ to $M$ is
+\[ \abs{\matches{L}{M}} = \prod_{a \in \species} \binom{L(a)}{M(a)} \]
+A reaction is said to be \emph{elementary} iff its rate is
+proportional to the number of matches of its left-hand side.
+This is known as the law of mass action in chemistry.
+Here we consider only elementary reactions.
+
+Petri nets can be given a stochastic interpretation
+in terms of a CTMC.
+
+
+
+  $k: \reactions \to \RR^+$ a kinetic map that assigns
+  a kinetic rate $k(r)$ to each reaction $r \in \reactions$.
+
+
+
 The physical validity of this stochastic approach
-together with the physical conditions under which
+and the physical conditions under which
 it can be used has been argued by \citet{gillespie76}.
 % The physical conditions under which this stochastic approach
 % is valid has been argued by \citet{gillespie76}.
@@ -260,9 +297,18 @@ cannot be described in a finite way using Petri nets,
 
 Recently,
 a formal language to describe biochemical interactions
-where molecules not just react but can also bind other molecules
-non-covalently has been created by \citet{danoslaneve2002a}.
+using rewriting rules,
+where molecules not just react but also can bind other molecules
+has been proposed by \citet{danoslaneve2002a}.
+In the next section we introduce this language, called Kappa,
+% and some of its properties,
+keeping in mind that we want to address
+the \emph{direct} and \emph{inverse} problem mentioned above,
+namely, the problem of generating a set of rewriting rules
+from an energy function and vice versa.
 
+
+\section{Kappa}
 
 
 
