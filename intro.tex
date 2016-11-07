@@ -147,7 +147,7 @@ which we introduce below.
   with respect to $\ip$.
 \end{definition}
 
-Intuitively, this property is related to the existence of an
+And the related property of an
 \emph{invariant} probability measure for the infinitesimal generator.
 
 \begin{definition}
@@ -159,6 +159,9 @@ Intuitively, this property is related to the existence of an
   In other words,
   whenever the action of $\qm$ on it does not change it.
 \end{definition}
+
+The relationship between these two properties is established
+by the following lemma.
 
 \begin{lemma}
   Suppose the infinitesimal generator $\qm$
@@ -201,23 +204,56 @@ They are the ``ground'' description in the stochastic world
 and all approaches to describe these processes
 are interpreted in terms of them.
 
-It is natural to wonder then what the thermodynamic approach
-has to say in the stochastic world.
-First, we need a stochastic interpretation for the energy.
-We define the energy function $E: \states \to \RR$
-% We define the energy $E(i)$ of a state $x \in \states$
-as the real-valued function that determines the probability $\ip_i$
-that the system finds itself in that state $i \in \states$
-according to the Boltzmann distribution, \ie
+It is natural to wonder then how the thermodynamic approach
+looks like in the stochastic world.
+It turns out the energy function has a very clear interpretation
+in this setting, namely, that of defining the probability $\ip_i$
+that the system finds itself in state $i \in \states$ as follows.
 \begin{equation}
+  \label{eq:energy}
   \ip_i = \frac{e^{-E(i)}}{\sum_{j \in \states} e^{-E(j)}}
 \end{equation}
+This is known as the \emph{Boltzmann distribution}.
+Usually the energy is divided by $kT$ the product of
+the Boltzmann constant $k$ and the temperature $T$.
+However, we can omit this term by expressing the energy
+in units of $1/(kT)$.
+Note also that i) \eqn{energy} defines the energy function
+uniquely only up to an additive constant
+given the probability distribution $\ip$,
+that is, if we change the energy of each state by adding
+a fixed constant we obtain the same probability distribution $\ip$;
+and ii) by convention the sign of the energy is inverted
+so lower energies represent more favourable states.
+
+The next question is how do we construct a CTMC
+from an energy function.
+What else do we need?
+Clearly, we need to know the state space $\states$.
+Also, unlike in classical mechanics,
+we would need to know which transitions between states are possible
+since there are no assumptions of continuity on $\states$.
+The first method to shed light on this problem
+was proposed by \citet{metropolis}.
+The original method was presented as a discrete-time Markov chain.
+However, here we present its continuous-time version that has been
+recently formulated by \citet{diaconis}.
+
 
 The transition rates themselves are random variables.
-The fact that the Metropolis algorithm does not give us
-back a standard, real-valued transition matrix
+The fact that the Metropolis algorithm does not give us back
+a standard (real-valued) infinitesimal generator
 leaves us with an unsatisfactory feeling.
+Since the infinitesimal generator defines a stochastic process,
+there should be a way to join the random variables in the entries
+of the infinitesimal generator into the family of random variables
+describing the Markov process.
+We explore this avenue in the present work and give a method
+that produces a real-valued infinitesimal generator.
 
+% Let us go back to the kinetic approach.
+Let us go back to the stochastic modelling of
+chemical interactions mentioned above.
 The theory of CTMCs allows one to frame
 the dynamics of chemical reaction systems.
 However, since the number of molecules of a species
