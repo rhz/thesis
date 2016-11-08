@@ -233,23 +233,73 @@ Clearly, we need to know the state space $\states$.
 Also, unlike in classical mechanics,
 we would need to know which transitions between states are possible
 since there are no assumptions of continuity on $\states$.
-The first method to shed light on this problem
+The first formulation to shed light on this problem
 was proposed by \citet{metropolis}.
-The original method was presented as a discrete-time Markov chain.
-However, here we present its continuous-time version that has been
-recently formulated by \citet{diaconis}.
+The algorithm asks for an energy function and an \emph{a priori},
+one-step transition probability matrix
+that is assumed to be symmetric,
+\ie that for any two states $i,j \in \states$
+the elements $a_{ij}$ and $a_{ji}$ of the matrix are equal.
+This matrix plays the role of the infinitesimal generator in the
+discrete-time setting (\ie where time is indexed by the naturals)
+and each element $a_{ij}$ denotes the probability that
+we choose to jump to state $j$ when we are at state $i$.
+Hence $\sum_{j \in \states} a_{ij} = 1$ for any fixed $i$
+and we write $a_{i-}$ for this probability distribution.
+The algorithm has been generalised to the case of asymmetric
+a priori probability matrices by \citet{hastings}.
 
+The construction gives a discrete-time Markov chain that
+converges to the probability distribution $\ip$ in \eqn{energy}.
+For the sake of simplicity we present here
+only the original formulation.
+The algorithm then works as follows.
+Given any state $i \in \states$ we pick a neighbour state $j$
+at random according to the probability distribution $a_{i-}$.
+We evaluate the energy function at $i$ and $j$
+to compute $\Delta E = E(j)-E(i)$ and proceed with the transition
+with probability $1$ if $\Delta E < 0$ and
+probability $e^{-\Delta E}$ if $\Delta E > 0$.
+Otherwise we stay at state $i$.
+In both cases time (a natural number) is increased by 1.
 
-The transition rates themselves are random variables.
-The fact that the Metropolis algorithm does not give us back
-a standard (real-valued) infinitesimal generator
-leaves us with an unsatisfactory feeling.
-Since the infinitesimal generator defines a stochastic process,
-there should be a way to join the random variables in the entries
-of the infinitesimal generator into the family of random variables
-describing the Markov process.
-We explore this avenue in the present work and give a method
-that produces a real-valued infinitesimal generator.
+To see that $\ip$ as defined in \eqn{energy} is the invariant
+probability distribution of the discrete-time Markov chain
+we show that it has (the discrete-time analogue of)
+detailed balance with respect to $\ip$.
+The probability $p_{ij}$ of jumping from $i$ to $j$ is
+a combination of the a priori probability and
+the probability of accepting that transition,
+which depends on $\Delta E$.
+\[ p_{ij} = a_{ij}\; \min(1, e^{-\Delta E}) \]
+By taking the ratio of $p_{ij}$ and $p_{ji}$ we have
+\[ \frac{p_{ij}}{p_{ji}} =
+   \frac{a_{ij}\; \min(1, e^{E(i)-E(j)})}{
+         a_{ji}\; \min(1, e^{E(j)-E(i)})} =
+   \frac{\min(1, e^{E(i)-E(j)})}{
+         \min(1, e^{E(j)-E(i)})} \]
+since $a_{ij} = a_{ji}$ by symmetry of the
+a priori transition probability matrix.
+Suppose $E(i)-E(j) > 0 > E(j)-E(i)$,
+\[ \frac{p_{ij}}{p_{ji}} = e^{E(i)-E(j)}
+     = \frac{e^{-E(j)}}{e^{-E(i)}} = \frac{\ip_{j}}{\ip_{i}} \]
+It is easy to see that when
+$E(j)-E(i) > 0 > E(i)-E(j)$ we obtain the same equation.
+Hence the discrete-time Markov chain has detailed balance
+with respect to $\ip$ as defined in \eqn{energy}.
+Given that the Markov chain is irreducible,
+it will converge to $\ip$ as $t \to \infty$.
+
+% The transition rates themselves are random variables.
+% The fact that the Metropolis algorithm does not give us back
+% a standard (real-valued) infinitesimal generator
+% leaves us with an unsatisfactory feeling.
+% Since the infinitesimal generator defines a stochastic process,
+% there should be a way to join the random variables in the entries
+% of the infinitesimal generator into the family of random variables
+% describing the Markov process.
+% We explore this avenue in the present work and give a method
+% that produces a real-valued infinitesimal generator.
 
 % Let us go back to the kinetic approach.
 Let us go back to the stochastic modelling of
@@ -283,8 +333,8 @@ We write $\MM(X)$ for the set of all multisets over $X$.
   Given a set of species $\species$,
   a \emph{reaction} $r$ is a pair $\tuple{L,R}$
   with $L$ and $R$ multisets over $\species$.
-  We refer to $L$ and $R$ as the left- and right-hand side of $r$
-  and write $L \to R$ for the reaction.
+  We refer to $L$ and $R$ as the left- and right-hand side of $r$.
+  % and write $L \to R$ for the reaction.
 \end{definition}
 
 \begin{definition}%[PN]%[Petri net]
@@ -350,14 +400,16 @@ what happens inside molecules in a chemical reaction.
 The chemical transformation taking place amounts to
 a change in the way electrons are shared by atoms
 resulting in a relocation of chemical bonds.
-It is all about atom binding and unbinding,
-\ie how they establish connections and break them.
+In other words, (non-radioactive) reactions are all about
+the binding and unbinding of atoms,
+how they establish connections and break them.
 This is poorly captured by a change of species,
 as it is modelled by Petri nets.
 A consequence of this lack of a formal representation for
 molecular bonds is that certain systems of chemical reactions
 cannot be described in a finite way using Petri nets,
-\eg unbounded polymerisation.
+\eg unbounded polymerisation
+(think of a chain that can always attach new links).
 
 Recently,
 a formal language to describe biochemical interactions
