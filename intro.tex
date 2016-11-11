@@ -1,6 +1,7 @@
 % \input{epigraph}
 % \noindent
 \section{Historical background}
+
 In the history of natural sciences,
 there has been two main approaches to describe dynamical systems,
 which I call here
@@ -287,7 +288,7 @@ It is easy to see that when
 $E(j)-E(i) > 0 > E(i)-E(j)$ we obtain the same equation.
 Hence the discrete-time Markov chain has detailed balance
 with respect to $\ip$ as defined in \eqn{energy}.
-Given that the a priori transition probability matrix
+Provided the a priori transition probability matrix
 makes it possible to reach any state from any other state,
 the Markov chain will converge to $\ip$ as $t \to \infty$.
 
@@ -375,7 +376,6 @@ an initial marking $M_0$ and
 a kinetic map $k: \reactions \to \RR^+$ that assigns
 kinetic rates $k(r)$ to reactions $r \in \reactions$,
 we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
-
 \begin{align*}
   \states &{} = \MM(\species) \\
   s(0)(x) &{} = \begin{cases}
@@ -414,7 +414,7 @@ A consequence of this lack of a formal representation for
 molecular bonds is that certain systems of chemical reactions
 cannot be described in a finite way using Petri nets,
 \eg unbounded polymerisation
-(think of a chain that can always attach new links).
+(think of a molecular chain that can always attach new links).
 
 Recently,
 a formal language to describe biochemical interactions
@@ -432,6 +432,39 @@ from an energy function and vice versa.
 \section{Kappa}
 \label{sec:kappa}
 
+Kappa represents interactions among proteins,
+nucleic acids and other biomolecules as
+connections in a biomolecular network.
+In these networks, nodes symbolise the biomolecules
+while connections stand for transient molecular bonds
+(\eg non-covalent interactions like hydrogen bonds).
+This network is constantly changing as molecules
+travel and interact with other molecules in a cell,
+which is viewed as the constant destruction and creation
+of the connections that make up the network.
+
+Due to spatial constraints,
+molecules can physically interact with
+just so many other molecules at once.
+% How many a given molecule will be able to bind depends on
+How many will depend on multiple factors like
+the size of the two interacting molecules and
+the region where they come in contact.
+% Kappa calls these regions interaction sites or simply sites.
+These regions, known in molecular biology by the names of domains,
+motifs or binding sites, are simply called \emph{sites} in Kappa.
+Any such site can bind at most one other site at a time.
+
+
+
+
+
+% The formal presentation of the language that we use here follows
+% the category-theoretical approach proposed in \citet{kappadpo}.
+% We follow the category-theoretical approach
+% presented in \citet{kappadpo}.
+The formal presentation that follows uses
+the category-theoretical approach introduced in \citet{kappadpo}.
 
 
 
