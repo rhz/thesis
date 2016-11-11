@@ -1,0 +1,298 @@
+%%%
+%
+% kappa.sty
+%
+% Common LaTeX macros for type-setting Kappa papers.
+%
+% To use the macros defined in this file, add the following line to
+% the preamble of a LaTeX document:
+%
+%   \uspackage{kappa}
+%
+% Authors: Sandro Stucki <sandro.stucki@gmail.com>
+%          Ricardo Honorato-Zimmer <rikardo.horo@gmail.com>
+%
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kappa}[2013/05/11 LaTeX package for Kappa papers]
+
+
+% My personal list of commonly used math packages and macros
+\RequirePackage{mathcommon}
+
+% If conditionals
+\RequirePackage{etoolbox}
+
+
+%%%% Custom macros %%%%
+
+%%% Kappa symbols %%%
+
+%% Categories
+
+% Category of site graphs.
+\newcommand{\sg}{\cat{SG}}         % Category.
+\newcommand{\ogs}{\ob(\sg)}        % Objects (site graphs).
+\newcommand{\hgs}{\hom(\sg)}       % Morphisms (embeddings).
+
+% Category of realizable site graphs with embeddings.
+\newcommand{\rsg}{\cat{rSGe}}
+
+% Slice categories over a contact map.
+\newcommand{\sgoc}{\sg/C}
+\newcommand{\rsgoc}{\rsg/C}
+
+% Typed categories (w.r.t. a contact map).
+\newcommand{\sgc}{\sg_C}
+\newcommand{\rsgc}{\rsg_C}
+
+% Type erasure functor.
+\newcommand{\terase}[1]{\lvert #1 \rvert}
+
+% Class of complete site graphs for contact graph #1.
+\newcommand{\kgs}[1]{\mathcal{K}_{#1}}
+
+% Minimal glueings
+\DeclareMathOperator*{\mg}{mg}
+\DeclareMathOperator*{\MG}{\mathcal{G}}
+
+
+%% Site graph sets, maps and relations
+\newcommand{\agents}{\mathcal{A}}  % Agent names.
+\newcommand{\sites}{\mathcal{S}}   % Site names.
+% \newcommand{\states}{\mathcal{E}}  % State names.
+\newcommand{\lnames}{\mathcal{L}}  % Bond/link labels.
+\newcommand{\sitemap}{\sigma}      % Interface (site map).
+\newcommand{\statemap}{\varepsilon}  % Site state map.
+\newcommand{\links}{\mathrel{\lambda}}  % Edge/link relation.
+\newcommand{\iundef}{\epsilon}     % Undefined internal state.
+\newcommand{\lfree}{\star}         % Free site symbol.
+\newcommand{\free}{\star}          % Alias of free site symbol.
+\newcommand{\lwild}{-}             % Bond wildcard symbol.
+\newcommand{\lany}{\epsilon}       % Unknown link state symbol.
+\newcommand{\iany}{\epsilon}       % Any state symbol.
+
+
+%% Symbols for embeddings
+
+% Set and number of embeddings from #1 to #2
+\newcommand{\embs}[2]{\ensuremath{\left[{#1};{#2}\right]}}
+\newcommand{\nembs}[2]{\ensuremath{\lvert\embs{#1}{#2}\rvert}}
+\newcommand{\emb}[2]{\embs{#1}{#2}}    % set of embeddings
+\newcommand{\nemb}[2]{\nembs{#1}{#2}}  % number of embeddings
+
+% Simple 'is embedded in' and 'embeds' arrows.
+\newcommand{\embin}{\to}
+\newcommand{\embds}{\gets}
+\newcommand{\embr}{\embin}  % embedded in
+\newcommand{\embl}{\embds}  % embeds
+
+% Simple 'is embedded by' arrow, with one argument (the name of the
+% embedding).
+\newcommand{\embinby}[1]{\toby{#1}}
+\newcommand{\embdsby}[1]{\getsby{#1}}
+\newcommand{\embrby}[1]{\embinby{#1}}
+\newcommand{\emblby}[1]{\ebbdsby{#1}}
+
+% Automatically extended arrows for long names.
+\newcommand{\xembinby}[1]{\xtoby{#1}}
+\newcommand{\xembdsby}[1]{\xgetsby{#1}}
+\newcommand{\xembrby}[1]{\xembinby{#1}}
+\newcommand{\xemblby}[1]{\xembdsby{#1}}
+
+
+%% Events, activities, transitions.
+
+% Symbols for Weighted Labeled Transition Systems (WLTS').
+\newcommand{\wlts}{\mathcal{W}}             % Regular WLTS.
+\newcommand{\gwlts}{\widehat{\mathcal{W}}}  % Geometrically sound WLTS.
+
+% Events, activities.
+\newcommand{\eventsof}{\Xi}         % Set of events assoc. with rules.
+\newcommand{\events}{\eventsof}
+\newcommand{\activof}{\mathbf{a}}   % Activity of rules.
+\newcommand{\activity}{\activof}
+
+
+% Simple unlabeled transition arrow.
+\newcommand{\trans}{\to}
+
+% Simple labeled transition (argument: label).
+\newcommand{\transby}[1]{\stackrel{#1}{\longrightarrow}}
+
+% Automatically extended transition arrow for long labels.
+\newcommand{\xtransby}[1]{\xrightarrow{#1}}
+
+% Sequence of transitions.
+\newcommand{\strans}{\to^*}
+
+
+%% Sets and functions of site graphs and Kappa models
+
+% Set of reachable mixtures/states.
+\DeclareMathOperator*{\reach}{\mathsf{reach}}
+
+
+%% Energy
+\newcommand{\energy}{\mathcal{P}}
+\newcommand{\energycost}{\epsilon}
+
+
+%%% TikZ macros/customizations %%%
+
+%% TikZ styles 
+
+% TikZ styles for arrows (morphisms/embeddings and actions).
+\tikzstyle{emb}=[hom]
+\tikzstyle{act}=[hom, -open triangle 45]
+\tikzstyle{biact}=[hom, open triangle 45-open triangle 45]
+
+% How to expand a macro in the node's options before splitting TikZ
+% argument list. http://tex.stackexchange.com/questions/85637/how-to-submit-a-set-of-tikz-command-with-pgfkeys
+\tikzset{
+  execute style/.style={#1},
+  execute macro/.style={execute style/.expand once=#1},
+}
+
+% Macro for drawing a site
+%
+%  #1 -- site options/style (optional)
+%  #2 -- site name
+%  #3 -- site position
+%  #4 -- site caption/text
+\newcommand{\sitet}[4][]{%
+  % \node[site,execute macro=#1] (#2) at #3 {#4}
+  \node[site,execute macro=#1] (#2) at (#3) {#4}%
+}
+\newcommand{\site}[3][]{\sitet[#1]{#2}{#3}{}}
+
+% Macro for drawing an agent with sites
+%
+%  #1 -- agent options/style (optional)
+%  #2 -- agent name
+%  #3 -- agent position
+%  #4 -- agent caption/text
+%  #5 -- agent interface (site name/options/position/caption)
+\newcommand{\agent}[5][]{%
+  \node[agent,#1] (#2) at #3 {#4};%
+  \foreach \sn/\so/\sp/\st in {#5}{%
+    % we assume that if \spo=\sto is because no \sto was given
+    % and we should leave the label blank.
+    \ifstreq{\spo}{\sto}{%
+      \site[\so]{#2-\sn}{(#2.\sp)};}{%
+      \sitet[\so]{#2-\sn}{(#2.\sp)}{\st}}%
+  }%
+}
+
+% Macro to compare two strings. Fully expand the two arguments.
+\newcommand{\ifstreq}[4]{
+  \edef\tmpa{{#1}}%
+  \edef\tmpb{{#2}}%
+  \expandafter\expandafter\expandafter%
+  \ifstrequal\expandafter\tmpa\tmpb{#3}{#4}}
+
+% Macro for drawing an agent with sites
+%
+%  #1 -- agent options/style (optional)
+%  #2 -- generated macro name
+%  #3 -- agent caption/text
+%  #4 -- agent interface (site name/options/position/caption)
+%
+% The generated macro has the following arguments
+%
+%  #1 -- agent options/style (optional)
+%  #2 -- agent name
+%  #3 -- agent position
+%  #4 -- agent interface (site name/options/position/caption) or
+%        just the site name of a site mentioned in the outer macro
+\newcommand{\newagent}[4][]{%
+  \newcommand{#2}[4][]{%
+    \edef\intf{##4}%
+    \node[agent,#1,##1] (##2) at (##3) {#3};%
+    \foreach \sno / \soo / \spo / \sto in {#4}{% o for outer
+      \foreach \sni / \soi / \spi / \sti in \intf {% i for inner
+        \ifstreq{\sno}{\sni}{%
+          \ifstreq{\sni}{\soi}{%
+            % we assume that if \spo=\sto is because no \sto was given
+            % and we should leave the label blank.
+            \ifstreq{\spo}{\sto}{%
+              % \node[site,\soo] (##2-\sno) at (##2.\spo) {\sto};}{%
+              \site[\soo]{##2-\sno}{##2.\spo};}{%
+              \sitet[\soo]{##2-\sno}{##2.\spo}{\sto}};%
+            \breakforeach}{}}{}}}%
+    \foreach \sn / \so / \sp / \st in \intf {%
+      \ifstreq{\sn}{\so}{}{%
+        % we assume that if \spo=\sto is because no \sto was given
+        % and we should leave the label blank.
+        \ifstreq{\sp}{\st}{%
+          % \node[site,\soo] (##2-\sn) at (##2.\sp) {\st};}{%
+          \site[\so]{##2-\sn}{##2.\sp};}{
+          \sitet[\so]{##2-\sn}{##2.\sp}{\st};}}}%
+  }%
+}
+
+% Macro for drawing a site internal state
+%
+%  #1 -- state options/style (optional)
+%  #2 -- agent name
+%  #3 -- site name
+%  #4 -- internal state
+\newcommand{\state}[4][]{%
+  \node[site,font=\footnotesize,execute macro=#1]
+    at ($(#2-#3)!-1.2!(#2)$) {#4} edge (#2-#3)
+}
+
+% Macro for drawing a stub
+%
+%  #1 -- stub options/style (optional)
+%  #2 -- agent name
+%  #3 -- site name
+\newcommand{\stub}[3][]{%
+  \draw[link,execute macro=#1] ($(#2-#3)!-.6!(#2)$) -- (#2-#3)
+}
+
+% Macro for drawing a semilink
+%
+%  #1 -- semilink options/style (optional)
+%  #2 -- agent name
+%  #3 -- site name
+\newcommand{\semilink}[3][]{%
+  \node[circle,draw=Black,fill=Grey,inner sep=0pt,minimum size=6pt,%
+    execute macro=#1] at ($(#2-#3)!-1.5!(#2)$) {} edge[link] (#2-#3)
+}
+
+% Macro for drawing a link
+%
+%  #1 -- link options/style (optional)
+%  #2 -- site 1 (agent name "-" site name)
+%  #3 -- site 2 (agent name "-" site name)
+\newcommand{\link}[3][]{%
+  \draw[link,execute macro=#1] (#2) -- (#3)
+}
+
+% Macro for drawing a rule arrow
+%
+%  #1 -- arrow options/style (optional)
+%  #2 -- position of last agent in left-hand side of the rule
+\tikzstyle{rulearrow}=[very thick,->,>=angle 90]
+\newcommand{\rulearrow}[2][]{%
+  \draw[rulearrow,execute macro=#1] #2 ++(30pt,0pt) -- ++(20pt,0pt)
+}
+
+% TikZ styles for agents
+\tikzstyle{agent}=[circle, draw=gray, fill=white, very thick,%
+  inner sep=3.5pt, minimum size=1.6em]
+
+% Basic TikZ style for sites
+\tikzstyle{site}=[draw=black, fill=white, rectangle,%
+  rounded corners=2.2pt, font=\scriptsize, inner sep=2pt,%
+  minimum size=4.5pt]
+
+% TikZ styles for links
+\tikzstyle{link}=[very thick]   % Basic link
+
+
+%%% Miscellaneous %%%
+
+% Set of fragments.
+\newcommand{\frag}{\mathcal{F}}
