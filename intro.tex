@@ -423,7 +423,6 @@ using rewriting rules,
 where molecules not just react but also can bind other molecules
 has been proposed by \citet{danoslaneve2002a}.
 In the next section we introduce this language, called Kappa,
-% and some of its properties,
 keeping in mind that we want to address
 the \emph{direct} and \emph{inverse} problem mentioned above,
 namely, the problem of generating a set of rewriting rules
@@ -532,7 +531,7 @@ The diagram to the right is the corresponding
 commutative diagram in the category $\Set$
 of sets and total functions
 to condition (i) in the definition.
-We call the homomorphism $h: G \to C$ a contact map over $C$
+We call the homomorphism $h: G \to C$ a \emph{contact map} over $C$
 iff $G$ is realisable and refer to $C$ as the contact graph.
 Contact maps act as the typing map mentioned above.
 
@@ -562,7 +561,6 @@ then $G$ is also realisable.
         & C & \\};
       \draw[hom] (m-1-1) -- node[above] {$h$} (m-1-3);
       \draw[hom] (m-1-1) -- node[below left] {$g$} (m-2-2);
-      % \draw[hom] (m-1-3) -- node[below right] {$g'$} (m-2-2);
       \draw[hom] (m-1-3) -- node[below right] (g) {\phantom{$g$}}
                  (m-2-2);
       \node[anchor=south] at (g.south) {$g'$};
@@ -578,6 +576,101 @@ Contact maps over $C$ and embeddings form a category $\rSGe_C$.
 Composition and the identity arrow
 are defined in a similar manner to $\SG$.
 
+As an example, consider the site graph $T$ for a triangle.
+
+\begin{minipage}{.5\textwidth}
+  \begin{align*}
+    \agents_T &= \set{1, 2, 3}, \quad
+    \sites_T = \set{l_1, r_1, l_2, r_2, l_3, r_3}, \\
+    \sitemap_T &= \setof{s_a \mapsto a}{
+      s \in \set{l, r},\; a \in \agents_T}, \\
+    \edges_T &= \set{(r_1, l_2), (l_2, r_1), (r_2, l_3),
+      (l_3, r_2), (r_3, l_1), (l_1, r_3)}
+  \end{align*}
+\end{minipage}
+\begin{minipage}{.32\textwidth}
+  \vspace{.7cm}
+  \begin{center}
+    \begin{tikzpicture}[grphdiag]
+      \nn[n5]{n1}{0,0}{1};
+      \nn[n5]{n2}{0:1.4}{2};
+      \nn[n5]{n3}{60:1.4}{3};
+      \e{n1}{n2};
+      \e{n2}{n3};
+      \e{n1}{n3};
+      \site{r1}{0:10pt};
+      \site{l1}{60:10pt};
+      \node at (86:15pt) {\scriptsize $l_1$};
+      \node at (-26:15pt) {\scriptsize $r_1$};
+      \begin{scope}[shift={(0:1.4)}]
+        \site{r2}{180:10pt};
+        \site{l2}{120:10pt};
+        \node at (206:15pt) {\scriptsize $l_2$};
+        \node at (94:15pt) {\scriptsize $r_2$};
+      \end{scope}
+      \begin{scope}[shift={(60:1.4)}]
+        \site{r3}{-120:10pt};
+        \site{l3}{-60:10pt};
+        \node at (-146:15pt) {\scriptsize $r_3$};
+        \node at (-34:15pt) {\scriptsize $l_3$};
+      \end{scope}
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\newline
+
+Let us use $T$ as the contact graph
+for a contact map $g: G \to T$ where
+
+\bigskip
+\begin{center}
+  $G = \; \;$
+  \begin{tikzpicture}[grphdiag,baseline=-2.5,thick]
+    \path[use as bounding box] (-0.8,0.4) rectangle (3.4,-0.42);
+    \e{-0.6,0}{3.2,0};
+    \begin{scope}
+      \nn[n5]{x}{0,0}{$x$};
+      \site{lx}{x.west};
+      \site{rx}{x.east};
+      \node at (206:.5) {\scriptsize $l_x$};
+      \node at (26:.5) {\scriptsize $r_x$};
+    \end{scope}
+    \begin{scope}[shift={(1.3,0)}]
+      \nn[n5]{y}{0,0}{$y$};
+      \site{ly}{y.west};
+      \site{ry}{y.east};
+      \node at (206:.5) {\scriptsize $l_y$};
+      \node at (26:.5) {\scriptsize $r_y$};
+    \end{scope}
+    \begin{scope}[shift={(2.6,0)}]
+      \nn[n5]{z}{0,0}{$z$};
+      \site{lz}{z.west};
+      \site{rz}{z.east};
+      \node at (206:.5) {\scriptsize $l_z$};
+      \node at (26:.5) {\scriptsize $r_z$};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+\begin{alignat*}{3}
+  \agents_G &= \set{x, y, z}, &
+  \sitemap_G &= \setof{s_a \mapsto a}{
+    s \in \set{l, r},\; a \in \agents_G}, \\
+  \sites_G &= \set{l_x, r_x, l_y, r_y, l_z, r_z}, \quad &
+  \edges_G &= \set{(r_x, l_y), (l_y, r_x), (r_y, l_z), (l_z, r_y)}.
+\end{alignat*}
+and
+\begin{align*}
+  g_\agents & {} = \set{x \mapsto 1, y \mapsto 2, z \mapsto 3} \\
+  g_\sites & {} = \setof{s_a \mapsto s_{a'}}{
+    s \in \set{l, r},\; a \in \agents_G,\; a' = g_\agents(a)}
+\end{align*}
+
+Sites $l_x$ and $r_z$ in $G$ are free,
+which we denote graphically by a stub coming out of the site.
+$T$ and $G$ are realisable since no site is bound to itself or
+bound to more than one other site.
+Note however that the codomain of a contact map ($T$ in this case)
+does not have to be realisable in general. % necessarily.
 
 
 
