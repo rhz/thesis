@@ -468,7 +468,7 @@ and build on them to construct the biomolecular network.%
 \footnote{Below we use the words graph and edge
   as synonyms for network and connection.}
 
-\begin{definition}[site graph]
+\begin{definition}%[site graph]
   A \emph{site graph} $G$ consists of
   a finite set of agents $\agents_G$,
   a finite set of sites $\sites_G$,
@@ -496,8 +496,8 @@ More precisely, we need a map from a realisable site graph
 to a site graph.
 Below we introduce such maps.
 
-\flushleft
-\begin{minipage}{.6\linewidth}
+\begin{flushleft}
+\begin{minipage}{.71\linewidth}
 \begin{definition}
   A \emph{homomorphism} $h: G \to G'$ of site graphs is
   a pair of functions, $h_\sites: \sites_G \to \sites_{G'}$
@@ -507,13 +507,10 @@ Below we introduce such maps.
   $h_\sites(s) \mathbin{\edges_{G'}} h_\sites(s')$.
 \end{definition}
 \end{minipage}
-\begin{minipage}{.05\linewidth}
-  \hfill
-\end{minipage}
-\begin{minipage}{.3\linewidth}
-\begin{center}
+\begin{minipage}{.28\linewidth}
+\begin{flushright}
   \begin{tikzpicture}
-    \matrix (m) [matrix of math nodes,row sep=35pt,column sep=35pt] {
+    \matrix (m) [matrix of math nodes,row sep=30pt,column sep=30pt] {
       \sites_G & \sites_{G'} \\
       \agents_G & \agents_{G'} \\};
     \draw[hom] (m-1-1) -- node[above] {$h_\sites$} (m-1-2);
@@ -521,13 +518,50 @@ Below we introduce such maps.
     \draw[hom] (m-1-1) -- node[left] {$\sitemap_G$} (m-2-1);
     \draw[hom] (m-1-2) -- node[right] {$\sitemap_{G'}$} (m-2-2);
   \end{tikzpicture}
-\end{center}
+\end{flushright}
 \end{minipage}
-\newline
+\end{flushleft}
 
-Hence homomorphisms preserve site ownership and connections.
+Put simply, homomorphisms preserve site ownership and connections.
+The diagram to the right is the corresponding
+commutative diagram in the category of sets and
+is equivalent to condition (i) in the definition.
 We call the typing map $h: G \to C$ a contact map over $C$
 and refer to $C$ as the contact graph.
+% TODO: say something more about typing
+
+% TODO: explain
+Site graphs and homomorphisms form a category $\SG$.
+
+A homomorphism $h: G \to G'$ is an \emph{embedding} iff
+(i) $h_\agents$ and $h_\sites$ are injective;
+and (ii) if $s$ is free in $G$, so is $h_\sites(s)$ in $G'$.
+Injectivity of $h_\agents$ and $h_\sites$ implies that
+whenever $h: G \to G'$ is an embedding and $G'$ is realisable
+then $G$ is also realisable.
+
+\begin{wrapfigure}[4]{r}{0.28\textwidth}
+  \vspace{-2.4em}
+  \begin{center}
+    \begin{tikzpicture}
+      \matrix (m) [matrix of math nodes,row sep=20pt,column sep=20pt] {
+        G & & G' \\
+        & C & \\};
+      \draw[hom] (m-1-1) -- node[above] {$\psi$} (m-1-3);
+      \draw[hom] (m-1-1) -- node[below left] {$h$} (m-2-2);
+      \draw[hom] (m-1-3) -- node[below right] {$h'$} (m-2-2);
+    \end{tikzpicture}
+  \end{center}
+\end{wrapfigure}
+
+An embedding $h: G \to G'$ between realisable site graphs
+can be lifted to an embedding between contact maps $g: G \to C$
+and $g': G' \to C$ iff the diagram on the left commutes
+% in the category of site graphs and homomorphisms $\SG$.
+in $\SG$.
+
+% TODO: explain
+Contact maps over $C$ and embeddings form a category $\rSGe_C$.
 
 
 
