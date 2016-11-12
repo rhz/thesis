@@ -531,9 +531,24 @@ The diagram to the right is the corresponding
 commutative diagram in the category $\Set$
 of sets and total functions
 to condition (i) in the definition.
-We call the homomorphism $h: G \to C$ a \emph{contact map} over $C$
-iff $G$ is realisable and refer to $C$ as the contact graph.
+We say the homomorphism $h: G \to C$ is
+a \emph{contact map} over $C$ iff
+(i) $G$ is realisable and
+(ii) whenever $h_\sites(s_1) = h_\sites(s_2)$
+and $\sitemap_G(s_1) = \sitemap_G(s_2)$, then $s_1 = s_2$.
+Condition (ii) means that every agent in $G$ has at most
+one copy of each site of its corresponding agent in $C$.
+We refer to $C$ as the contact graph.
 Contact maps act as the typing map mentioned above.
+In particular,
+$C$ specifies the types of agents that can exist in $G$,
+the sites that they may possess,
+and which of the $|\sites_C|(|\sites_C|+1)/2$
+possible edge types are actually valid.
+% |\sites_C|(|\sites_C|+1)/2 = |\sites_C|(|\sites_C|-1)/2+|\sites_C|,
+% that is, each site can bind any other site (divided by 2 to
+% compensate for counting each edge twice) or it can bind itself
+% (these edges aren't counted twice).
 
 Site graphs and homomorphisms form a category $\SG$.
 The composition of two homomorphisms
@@ -550,10 +565,9 @@ A homomorphism $h: G \to G'$ is an \emph{embedding} iff
 (ii) if $s$ is free in $G$, so is $h_\sites(s)$ in $G'$.
 Injectivity of $h_\agents$ and $h_\sites$ implies that
 whenever $h: G \to G'$ is an embedding and $G'$ is realisable
-then $G$ is also realisable.
-
-\begin{wrapfigure}[4]{r}{0.28\textwidth}
-  \vspace{-2.4em}
+then $G$ is also
+\begin{wrapfigure}[3]{r}{0.28\textwidth}
+  \vspace{-1em}
   \begin{center}
     \begin{tikzpicture}
       \matrix (m) [matrix of math nodes,row sep=20pt,column sep=20pt] {
@@ -567,7 +581,7 @@ then $G$ is also realisable.
     \end{tikzpicture}
   \end{center}
 \end{wrapfigure}
-
+realisable.
 An embedding $h: G \to G'$ between realisable site graphs
 can be lifted to a morphism between contact maps $g: G \to C$
 and $g': G' \to C$ iff the diagram on the right commutes in $\SG$.
@@ -575,6 +589,12 @@ and $g': G' \to C$ iff the diagram on the right commutes in $\SG$.
 Contact maps over $C$ and embeddings form a category $\rSGe_C$.
 Composition and the identity arrow
 are defined in a similar manner to $\SG$.
+We write $\matches{g}{g'}$ for the set of embeddings
+between $g$ and $g'$ in $\rSGe_C$. % contact maps over $C$.
+We have a functor $\anon{\cdot}$
+from $\rSGe_C$ to $\SG$ which forgets types.
+In particular, if $g: G \to C$ is a contact map,
+we write $\anon{g}$ for its domain $G$.
 
 As an example, consider the site graph $T$ for a triangle.
 
@@ -632,22 +652,22 @@ for a contact map $g: G \to T$ where
       \nn[n5]{x}{0,0}{$x$};
       \site{lx}{x.west};
       \site{rx}{x.east};
-      \node at (206:.5) {\scriptsize $l_x$};
-      \node at (26:.5) {\scriptsize $r_x$};
+      \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l_x$};
+      \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r_x$};
     \end{scope}
     \begin{scope}[shift={(1.3,0)}]
       \nn[n5]{y}{0,0}{$y$};
       \site{ly}{y.west};
       \site{ry}{y.east};
-      \node at (206:.5) {\scriptsize $l_y$};
-      \node at (26:.5) {\scriptsize $r_y$};
+      \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l_y$};
+      \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r_y$};
     \end{scope}
     \begin{scope}[shift={(2.6,0)}]
       \nn[n5]{z}{0,0}{$z$};
       \site{lz}{z.west};
       \site{rz}{z.east};
-      \node at (206:.5) {\scriptsize $l_z$};
-      \node at (26:.5) {\scriptsize $r_z$};
+      \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l_z$};
+      \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r_z$};
     \end{scope}
   \end{tikzpicture}
 \end{center}
@@ -672,6 +692,42 @@ bound to more than one other site.
 Note however that the codomain of a contact map ($T$ in this case)
 does not have to be realisable in general. % necessarily.
 
+To ease the specification of concrete contact maps,
+we colour agents according to their type
+and annotate sites by their name in $C$.
+In that way, the contact map $g: G \to T$ above
+can be completely specified by the following drawing as
+\smallskip
+\begin{center}
+  \begin{tikzpicture}[grphdiag,thick]
+    \e{-0.5,0}{2.7,0};
+    \begin{scope}
+      \n[n1]{x}{0,0};
+      \site{lx}{x.west};
+      \site{rx}{x.east};
+      \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l$};
+      \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r$};
+    \end{scope}
+    \begin{scope}[shift={(1.1,0)}]
+      \n[n2]{y}{0,0};
+      \site{ly}{y.west};
+      \site{ry}{y.east};
+      \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l$};
+      \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r$};
+    \end{scope}
+    \begin{scope}[shift={(2.2,0)}]
+      \n[n3]{z}{0,0};
+      \site{lz}{z.west};
+      \site{rz}{z.east};
+      \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l$};
+      \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r$};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+where we have assigned colours orange, blue and green to
+agent types $1$, $2$, $3$ in $C$.
+We have written $l$ and $r$ for sites $l_1,l_2,l_3$ and $r_1,r_2,r_3$
+as the subscript can be deduced from the colour of the agent as well.
 
 
 
