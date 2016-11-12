@@ -148,8 +148,8 @@ which we introduce below.
   with respect to $\ip$.
 \end{definition}
 
-And the related property of an
-\emph{invariant} probability measure for the infinitesimal generator.
+A related property is that of
+having an \emph{invariant} probability measure.
 
 \begin{definition}
   A \pmf $\ip$ on $\states$ is
@@ -161,8 +161,9 @@ And the related property of an
   whenever the action of $\qm$ on it does not change it.
 \end{definition}
 
-The relationship between these two properties is established
-by the following lemma.
+The relationship between % these two properties
+detailed balance and having an invariant probability measure
+is established by the following lemma.
 
 \begin{lemma}
   Suppose the infinitesimal generator $\qm$
@@ -435,8 +436,8 @@ from an energy function and vice versa.
 Kappa represents interactions among proteins,
 nucleic acids and other biomolecules as
 connections in a biomolecular network.
-In these networks, nodes symbolise the biomolecules
-while connections stand for transient molecular bonds
+In these networks, nodes stand for the biomolecules
+while connections represent transient molecular bonds
 (\eg non-covalent interactions like hydrogen bonds).
 This network is constantly changing as molecules
 travel and interact with other molecules in a cell,
@@ -462,9 +463,11 @@ It tell us which sites a site \emph{can} bind
 instead of what is actually bound to at a given moment.
 
 To make these ideas formal we will use
-the category-theoretical approach introduced in \citet{kappadpo}.
-We will first introduce the networks for types
-and build on them to construct the biomolecular network.%
+the category-theoretical approach % presented by \citet{kappadpo}.
+introduced in the work of \citet{kappadpo}.
+We first define the networks where types live and then
+use them as a basis to construct the actual biomolecular networks.%
+% build on them to construct the actual biomolecular networks.%
 \footnote{Below we use the words graph and edge
   as synonyms for network and connection.}
 
@@ -478,10 +481,11 @@ and build on them to construct the biomolecular network.%
 \end{definition}
 
 The pair $\sites_G$, $\edges_G$ form an undirected graph.
-Note that site graphs do not impose a bound on
-the number of connections a site can have,
-it just lists the possibilities.
+Clearly, the definition of site graphs does not impose
+a bound on the number of connections a site can have.
+% it just lists the possibilities.
 Indeed there is no restriction at all so far.
+This is the network where types live.
 
 Sites not in the domain of $\edges_G$ are said to be \emph{free}.
 One says $G$ is \emph{realisable} iff
@@ -489,25 +493,26 @@ One says $G$ is \emph{realisable} iff
 (ii) sites have at most one incident edge.
 Each realisable site graph represents a state
 in which our biomolecular network can be.
-However, it contains no typing information.
-We have to assign to each agent and site in the graph
-an agent and site in the type graph.
-More precisely, we need a map from a realisable site graph
-to a site graph.
+Note however that it contains no typing information.
+We can give a type to each agent and site in the graph
+by assigning to it an agent and site in the type graph.
+More precisely,
+we need a map from a realisable site graph to a site graph.
 Below we introduce such maps.
 
 \begin{flushleft}
-\begin{minipage}{.71\linewidth}
+\begin{minipage}{.66\linewidth}
 \begin{definition}
   A \emph{homomorphism} $h: G \to G'$ of site graphs is
   a pair of functions, $h_\sites: \sites_G \to \sites_{G'}$
   and $h_\agents: \agents_G \to \agents_{G'}$, such that
+  for all $s,s' \in \sites_G$ we have
   (i) $h_\agents(\sitemap_G(s)) = \sitemap_{G'}(h_\sites(s))$
   and (ii) if $s \mathbin{\edges_G} s'$ then
   $h_\sites(s) \mathbin{\edges_{G'}} h_\sites(s')$.
 \end{definition}
 \end{minipage}
-\begin{minipage}{.28\linewidth}
+\begin{minipage}{.3\linewidth}
 \begin{flushright}
   \begin{tikzpicture}
     \matrix (m) [matrix of math nodes,row sep=30pt,column sep=30pt] {
@@ -524,18 +529,26 @@ Below we introduce such maps.
 
 Put simply, homomorphisms preserve site ownership and connections.
 The diagram to the right is the corresponding
-commutative diagram in the category of sets and
-is equivalent to condition (i) in the definition.
-We call the typing map $h: G \to C$ a contact map over $C$
-and refer to $C$ as the contact graph.
-% TODO: say something more about typing
+commutative diagram in the category $\Set$
+of sets and total functions
+to condition (i) in the definition.
+We call the homomorphism $h: G \to C$ a contact map over $C$
+iff $G$ is realisable and refer to $C$ as the contact graph.
+Contact maps act as the typing map mentioned above.
 
-% TODO: explain
 Site graphs and homomorphisms form a category $\SG$.
+The composition of two homomorphisms
+$h_1: G_1 \to G_2$ and $h_2: G_2 \to G_3$
+is a homomorphism $h: G_1 \to G_3$ with
+$h_\sites = h_{2,\sites} \comp h_{1,\sites}$ and
+$h_\agents = h_{2,\agents} \comp h_{1,\agents}$.
+It is easy to see that composition defined in this way is associative.
+The identity arrow $\id_G: G \to G$ in $\SG$ is defined
+using the identity functions of the corresponding sets.
 
 A homomorphism $h: G \to G'$ is an \emph{embedding} iff
-(i) $h_\agents$ and $h_\sites$ are injective;
-and (ii) if $s$ is free in $G$, so is $h_\sites(s)$ in $G'$.
+(i) $h_\agents$ and $h_\sites$ are injective and
+(ii) if $s$ is free in $G$, so is $h_\sites(s)$ in $G'$.
 Injectivity of $h_\agents$ and $h_\sites$ implies that
 whenever $h: G \to G'$ is an embedding and $G'$ is realisable
 then $G$ is also realisable.
@@ -547,21 +560,20 @@ then $G$ is also realisable.
       \matrix (m) [matrix of math nodes,row sep=20pt,column sep=20pt] {
         G & & G' \\
         & C & \\};
-      \draw[hom] (m-1-1) -- node[above] {$\psi$} (m-1-3);
-      \draw[hom] (m-1-1) -- node[below left] {$h$} (m-2-2);
-      \draw[hom] (m-1-3) -- node[below right] {$h'$} (m-2-2);
+      \draw[hom] (m-1-1) -- node[above] {$h$} (m-1-3);
+      \draw[hom] (m-1-1) -- node[below left] {$g$} (m-2-2);
+      \draw[hom] (m-1-3) -- node[below right] {$g'$} (m-2-2);
     \end{tikzpicture}
   \end{center}
 \end{wrapfigure}
 
 An embedding $h: G \to G'$ between realisable site graphs
 can be lifted to an embedding between contact maps $g: G \to C$
-and $g': G' \to C$ iff the diagram on the left commutes
-% in the category of site graphs and homomorphisms $\SG$.
-in $\SG$.
+and $g': G' \to C$ iff the diagram on the left commutes in $\SG$.
 
-% TODO: explain
 Contact maps over $C$ and embeddings form a category $\rSGe_C$.
+Composition and the identity arrow
+are defined in a similar manner to $\SG$.
 
 
 
