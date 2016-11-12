@@ -460,18 +460,13 @@ These types also live in a network,
 a static network which represents the ``network of possibilities''.
 It tell us which sites a site \emph{can} bind
 instead of what is actually bound to at a given moment.
-% instead of what is attached to at a given moment.
-% instead of the site it is binding at a given moment.
-% instead of those they are bound to at a given moment.
-% not the ones they are bound to at a given moment.
 
 To make these ideas formal we will use
 the category-theoretical approach introduced in \citet{kappadpo}.
 We will first introduce the networks for types
-% and use them as a basis to construct the biomolecular network.%
 and build on them to construct the biomolecular network.%
 \footnote{Below we use the words graph and edge
-  for network and connection.}
+  as synonyms for network and connection.}
 
 \begin{definition}[site graph]
   A \emph{site graph} $G$ consists of
@@ -484,24 +479,55 @@ and build on them to construct the biomolecular network.%
 
 The pair $\sites_G$, $\edges_G$ form an undirected graph.
 Note that site graphs do not impose a bound on
-% the number of sites a given site can be bound to.
 the number of connections a site can have,
 it just lists the possibilities.
-% Instead, they only list the possible connections as mentioned before.
 Indeed there is no restriction at all so far.
 
-% One can think of agents as equivalence classes for sites.
 Sites not in the domain of $\edges_G$ are said to be \emph{free}.
 One says $G$ is \emph{realisable} iff
 (i) no site has an edge to itself and
 (ii) sites have at most one incident edge.
-Realisable site graphs represent the states in which
-our biomolecular network can be.
-However, they have no types.
-For that we need a map that tells us
-the type of each agent and site. % in our realisable site graph.
+Each realisable site graph represents a state
+in which our biomolecular network can be.
+However, it contains no typing information.
+We have to assign to each agent and site in the graph
+an agent and site in the type graph.
+More precisely, we need a map from a realisable site graph
+to a site graph.
 Below we introduce such maps.
 
+\flushleft
+\begin{minipage}{.6\linewidth}
+\begin{definition}
+  A \emph{homomorphism} $h: G \to G'$ of site graphs is
+  a pair of functions, $h_\sites: \sites_G \to \sites_{G'}$
+  and $h_\agents: \agents_G \to \agents_{G'}$, such that
+  (i) $h_\agents(\sitemap_G(s)) = \sitemap_{G'}(h_\sites(s))$
+  and (ii) if $s \mathbin{\edges_G} s'$ then
+  $h_\sites(s) \mathbin{\edges_{G'}} h_\sites(s')$.
+\end{definition}
+\end{minipage}
+\begin{minipage}{.05\linewidth}
+  \hfill
+\end{minipage}
+\begin{minipage}{.3\linewidth}
+\begin{center}
+  \begin{tikzpicture}
+    \matrix (m) [matrix of math nodes,row sep=35pt,column sep=35pt] {
+      \sites_G & \sites_{G'} \\
+      \agents_G & \agents_{G'} \\};
+    \draw[hom] (m-1-1) -- node[above] {$h_\sites$} (m-1-2);
+    \draw[hom] (m-2-1) -- node[below] {$h_\agents$} (m-2-2);
+    \draw[hom] (m-1-1) -- node[left] {$\sitemap_G$} (m-2-1);
+    \draw[hom] (m-1-2) -- node[right] {$\sitemap_{G'}$} (m-2-2);
+  \end{tikzpicture}
+\end{center}
+\end{minipage}
+\newline
+
+Hence homomorphisms preserve site ownership and connections.
+We call the typing map $h: G \to C$ a contact map over $C$
+and refer to $C$ as the contact graph.
 
 
 
