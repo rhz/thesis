@@ -219,12 +219,12 @@ Usually the energy is divided by $kT$ the product of
 the Boltzmann constant $k$ and the temperature $T$.
 However, we can omit this term by expressing the energy
 in units of $1/(kT)$.
-Note also that i) \eqn{energy} defines the energy function
+Note also that (i) \eqn{energy} defines the energy function
 uniquely only up to an additive constant
 given the probability distribution $\ip$,
 that is, if we change the energy of each state by adding
 a fixed constant we obtain the same probability distribution $\ip$;
-and ii) by convention the sign of the energy is inverted
+and (ii) by convention the sign of the energy is inverted
 so lower energies represent more favourable states.
 
 The next question is how do we construct a CTMC
@@ -295,9 +295,9 @@ the Markov chain will converge to $\ip$ as $t \to \infty$.
 The Metropolis-Hastings algorithm can be generalised
 to the continuous-time case \citep{diaconis}.
 However, the algorithm require us to either
-i) compute the energy of all states to obtain the probabilities
+(i) compute the energy of all states to obtain the probabilities
 $p_{ij}$ (or transition rates $q_{ij}$ in the continuous-time case),
-or ii) do rejection sampling, as outlined above.
+or (ii) do rejection sampling, as outlined above.
 Option (i) can be very time-consuming when $\states$ is large
 % or the evaluation of the energy function is expensive.
 or it's costly to evaluate the energy function.
@@ -458,27 +458,49 @@ In the same way a molecule is of a certain species,
 agents can be of different types.
 These types also live in a network,
 a static network which represents the ``network of possibilities''.
-It tell us which sites \emph{can} bind which sites,
-not the ones they are bound to at a given moment. % particular time.
+It tell us which sites a site \emph{can} bind
+instead of what is actually bound to at a given moment.
+% instead of what is attached to at a given moment.
+% instead of the site it is binding at a given moment.
+% instead of those they are bound to at a given moment.
+% not the ones they are bound to at a given moment.
 
-% The formal presentation that follows uses
 To make these ideas formal we will use
 the category-theoretical approach introduced in \citet{kappadpo}.
 We will first introduce the networks for types
+% and use them as a basis to construct the biomolecular network.%
 and build on them to construct the biomolecular network.%
-\footnote{We use the word graph, a synonym of network,
-  in the formal presentation.}
+\footnote{Below we use the words graph and edge
+  for network and connection.}
 
 \begin{definition}[site graph]
   A \emph{site graph} $G$ consists of
-  finite sets of agents and sites, $\agents_G$ and $\sites_G$,
+  a finite set of agents $\agents_G$,
+  a finite set of sites $\sites_G$,
   a map $\sitemap_G: \sites_G \to \agents_G$
   that assigns sites to agents
   and a symmetric edge relation $\edges_G$ on $\sites_G$.
 \end{definition}
 
 The pair $\sites_G$, $\edges_G$ form an undirected graph.
+Note that site graphs do not impose a bound on
+% the number of sites a given site can be bound to.
+the number of connections a site can have,
+it just lists the possibilities.
+% Instead, they only list the possible connections as mentioned before.
+Indeed there is no restriction at all so far.
+
+% One can think of agents as equivalence classes for sites.
 Sites not in the domain of $\edges_G$ are said to be \emph{free}.
+One says $G$ is \emph{realisable} iff
+(i) no site has an edge to itself and
+(ii) sites have at most one incident edge.
+Realisable site graphs represent the states in which
+our biomolecular network can be.
+However, they have no types.
+For that we need a map that tells us
+the type of each agent and site. % in our realisable site graph.
+Below we introduce such maps.
 
 
 
