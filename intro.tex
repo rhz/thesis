@@ -467,7 +467,8 @@ introduced in the work of \citet{kappadpo}.
 We first define the networks where types live and then
 use them as a basis to construct the actual biomolecular networks.%
 % build on them to construct the actual biomolecular networks.%
-\footnote{Below we use the words graph and edge
+\footnote{
+  Below we use the words graph and edge
   as synonyms for network and connection.}
 
 \begin{definition}%[site graph]
@@ -482,7 +483,6 @@ use them as a basis to construct the actual biomolecular networks.%
 The pair $\sites_G$, $\edges_G$ form an undirected graph.
 Clearly, the definition of site graphs does not impose
 a bound on the number of connections a site can have.
-% it just lists the possibilities.
 Indeed there is no restriction at all so far.
 This is the network where types live.
 
@@ -490,8 +490,11 @@ Sites not in the domain of $\edges_G$ are said to be \emph{free}.
 One says $G$ is \emph{realisable} iff
 (i) no site has an edge to itself and
 (ii) sites have at most one incident edge.
-Each realisable site graph represents a state
-in which our biomolecular network can be.
+Each realisable site graph represents a
+(possibly partially specified\footnote{
+  Below you can find the definition of a fully specified state,
+  which we call a mixture.})
+state in which our biomolecular network can be.
 Note however that it contains no typing information.
 We can give a type to each agent and site in the graph
 by assigning to it an agent and site in the type graph.
@@ -697,7 +700,7 @@ we colour agents according to their type
 and annotate sites by their name in $C$.
 In that way, the contact map $g: G \to T$ above
 can be completely specified by the following drawing as
-\smallskip
+\vspace{.15cm}
 \begin{center}
   \begin{tikzpicture}[grphdiag,thick]
     \e{-0.5,0}{2.7,0};
@@ -729,6 +732,24 @@ agent types $1$, $2$, $3$ in $C$.
 We have written $l$ and $r$ for sites $l_1,l_2,l_3$ and $r_1,r_2,r_3$
 as the subscript can be deduced from the colour of the agent as well.
 
+Whenever a contact map $g: G \to C$ specifies all sites that
+it can possibly specify for all its agents, that is,
+if for all $a \in \agents_G$,
+$h_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(h_\agents(a))$,
+then we say $g$ is a \emph{mixture}.
+Mixtures, being fully specified biomolecular networks
+with respect to the type $C$,
+are the states of our dynamical system.
+We change states by the applications of \emph{rules}.
+
+\begin{definition}
+  A \emph{rule} $r$ is a pair of contact maps
+  $r_L: L \to C$, $r_R: R \to C$
+  which differ only in their edge structures,
+  \ie\ $\agents_L = \agents_R$, $\sites_L = \sites_R$,
+  $\sitemap_L = \sitemap_R$, $r_{L,\agents} = r_{R,\agents}$
+  and $r_{L,\sites} = r_{R,\sites}$.
+\end{definition}
 
 
 
