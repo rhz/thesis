@@ -601,6 +601,7 @@ we write $\anon{g}$ for its domain $G$.
 
 As an example, consider the site graph $T$ for a triangle.
 
+\vspace{-.2cm}
 \begin{minipage}{.5\textwidth}
   \begin{align*}
     \agents_T &= \set{1, 2, 3}, \quad
@@ -641,13 +642,14 @@ As an example, consider the site graph $T$ for a triangle.
   \end{center}
 \end{minipage}
 \newline
+\vspace{.2cm}
 
 Let us use $T$ as the contact graph
 for a contact map $g: G \to T$ where
 
-\bigskip
+\vspace{.3cm}
 \begin{center}
-  $G = \; \;$
+  $G = \;\;$
   \begin{tikzpicture}[grphdiag,baseline=-2.5,thick]
     \path[use as bounding box] (-0.8,0.4) rectangle (3.4,-0.42);
     \e{-0.6,0}{3.2,0};
@@ -675,16 +677,17 @@ for a contact map $g: G \to T$ where
   \end{tikzpicture}
 \end{center}
 \begin{alignat*}{3}
-  \agents_G &= \set{x, y, z}, &
+  \agents_G &= \set{x, y, z} &
   \sitemap_G &= \setof{s_a \mapsto a}{
-    s \in \set{l, r},\; a \in \agents_G}, \\
-  \sites_G &= \set{l_x, r_x, l_y, r_y, l_z, r_z}, \quad &
-  \edges_G &= \set{(r_x, l_y), (l_y, r_x), (r_y, l_z), (l_z, r_y)}.
+    s \in \set{l, r},\; a \in \agents_G} \\
+  \sites_G &= \set{l_x, r_x, l_y, r_y, l_z, r_z} \quad\quad &
+  \edges_G &= \set{(r_x, l_y), (l_y, r_x), (r_y, l_z), (l_z, r_y)}
 \end{alignat*}
 and
+\vspace{-.4cm}
 \begin{align*}
-  g_\agents & {} = \set{x \mapsto 1, y \mapsto 2, z \mapsto 3} \\
-  g_\sites & {} = \setof{s_a \mapsto s_{a'}}{
+  g_\agents &= \set{x \mapsto 1, y \mapsto 2, z \mapsto 3} \\
+  g_\sites &= \setof{s_a \mapsto s_{a'}}{
     s \in \set{l, r},\; a \in \agents_G,\; a' = g_\agents(a)}
 \end{align*}
 
@@ -699,8 +702,8 @@ To ease the specification of concrete contact maps,
 we colour agents according to their type
 and annotate sites by their name in $C$.
 In that way, the contact map $g: G \to T$ above
-can be completely specified by the following drawing as
-\vspace{.15cm}
+can be described formally by the following drawing.
+\vspace{.3cm}
 \begin{center}
   \begin{tikzpicture}[grphdiag,thick]
     \e{-0.5,0}{2.7,0};
