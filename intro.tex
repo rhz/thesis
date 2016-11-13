@@ -698,7 +698,7 @@ bound to more than one other site.
 Note however that the codomain of a contact map ($T$ in this case)
 does not have to be realisable in general. % necessarily.
 
-To ease the specification of concrete contact maps,
+To ease the definition of concrete contact maps,
 we colour agents according to their type
 and annotate sites by their name in $C$.
 In that way, the contact map $g: G \to T$ above
@@ -735,14 +735,20 @@ agent types $1$, $2$, $3$ in $C$.
 We have written $l$ and $r$ for sites $l_1,l_2,l_3$ and $r_1,r_2,r_3$
 as the subscript can be deduced from the colour of the agent as well.
 
+What other contact maps there are that have $T$ as contact graph?
+We can have chains of any length and closed cycles
+of length some multiple of three like triangles, hexagons, etc.
+% TODO: perhaps expand here
+
 Whenever a contact map $g: G \to C$ specifies all sites that
 it can possibly specify for all its agents, that is,
 if for all $a \in \agents_G$,
 $h_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(h_\agents(a))$,
 then we say $g$ is a \emph{mixture}.
+% TODO: I don't like so much the next sentence
 Mixtures, being fully specified biomolecular networks
 with respect to the type $C$,
-are the states of our dynamical system.
+are a natural choice for the states of our dynamical system.
 We change states by the applications of \emph{rules}.
 
 \begin{definition}
@@ -754,6 +760,98 @@ We change states by the applications of \emph{rules}.
   and $r_{L,\sites} = r_{R,\sites}$.
 \end{definition}
 
+% The associated commuting diagram in $\Set$.
+%
+% \begin{center}
+%   \begin{tikzpicture}
+%     \matrix (m) [matrix of math nodes,row sep=25pt,column sep=30pt] {
+%       \sites_L & & \sites_R \\
+%       & \sites_C & \\
+%       \agents_L & & \agents_R \\
+%       & \agents_C & \\};
+%     \draw[hom] (m-1-1) -- node[onarrow] {$\id_{\sites}$} (m-1-3);
+%     \draw[hom] (m-3-1) --
+%     node[onarrow,xshift=-15pt] {$\id_{\agents}$} (m-3-3);
+%     \draw[hom] (m-1-1) -- node[onarrow] {$r_{L,\sites}$} (m-2-2);
+%     \draw[hom] (m-3-1) -- node[onarrow] {$r_{L,\agents}$} (m-4-2);
+%     \draw[hom] (m-1-3) -- node[onarrow] {$r_{R,\sites}$} (m-2-2);
+%     \draw[hom] (m-3-3) -- node[onarrow] {$r_{R,\agents}$} (m-4-2);
+%     \draw[hom] (m-1-1) -- node[onarrow] {$\sitemap_{L}$} (m-3-1);
+%     \draw[hom] (m-2-2) --
+%       node[right,yshift=15pt] {$\sitemap_{C}$} (m-4-2);
+%     \draw[hom] (m-1-3) -- node[onarrow] {$\sitemap_{R}$} (m-3-3);
+%   \end{tikzpicture}
+% \end{center}
+
+For example, in the context of the contact graph $T$
+a rule that binds agents of type $1$
+with agents of type $2$ can be defined as
+
+\vspace{-.6cm}
+\begin{flushright}
+\begin{minipage}{.43\linewidth}
+\begin{center}
+  \begin{tikzpicture}[thick]
+    \node[grphnode] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{1.1,0};
+        \begin{scope}
+          \n[n1]{x}{0,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+    \path (lhs.east) +(.3,0) edge[rule] +(1,0)
+      +(1.3,0) coordinate (r);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \e{x}{.5,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.2,0)}]
+          \n[n2]{y}{0,0};
+          \e{y}{-.5,0};
+          \site{ly}{y.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+  \end{tikzpicture}
+\end{center}
+\end{minipage}
+\begin{minipage}{.5\linewidth}
+\begin{equation*}
+  \arraycolsep=2pt
+  \begin{array}{ccccl}
+    \agents_L &=& \agents_R &=& \set{u,v} \\
+    \sites_L &=& \sites_R &=& \set{r_u, l_v} \\
+    \sitemap_L &=& \sitemap_R &=& \set{r_u \mapsto u, l_v \mapsto v} \\
+    r_{L,\agents} &=& r_{R,\agents} &=& \set{u \mapsto 1, v \mapsto 2} \\
+    r_{L,\sites} &=& r_{R,\sites} &=& \set{r_u \mapsto r_1, l_v \mapsto l_2} \\
+    && \edges_L &=& \set{(r_u,l_v),(l_v,r_u)} \\
+    && \edges_R &=& \emptyset
+  \end{array}
+\end{equation*}
+\end{minipage}
+\end{flushright}
+
+Note that there is no site $l$ in $u$ and no site $r$ in $v$.
+Hence $r_L$ and $r_R$ are not mixtures
+but partially specified biomolecular networks,
+to which we refer as \emph{patterns}.
+% TODO: I'm still not happy with the following sentence
+The ability to use patterns in rules will allow us
+to apply them in many contexts. % more general contexts
+In particular, the rule defined above can be applied
+% As we will see later, this means that the rule can be applied
+regardless of whether these sites are bound or free.
 
 
 
