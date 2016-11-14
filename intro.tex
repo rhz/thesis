@@ -563,20 +563,20 @@ It is easy to see that composition defined in this way is associative.
 The identity arrow $\id_G: G \to G$ in $\SG$ is defined
 using the identity functions of the corresponding sets.
 
-A homomorphism $h: G \to G'$ is an \emph{embedding} iff
-(i) $h_\agents$ and $h_\sites$ are injective and
-(ii) if $s$ is free in $G$, so is $h_\sites(s)$ in $G'$.
-Injectivity of $h_\agents$ and $h_\sites$ implies that
-whenever $h: G \to G'$ is an embedding and $G'$ is realisable
+A homomorphism $\psi: G \to G'$ is an \emph{embedding} iff
+(i) $\psi_\agents$ and $\psi_\sites$ are injective and
+(ii) if $s$ is free in $G$, so is $\psi_\sites(s)$ in $G'$.
+Injectivity of $\psi_\agents$ and $\psi_\sites$ implies that
+whenever $\psi: G \to G'$ is an embedding and $G'$ is realisable
 then $G$ is also
 \begin{wrapfigure}[3]{r}{0.28\textwidth}
-  \vspace{-1em}
+  \vspace{-1.5em}
   \begin{center}
     \begin{tikzpicture}
       \matrix (m) [matrix of math nodes,row sep=20pt,column sep=20pt] {
         G & & G' \\
         & C & \\};
-      \draw[hom] (m-1-1) -- node[above] {$h$} (m-1-3);
+      \draw[hom] (m-1-1) -- node[above] {$\psi$} (m-1-3);
       \draw[hom] (m-1-1) -- node[below left] {$g$} (m-2-2);
       \draw[hom] (m-1-3) -- node[below right] (g) {\phantom{$g$}}
                  (m-2-2);
@@ -585,7 +585,7 @@ then $G$ is also
   \end{center}
 \end{wrapfigure}
 realisable.
-An embedding $h: G \to G'$ between realisable site graphs
+An embedding $\psi: G \to G'$ between realisable site graphs
 can be lifted to a morphism between contact maps $g: G \to C$
 and $g': G' \to C$ iff the diagram on the right commutes in $\SG$.
 
@@ -593,7 +593,7 @@ Contact maps over $C$ and embeddings form a category $\rSGe_C$.
 Composition and the identity arrow
 are defined in a similar manner to $\SG$.
 We write $\matches{g}{g'}$ for the set of embeddings
-between $g$ and $g'$ in $\rSGe_C$. % contact maps over $C$.
+between $g$ and $g'$ in $\rSGe_C$.
 We have a functor $\anon{\cdot}$
 from $\rSGe_C$ to $\SG$ which forgets types.
 In particular, if $g: G \to C$ is a contact map,
@@ -696,7 +696,7 @@ which we denote graphically by a stub coming out of the site.
 $T$ and $G$ are realisable since no site is bound to itself or
 bound to more than one other site.
 Note however that the codomain of a contact map ($T$ in this case)
-does not have to be realisable in general. % necessarily.
+does not have to be realisable in general.
 
 To ease the definition of concrete contact maps,
 we colour agents according to their type
@@ -735,17 +735,18 @@ agent types $1$, $2$, $3$ in $C$.
 We have written $l$ and $r$ for sites $l_1,l_2,l_3$ and $r_1,r_2,r_3$
 as the subscript can be deduced from the colour of the agent as well.
 
-What other contact maps there are that have $T$ as contact graph?
-We can have chains of any length and closed cycles
-of length some multiple of three like triangles, hexagons, etc.
-% TODO: perhaps expand here
-
 Whenever a contact map $g: G \to C$ specifies all sites that
 it can possibly specify for all its agents, that is,
 if for all $a \in \agents_G$,
 $h_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(h_\agents(a))$,
 then we say $g$ is a \emph{mixture}.
-% TODO: I don't like so much the next sentence
+In the above example, $g$ is a mixture.
+What other mixtures are there that have $T$ as contact graph?
+We can have chains of any length and closed cycles
+of length some multiple of three like triangles, hexagons, etc.
+We can have any disjoint sum of them as well.
+
+% TODO: next sentence could be improved
 Mixtures, being fully specified biomolecular networks
 with respect to the type $C$,
 are a natural choice for the states of our dynamical system.
@@ -755,37 +756,15 @@ We change states by the applications of \emph{rules}.
   A \emph{rule} $r$ is a pair of contact maps
   $r_L: L \to C$, $r_R: R \to C$
   which differ only in their edge structures,
-  \ie\ $\agents_L = \agents_R$, $\sites_L = \sites_R$,
+  \ie $\agents_L = \agents_R$, $\sites_L = \sites_R$,
   $\sitemap_L = \sitemap_R$, $r_{L,\agents} = r_{R,\agents}$
   and $r_{L,\sites} = r_{R,\sites}$.
 \end{definition}
 
-% The associated commuting diagram in $\Set$.
-%
-% \begin{center}
-%   \begin{tikzpicture}
-%     \matrix (m) [matrix of math nodes,row sep=25pt,column sep=30pt] {
-%       \sites_L & & \sites_R \\
-%       & \sites_C & \\
-%       \agents_L & & \agents_R \\
-%       & \agents_C & \\};
-%     \draw[hom] (m-1-1) -- node[onarrow] {$\id_{\sites}$} (m-1-3);
-%     \draw[hom] (m-3-1) --
-%     node[onarrow,xshift=-15pt] {$\id_{\agents}$} (m-3-3);
-%     \draw[hom] (m-1-1) -- node[onarrow] {$r_{L,\sites}$} (m-2-2);
-%     \draw[hom] (m-3-1) -- node[onarrow] {$r_{L,\agents}$} (m-4-2);
-%     \draw[hom] (m-1-3) -- node[onarrow] {$r_{R,\sites}$} (m-2-2);
-%     \draw[hom] (m-3-3) -- node[onarrow] {$r_{R,\agents}$} (m-4-2);
-%     \draw[hom] (m-1-1) -- node[onarrow] {$\sitemap_{L}$} (m-3-1);
-%     \draw[hom] (m-2-2) --
-%       node[right,yshift=15pt] {$\sitemap_{C}$} (m-4-2);
-%     \draw[hom] (m-1-3) -- node[onarrow] {$\sitemap_{R}$} (m-3-3);
-%   \end{tikzpicture}
-% \end{center}
-
-For example, in the context of the contact graph $T$
-a rule that binds agents of type $1$
-with agents of type $2$ can be defined as
+In the context of the contact graph $T$,
+we can have a rule that binds
+agents of type $1$ with agents of type $2$.
+It is defined as follows.
 
 \vspace{-.6cm}
 \begin{flushright}
@@ -793,22 +772,6 @@ with agents of type $2$ can be defined as
 \begin{center}
   \begin{tikzpicture}[thick]
     \node[grphnode] (lhs) at (0,0) {
-      \tikz[ingrphdiag]{
-        \e{0,0}{1.1,0};
-        \begin{scope}
-          \n[n1]{x}{0,0};
-          \site{rx}{x.east};
-          \node at (26:.42) {\scriptsize $r$};
-        \end{scope}
-        \begin{scope}[shift={(1.1,0)}]
-          \n[n2]{y}{0,0};
-          \site{ly}{y.west};
-          \node at (206:.42) {\scriptsize $l$};
-        \end{scope}
-      }};
-    \path (lhs.east) +(.3,0) edge[rule] +(1,0)
-      +(1.3,0) coordinate (r);
-    \node[grphnode,anchor=west] (rhs) at (r) {
       \tikz[ingrphdiag]{
         \begin{scope}[shift={(0,0)}]
           \n[n1]{x}{0,0};
@@ -819,6 +782,22 @@ with agents of type $2$ can be defined as
         \begin{scope}[shift={(1.2,0)}]
           \n[n2]{y}{0,0};
           \e{y}{-.5,0};
+          \site{ly}{y.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+    \path (lhs.east) +(.3,0) edge[rule] +(1,0)
+      +(1.3,0) coordinate (r);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{1.1,0};
+        \begin{scope}
+          \n[n1]{x}{0,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
           \site{ly}{y.west};
           \node at (206:.42) {\scriptsize $l$};
         \end{scope}
@@ -835,23 +814,62 @@ with agents of type $2$ can be defined as
     \sitemap_L &=& \sitemap_R &=& \set{r_u \mapsto u, l_v \mapsto v} \\
     r_{L,\agents} &=& r_{R,\agents} &=& \set{u \mapsto 1, v \mapsto 2} \\
     r_{L,\sites} &=& r_{R,\sites} &=& \set{r_u \mapsto r_1, l_v \mapsto l_2} \\
-    && \edges_L &=& \set{(r_u,l_v),(l_v,r_u)} \\
-    && \edges_R &=& \emptyset
+    && \edges_L &=& \emptyset \\
+    && \edges_R &=& \set{(r_u,l_v),(l_v,r_u)}
   \end{array}
 \end{equation*}
 \end{minipage}
 \end{flushright}
 
 Note that there is no site $l$ in $u$ and no site $r$ in $v$.
-Hence $r_L$ and $r_R$ are not mixtures
-but partially specified biomolecular networks,
-to which we refer as \emph{patterns}.
-% TODO: I'm still not happy with the following sentence
-The ability to use patterns in rules will allow us
-to apply them in many contexts. % more general contexts
-In particular, the rule defined above can be applied
-% As we will see later, this means that the rule can be applied
-regardless of whether these sites are bound or free.
+Hence $r_L$ and $r_R$ are not mixtures.
+They are partially specified biomolecular networks.
+% to which we refer as \emph{patterns}.
+% The ability to use patterns in rules will allow us
+% to apply them in many contexts. % more general contexts
+Intuitevely, this means that the rule can be applied
+regardless of whether those sites are bound or free.
+
+\begin{wrapfigure}[5]{r}{0.34\textwidth}
+  \vspace{-1.7em}
+  \begin{equation}
+    \label{eq:rewrite-step}
+    \tikz[baseline=-2.5]{
+      \matrix (m) [matrix of math nodes,row sep=35pt,column sep=35pt] {
+        r_L & r_R \\
+        h & \comatch{h} \\};
+      \draw[hom,dotted] (m-1-1) -- (m-1-2);
+      \draw[hom,dotted] (m-2-1) -- (m-2-2);
+      \draw[hom] (m-1-1) -- node[left] {$\psi$} (m-2-1);
+      \draw[hom] (m-1-2) -- node[right] {$\comatch{\psi}$} (m-2-2);
+    }
+  \end{equation}
+\end{wrapfigure}
+
+When a rule $r$ is applied to an embedding $\psi: r_L \to m$
+it induces a \emph{rewrite} of the mixture $m$
+by modifying the edge structure of the image of $\psi$
+from that of $r_L$ to that of $r_R$.
+The result of rewriting is a new mixture $\comatch{m}$
+and an embedding $\comatch{\psi}: r_R \to \comatch{m}$, where
+$\anon{\comatch{m}}$ has the same agents and sites as $\anon{m}$,
+\ie $\agents_{\anon{\comatch{m}}} = \agents_{\anon{m}}$,
+$\sites_{\anon{\comatch{m}}} = \sites_{\anon{m}}$,
+$\sitemap_{\anon{\comatch{m}}} = \sitemap_{\anon{m}}$,
+$\comatch{m}_\agents = m_\agents$,
+$\comatch{m}_\sites = m_\sites$,
+and $\edges_{\anon{\comatch{m}}} = \edges_{\anon{m}} -
+\psi_\sites(\edges_{\anon{r_L}}) +
+\comatch{\psi}_\sites(\edges_{\anon{r_R}})$.
+The embedding $\comatch{\psi}$ is simply defined by
+$\comatch{\psi}_\agents = \psi_\agents$ and
+$\comatch{\psi}_\sites = \psi_\sites$.
+The inverse of $r$,
+defined as $\inv{r} := (r_R,r_L)$ is also a valid rule.
+By applying $\inv{r}$ to $\comatch{\psi}$
+we recover $m$ and $\psi$.
+% By rewriting $\comatch{m}$ with $\inv{r}$ via $\comatch{\psi}$,
+% we recover $m$ and $\psi$.
 
 
 
