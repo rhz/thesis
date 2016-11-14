@@ -871,6 +871,34 @@ we recover $m$ and $\psi$.
 % By rewriting $\comatch{m}$ with $\inv{r}$ via $\comatch{\psi}$,
 % we recover $m$ and $\psi$.
 
+\begin{lemma}
+  Let $r = (r_L, r_R)$ be a rule,
+  $r_L/\rSGe_C$ the coslice category under $r_L$, and
+  $r_R/\rSGe_C$ the coslice category under $r_R$.
+  The categories $r_L/\rSGe_C$ and $r_R/\rSGe_C$ are isomorphic.
+\end{lemma}
+\begin{proof}
+  We construct a functor $F: r_L/\rSGe_C \to r_R/\rSGe_C$
+  by mapping an embedding $\psi: r_L \to m$
+  to the result of applying $r$ to it,
+  $\comatch{\psi}: r_R \to \comatch{m}$.
+  By definition $\comatch{\psi}_\agents = \psi_\agents$ and
+  $\comatch{\psi}_\sites = \psi_\sites$.
+  Hence the mapping of embeddings induced by $F$ is injective:
+  whenever the application of $r$ to two embeddings
+  $\psi: r_L \to m$ and $\phi: r_L \to m'$
+  results in $\comatch{\phi}$ and $\comatch{\psi}$
+  with $\comatch{\phi} = \comatch{\psi}$,
+  then $\phi = \psi$.
+  By an analogous argument, we can construct a functor
+  $G: r_R/\rSGe_C \to r_L/\rSGe_C$ using $\inv{r}$ that
+  maps embeddings injectively in the reverse direction.
+  Applying $r$ followed by $\inv{r}$ to $\psi$
+  results in $\psi$ itself.
+  Therefore $GF = \id_{r_L/\rSGe_C}$ and $FG = \id_{r_R/\rSGe_C}$.
+\end{proof}
+
+Intuitively, this property characterises a ``reversible'' rule.
 
 
 
