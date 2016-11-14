@@ -80,7 +80,7 @@ In particular, we work with time-homogeneous CTMCs.
   is an $\states \times \states$ matrix
   with elements $q_{ij} \in \RR$, $i,j \in \states$
   such that $0 \leqslant q_{ij} < \infty$ when $i \neq j$
-  and $q_{ii} = - \sum_{j \neq i} q_{ij} < \infty$.
+  and $q_{ii} = - \sum_{j \neq i} q_{ij} > -\infty$.
 \end{definition}
 
 The infinitesimal generator plays the role of
@@ -374,16 +374,16 @@ Petri nets can be given a stochastic interpretation
 in terms of a CTMC.
 Given a Petri net $\tuple{\species, \reactions}$,
 an initial marking $M_0$ and
-a kinetic map $k: \reactions \to \RR^+$ that assigns
-kinetic rates $k(r)$ to reactions $r \in \reactions$,
+a rate map $k: \reactions \to \RR^+$ that assigns rates to reactions,
 we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
 \begin{align*}
-  \states &{} = \MM(\species) \\
-  s(0)(x) &{} = \begin{cases}
+  \states &= \MM(\species) \\
+  s(0)(x) &= \begin{cases}
     1 \quad\text{if } x = M_0 \\
     0 \quad\text{if } x \neq M_0
   \end{cases} \\
-  q_{MN} &{} = \sum_{\tuple{L,R} \in \reactions} n_{MN}(L,R)
+  q_{MN} &= \sum_{\shortstack{$\scriptstyle r \in \reactions$\\
+    $\scriptstyle r = \tuple{L,R}$}} k(r) \; n_{MN}(L,R)
 \end{align*}
 with
 \begin{equation*}
@@ -740,6 +740,7 @@ it can possibly specify for all its agents, that is,
 if for all $a \in \agents_G$,
 $h_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(h_\agents(a))$,
 then we say $g$ is a \emph{mixture}.
+We write $\MM(C)$ for the set of all mixtures in $\rSGe_C$.
 In the above example, $g$ is a mixture.
 What other mixtures are there that have $T$ as contact graph?
 We can have chains of any length and closed cycles
@@ -822,11 +823,8 @@ It is defined as follows.
 \end{flushright}
 
 Note that there is no site $l$ in $u$ and no site $r$ in $v$.
-Hence $r_L$ and $r_R$ are not mixtures.
-They are partially specified biomolecular networks.
-% to which we refer as \emph{patterns}.
-% The ability to use patterns in rules will allow us
-% to apply them in many contexts. % more general contexts
+Hence $r_L$ and $r_R$ are not mixtures
+as they are only partially specified.
 Intuitevely, this means that the rule can be applied
 regardless of whether those sites are bound or free.
 
@@ -884,7 +882,7 @@ we recover $m$ and $\psi$.
   $\comatch{\psi}: r_R \to \comatch{m}$.
   By definition $\comatch{\psi}_\agents = \psi_\agents$ and
   $\comatch{\psi}_\sites = \psi_\sites$.
-  Hence the mapping of embeddings induced by $F$ is injective:
+  Hence, the mapping of embeddings induced by $F$ is injective:
   whenever the application of $r$ to two embeddings
   $\psi: r_L \to m$ and $\phi: r_L \to m'$
   results in $\comatch{\phi}$ and $\comatch{\psi}$
@@ -898,7 +896,36 @@ we recover $m$ and $\psi$.
   Therefore $GF = \id_{r_L/\rSGe_C}$ and $FG = \id_{r_R/\rSGe_C}$.
 \end{proof}
 
-Intuitively, this property characterises a ``reversible'' rule.
+Intuitively, this property characterises a \emph{reversible} rule.
+% TODO: say something more about reversibility
+
+Given a finite set of rules $\generators$ over $C$,
+an initial mixture $m_0$
+and a rate map $k$ from $\generators$ to $\RR^+$,
+we can construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
+\begin{align*}
+  \states &= \MM(C) \\
+  s(0)(x) &= \begin{cases}
+    1 \quad\text{if } x = m_0 \\
+    0 \quad\text{if } x \neq m_0
+  \end{cases} \\
+  q_{mn} &= \sum_{\shortstack{$\scriptstyle r \in \generators$\\
+    $\scriptstyle r = \tuple{r_L,r_R}$}} k(r) \; n_{mn}(r_L,r_R)
+\end{align*}
+with
+\begin{equation*}
+  n_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
+    \abs{\matches{r_L}{m}} & \text{if } \comatch{m} = n \\
+    0 & \text{otherwise}
+  \end{array}\right.
+\end{equation*}
+
+Clearly, the number of embeddings between any two contact maps $x,y$
+is finite, \ie $|\matches{x}{y}| < \infty$ for all $x,y$.
+Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$.
+Also, as agents cannot be destroyed nor created by rules,
+the (strongly) connected components of Markov chain are finite.
+% We write $\LTS^k_\generators$ for the CTMC thus obtained.
 
 
 
