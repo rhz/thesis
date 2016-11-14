@@ -382,8 +382,8 @@ we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
     1 \quad\text{if } x = M_0 \\
     0 \quad\text{if } x \neq M_0
   \end{cases} \\
-  q_{MN} &= \sum_{\shortstack{$\scriptstyle r \in \reactions$\\
-    $\scriptstyle r = \tuple{L,R}$}} k(r) \; n_{MN}(L,R)
+  q_{MN} &= \sum_{\substack{r \in \reactions\\r = \tuple{L,R}}}
+    k(r) \; n_{MN}(L,R)
 \end{align*}
 with
 \begin{equation*}
@@ -897,21 +897,23 @@ we recover $m$ and $\psi$.
 \end{proof}
 
 Intuitively, this property characterises a \emph{reversible} rule.
-% TODO: say something more about reversibility
+Reversibility will be important to obtain detailed balance as
+every rule $r$ must be in balance with its inverse $\inv{r}$.
 
 Given a finite set of rules $\generators$ over $C$,
 an initial mixture $m_0$
 and a rate map $k$ from $\generators$ to $\RR^+$,
 we can construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
-\begin{align*}
-  \states &= \MM(C) \\
+\begin{align}
+  \label{eq:kappa-ctmc}
+  \states &= \MM(C) \nonumber \\
   s(0)(x) &= \begin{cases}
     1 \quad\text{if } x = m_0 \\
     0 \quad\text{if } x \neq m_0
   \end{cases} \\
-  q_{mn} &= \sum_{\shortstack{$\scriptstyle r \in \generators$\\
-    $\scriptstyle r = \tuple{r_L,r_R}$}} k(r) \; n_{mn}(r_L,r_R)
-\end{align*}
+  q_{mn} &= \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
+    k(r) \; n_{mn}(r_L,r_R) \nonumber
+\end{align}
 with
 \begin{equation*}
   n_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
@@ -921,11 +923,28 @@ with
 \end{equation*}
 
 Clearly, the number of embeddings between any two contact maps $x,y$
-is finite, \ie $|\matches{x}{y}| < \infty$ for all $x,y$.
-Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$.
-Also, as agents cannot be destroyed nor created by rules,
-the (strongly) connected components of Markov chain are finite.
-% We write $\LTS^k_\generators$ for the CTMC thus obtained.
+is finite. %, \ie $|\matches{x}{y}| < \infty$. % for all $x,y$.
+Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
+for any fixed $m \in \states$.
+
+The purely qualitative properties of the Markov chain
+are captured by the notion of a \emph{labelled transition system}.
+It represents the underlying transition graph,
+% with nodes standing for the states and edges for the transitions.
+where nodes are the states of the Markov chain
+and edges its transitions,
+which are given a unique label.
+In particular, the labelled transition system
+of the Markov chain presented in \eqn{kappa-ctmc},
+a transition from a mixture $m$ is labelled by
+an \emph{event} $(r,\psi)$, as in \diagram{rewrite-step},
+with $r$ in $\generators$ and $\psi$ in $\matches{r_L}{m}$.
+We write $\LTS_\generators$ for this labelled transition system
+and $\LTS^k_\generators$ for the CTMC in \eqn{kappa-ctmc}.
+The (strongly) connected components of $\LTS_\generators$ are finite
+as agents cannot be destroyed nor created by rules.
+One should not confuse the transition graph with site graphs.
+Each node of the transition graph corresponds to one site graph.
 
 
 
