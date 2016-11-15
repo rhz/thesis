@@ -496,7 +496,7 @@ Each realisable site graph represents a
   which we call a mixture.})
 state in which our biomolecular network can be.
 Note however that it contains no typing information.
-We can give a type to each agent and site in the graph
+We give a type to each agent and site in the graph
 by assigning to it an agent and site in the type graph.
 More precisely,
 we need a map from a realisable site graph to a site graph.
@@ -701,8 +701,8 @@ does not have to be realisable in general.
 To ease the definition of concrete contact maps,
 we colour agents according to their type
 and annotate sites by their name in $C$.
-In that way, the contact map $g: G \to T$ above
-can be described formally by the following drawing.
+The contact map $g: G \to T$ above can then be defined
+more succinctly by the following drawing.
 \vspace{.3cm}
 \begin{center}
   \begin{tikzpicture}[grphdiag,thick]
@@ -735,8 +735,8 @@ agent types $1$, $2$, $3$ in $C$.
 We have written $l$ and $r$ for sites $l_1,l_2,l_3$ and $r_1,r_2,r_3$
 as the subscript can be deduced from the colour of the agent as well.
 
-Whenever a contact map $g: G \to C$ specifies all sites that
-it can possibly specify for all its agents, that is,
+Whenever a contact map $g: G \to C$ specifies all sites
+that its type $C$ permits for all its agents, that is,
 if for all $a \in \agents_G$,
 $h_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(h_\agents(a))$,
 then we say $g$ is a \emph{mixture}.
@@ -751,7 +751,7 @@ We can have any disjoint sum of them as well.
 Mixtures, being fully specified biomolecular networks
 with respect to the type $C$,
 are a natural choice for the states of our dynamical system.
-We change states by the applications of \emph{rules}.
+We jump from state to state by the applications of \emph{rules}.
 
 \begin{definition}
   A \emph{rule} $r$ is a pair of contact maps
@@ -763,9 +763,8 @@ We change states by the applications of \emph{rules}.
 \end{definition}
 
 In the context of the contact graph $T$,
-we can have a rule that binds
-agents of type $1$ with agents of type $2$.
-It is defined as follows.
+we define a rule that binds
+agents of type $1$ with agents of type $2$ as follows.
 
 \vspace{-.6cm}
 \begin{flushright}
@@ -888,7 +887,7 @@ we recover $m$ and $\psi$.
   results in $\comatch{\phi}$ and $\comatch{\psi}$
   with $\comatch{\phi} = \comatch{\psi}$,
   then $\phi = \psi$.
-  By an analogous argument, we can construct a functor
+  By an analogous argument, we construct a functor
   $G: r_R/\rSGe_C \to r_L/\rSGe_C$ using $\inv{r}$ that
   maps embeddings injectively in the reverse direction.
   Applying $r$ followed by $\inv{r}$ to $\psi$
@@ -903,7 +902,7 @@ every rule $r$ must be in balance with its inverse $\inv{r}$.
 Given a finite set of rules $\generators$ over $C$,
 an initial mixture $m_0$
 and a rate map $k$ from $\generators$ to $\RR^+$,
-we can construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
+we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
 \begin{align}
   \label{eq:kappa-ctmc}
   \states &= \MM(C) \nonumber \\
@@ -921,30 +920,31 @@ with
     0 & \text{otherwise}
   \end{array}\right.
 \end{equation*}
-
 Clearly, the number of embeddings between any two contact maps $x,y$
 is finite. %, \ie $|\matches{x}{y}| < \infty$. % for all $x,y$.
 Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
 for any fixed $m \in \states$.
 
-The purely qualitative properties of the Markov chain
-are captured by the notion of a \emph{labelled transition system}.
-It represents the underlying transition graph,
-% with nodes standing for the states and edges for the transitions.
-where nodes are the states of the Markov chain
-and edges its transitions,
-which are given a unique label.
-In particular, the labelled transition system
-of the Markov chain presented in \eqn{kappa-ctmc},
+The transition graph of the Markov chain has its states as nodes
+and an edge between $m$ and $n$ whenever $q_{mn} > 0$.
+By labelling the edges of the transition graph we obtain
+a \emph{labelled transition system}.
+% Essentially, this captures
+% the qualitative properties of the Markov chain.
+Given $\generators$,
+we define a labelled transition system $\LTS_\generators$
+on mixtures over $C$:
 a transition from a mixture $m$ is labelled by
 an \emph{event} $(r,\psi)$, as in \diagram{rewrite-step},
 with $r$ in $\generators$ and $\psi$ in $\matches{r_L}{m}$.
-We write $\LTS_\generators$ for this labelled transition system
-and $\LTS^k_\generators$ for the CTMC in \eqn{kappa-ctmc}.
+The CTMC presented in \eqn{kappa-ctmc} can equivalently be
+constructed from $\LTS_\generators$ by simply by assigning
+rate $k(r)$ to an event of the form $(r,\psi)$.
+We write $\LTS^k_\generators$ for the CTMC.
 The (strongly) connected components of $\LTS_\generators$ are finite
 as agents cannot be destroyed nor created by rules.
-One should not confuse the transition graph with site graphs.
-Each node of the transition graph corresponds to one site graph.
+One should not confuse the transition graph with site graphs:
+each node of the transition graph corresponds to one site graph.
 
 
 
