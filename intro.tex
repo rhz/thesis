@@ -45,7 +45,11 @@ partly because of non-conservative (\eg dissipative) forces.
 Obtaining an energy function from the equations of motion
 is called the \emph{inverse problem} in classical mechanics
 and it was first attended to by \citet{helmholtz}.
-Both the direct and the inverse problem are the interest of this thesis.
+Both the direct and the inverse problem are the interest of this thesis
+and we aim to answer these questions
+in the context of biomolecular interaction networks.
+A more precise statement of the problem will have to wait
+until we have introduced all the relevant concepts.
 Note that this approach has been given the name `thermodynamic'
 not because of thermodynamics,
 the science that studies the dynamics of heat and temperature,
@@ -70,9 +74,9 @@ for the axiomatisation of probability theory by \citet{kolmogorov}
 and the further developments by \citet{doob} and \citet{feller},
 who, among others, established the theoretical framework
 for continuous-time Markov chains (CTMCs).
-Below you can find the definitions for a CTMC
-and its infinitesimal generator that will be used in this thesis.
-In particular, we work with time-homogeneous CTMCs.
+Below you can find the definition of (time-homogeneous) CTMCs
+and infinitesimal generators that will be used.
+% In particular, we work with time-homogeneous CTMCs.
 
 \begin{definition}%[Infinitesimal generator]
   An \emph{infinitesimal generator} $\qm$
@@ -103,7 +107,7 @@ and assume there is a transition function $P(t)$
 whenever we have an infinitesimal generator $\qm$ and vice versa.
 
 Given a \pmf $s(0)$ on $\states$ (seen as a row vector)
-as an initial probabilistic state,
+the state at $t = 0$,
 the probability distribution $s(t)$ after time $t$
 is given by $s(t) = s(0) P(t)$.
 % We can obtain the time derivative of this distribution
@@ -183,8 +187,8 @@ probability measure is realised by the Markov chain.
 \begin{definition}[ergodicity]
   An infinitesimal generator $\qm$ is \emph{ergodic} when
   there is a probability measure $\ip$ on $\states$ such that
+  for all $i,j \in \states$,
   \[ \lim_{t \to \infty} P_{ij}(t) = \ip_j \]
-  for all $i,j \in \states$.
 \end{definition}
 
 This is equivalent to say that the Markov chain
