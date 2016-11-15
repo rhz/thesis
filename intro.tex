@@ -220,13 +220,17 @@ Usually the energy is divided by $kT$ the product of
 the Boltzmann constant $k$ and the temperature $T$.
 However, we can omit this term by expressing the energy
 in units of $1/(kT)$.
-Note also that (i) \eqn{energy} defines the energy function
-uniquely only up to an additive constant
-given the probability distribution $\ip$,
-that is, if we change the energy of each state by adding
-a fixed constant we obtain the same probability distribution $\ip$;
-and (ii) by convention the sign of the energy is inverted
-so lower energies represent more favourable states.
+Note also that
+(i) when given the probability distribution $\ip$
+the energy function is defined uniquely
+only up to an additive constant;\footnote{
+  In other words, if we change the energy of each state by adding
+  a fixed constant we obtain the same probability distribution $\ip$.}
+(ii) by convention the sign of the energy is inverted
+so lower energies represent more favourable states; and
+(iii) in the case of detailed balance,
+we obtain $e^{E(j)-E(i)} = q_{ji}/q_{ij}$
+by combining \eqn{energy} and \eqn{detailed-balance}.
 
 The next question is how do we construct a CTMC
 from an energy function.
