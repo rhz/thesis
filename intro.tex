@@ -946,6 +946,31 @@ as agents cannot be destroyed nor created by rules.
 One should not confuse the transition graph with site graphs:
 each node of the transition graph corresponds to one site graph.
 
+With all the ingredients on the table % in place
+we can proceed now to formulate more precisely
+the main question addressed in this thesis.
+In the context of the dynamics of biomolecular networks,
+the direct problem is stated as,
+given a contact graph $C$ and
+an energy function $E: \MM(C) \to \RR$ on mixtures over $C$,
+how do we generate a set of rules $\rules$
+with a corresponding rate map $k: \rules \to \RR^+$
+such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
+the probability distribution $\ip$ as defined in \eqn{energy}?
+A method to achieve this is presented in \chp{direct}.
+
+On the other hand, the inverse problem is stated as,
+given a contact graph $C$,
+a set of rules $\rules$ over $C$
+and a rate map $k$,
+does the CTMC $\LTS^k_\rules$ have detailed balance?
+If so, how do we obtain its invariant probability distribution
+and the energy function that defines it?
+To much of my surprise, the former question
+has been proven to be undecidable by \citet{et1}.
+In \chp{inverse} we address this question regarding
+restricted versions of Kappa for which this problem is decidable
+and an energy function can be constructed from its parameters.
 
 
 
