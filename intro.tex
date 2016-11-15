@@ -827,7 +827,7 @@ as they are only partially specified.
 Intuitevely, this means that the rule can be applied
 regardless of whether those sites are bound or free.
 
-\begin{wrapfigure}[5]{r}{0.34\textwidth}
+\begin{wrapfigure}[5]{r}{0.35\textwidth}
   \vspace{-1.7em}
   \begin{equation}
     \label{eq:rewrite-step}
@@ -920,31 +920,38 @@ with
     0 & \text{otherwise}
   \end{array}\right.
 \end{equation*}
-Clearly, the number of embeddings between any two contact maps $x,y$
-is finite. %, \ie $|\matches{x}{y}| < \infty$. % for all $x,y$.
+It is easy to see that the number of embeddings
+between any two contact maps $x,y$ is finite.
 Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
-for any fixed $m \in \states$.
+for any fixed $m \in \states$
+and $\qm$ is a well-defined infinitesimal generator.
+Another, perhaps simpler way to construct this CTMC is
+by first defining a \emph{labelled transition system}.
 
-The transition graph of the Markov chain has its states as nodes
-and an edge between $m$ and $n$ whenever $q_{mn} > 0$.
-By labelling the edges of the transition graph we obtain
-a \emph{labelled transition system}.
-% Essentially, this captures
-% the qualitative properties of the Markov chain.
+\newcommand{\labels}{\Lambda}
+\begin{definition}
+  A \emph{labelled transition system} is a tuple
+  $\tuple{\states,\labels,\to}$ with
+  $\states$ a set of states,
+  $\labels$ a set of labels,
+  and $\to\; \subseteq \states \times \labels \times \states$
+  a set of transitions $\tuple{x,\alpha,y}$
+  between states $x,y \in \states$
+  labelled by $\alpha \in \labels$.
+\end{definition}
+
 Given $\generators$,
 we define a labelled transition system $\LTS_\generators$
-on mixtures over $C$:
+on mixtures over $C$ where
 a transition from a mixture $m$ is labelled by
 an \emph{event} $(r,\psi)$, as in \diagram{rewrite-step},
 with $r$ in $\generators$ and $\psi$ in $\matches{r_L}{m}$.
-The CTMC presented in \eqn{kappa-ctmc} can equivalently be
-constructed from $\LTS_\generators$ by simply by assigning
+The CTMC presented in \eqn{kappa-ctmc} can then be equivalently
+constructed from $\LTS_\generators$ by simply assigning
 rate $k(r)$ to an event of the form $(r,\psi)$.
-We write $\LTS^k_\generators$ for the CTMC.
-The (strongly) connected components of $\LTS_\generators$ are finite
-as agents cannot be destroyed nor created by rules.
-One should not confuse the transition graph with site graphs:
-each node of the transition graph corresponds to one site graph.
+Thus we write $\LTS^k_\generators$ for the CTMC.
+Note that the (strongly) connected components of $\LTS_\generators$
+are finite as agents cannot be destroyed nor created by rules.
 
 With all the ingredients on the table % in place
 we can proceed now to formulate more precisely
@@ -952,7 +959,7 @@ the main question addressed in this thesis.
 In the context of the dynamics of biomolecular networks,
 the direct problem is stated as,
 given a contact graph $C$ and
-an energy function $E: \MM(C) \to \RR$ on mixtures over $C$,
+an energy function on mixtures over $C$,
 how do we generate a set of rules $\rules$
 with a corresponding rate map $k: \rules \to \RR^+$
 such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
@@ -966,10 +973,11 @@ and a rate map $k$,
 does the CTMC $\LTS^k_\rules$ have detailed balance?
 If so, how do we obtain its invariant probability distribution
 and the energy function that defines it?
-To much of my surprise, the former question
-has been proven to be undecidable by \citet{et1}.
+% To much of my surprise,
+The former question has been proven to be undecidable by \citet{et1}.
 In \chp{inverse} we address this question regarding
-restricted versions of Kappa for which this problem is decidable
+restricted versions of the Kappa language
+for which this problem is decidable
 and an energy function can be constructed from its parameters.
 
 
