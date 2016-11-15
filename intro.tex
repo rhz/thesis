@@ -6,28 +6,29 @@ In the history of natural sciences,
 there has been two main approaches to describe dynamical systems,
 which I call here
 \emph{kinetics} and \emph{thermodynamics}.
-Loosely speaking, in the kinetic approach the system is
-described by the positions and momenta of each particle.
-This approach goes all the way back to
+The first approach goes all the way back to
 Newton's laws of motion~\citep{newton}.
-Intuitively, it is a ``ground'' description in the sense that
-it is as explicit and detailed as possible.
-If a (classical) mechanical system has $N$ particles
-then a state of the system is described by
+Loosely speaking, it describes a system by
+the positions and momenta of each particle.
+A description of this type is as explicit and detailed as it can get
+for the type of systems under consideration in classical mechanics,
+\ie the movement of point particles.
+In the case of a classical mechanical system that has $N$ particles,
+a state of the system is specified by
 a vector in $\RR^{2 \cdot 3 \cdot N}$.
+In general, a kinetic description is the full description of the
+dynamics of the system in terms of the velocities of its processes.
 % Regarding the role of forces in Newtonian mechanics:
 % Interactions producing a change of momentum on a particle
 % that can be measured independently do not interact between them
 % and thus the resulting derivative of the momentum (force)
 % is just the sum of the forces as measured independently.
 
-On the other hand,
-the thermodynamic approach shows how
-all information about the change of the system in time
-is contained in the energy function (for conservative systems).
-Given a set of states $\states$ for the system,
-an energy function $E: \states \to \RR$ maps a state to its energy.
-In this way a state is described by a single scalar
+The thermodynamic approach, on the other hand,
+is a description based on an \emph{energy function}.
+The energy function is defined on the states of the system
+and assigns a real value to each state, its energy.
+That is, a state is described by a single scalar
 regardless of how many particles it comprises.
 Naturally, this approach endowed the description of
 a dynamical system in classical mechanics
@@ -37,26 +38,26 @@ It first appeared in the work of
 and has been subsequently used as the basis for most of modern physics.
 Once in possession of the energy function,
 the kinetic description (\ie the equations of motion)
-can then be derived from it.
+can be derived from it.
 However the converse is not true:
 in general a kinetic description might not have an energy function
-from which it can be derived \citep{santilli},
-partly because of non-conservative (\eg dissipative) forces.
+from which it can be derived \citep{santilli}
+because of non-conservative (dissipative) forces.
 Obtaining an energy function from the equations of motion
-is called the \emph{inverse problem} in classical mechanics
+is referred to as the \emph{inverse problem} in classical mechanics
 and it was first attended to by \citet{helmholtz}.
 Both the direct and the inverse problem are the interest of this thesis
 and we aim to answer these questions
 in the context of biomolecular interaction networks.
-A more precise statement of the problem will have to wait
-until we have introduced all the relevant concepts.
-Note that this approach has been given the name `thermodynamic'
-not because of thermodynamics,
-the science that studies the dynamics of heat and temperature,
-but because of the protagonical role of the energy
-in driving the system's evolution.
-Certainly, there are connections to thermodynamics
-that will be highlighted as they arise.
+% A more precise statement of the problem will have to wait
+% until we have introduced all the relevant concepts.
+% Note that this approach has been given the name `thermodynamic'
+% not because of thermodynamics,
+% the science that studies the dynamics of heat and temperature,
+% but because of the protagonical role of the energy
+% in driving the system's evolution.
+% Certainly, there are connections to thermodynamics
+% that will be highlighted as they arise.
 
 Half a century after Hamilton's work
 researchers like Maxwell, Boltzmann, and Gibbs
@@ -205,8 +206,8 @@ The proof for this lemma can be found in part 2 of theorem 1.6
 in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
 CTMCs have a strong kinetic flavour as they describe
 stochastic processes in terms of probability flows
-happening at a certain rate.
-They are the ``ground'' description in the stochastic world
+happening at a certain rate (read velocities).
+They are the most detailed description in the stochastic world
 and all approaches to describe these processes
 are interpreted in terms of them.
 
@@ -989,6 +990,9 @@ for which this problem is decidable
 and an energy function can be constructed from its parameters.
 
 
+\section{Related work}
+% TODO: talk about ANC and
+% http://bib.oxfordjournals.org/content/8/4/226.long
 
 
 
