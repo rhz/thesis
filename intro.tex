@@ -25,7 +25,7 @@ dynamics of the system in terms of the velocities of its processes.
 % is just the sum of the forces as measured independently.
 
 The thermodynamic approach, on the other hand,
-is a description based on an \emph{energy function}.
+gives a description based on an \emph{energy function}.
 The energy function is defined on the states of the system
 and assigns a real value to each state, its energy.
 That is, a state is described by a single scalar
@@ -407,8 +407,10 @@ and the physical conditions under which
 it can be used has been argued by \citet{gillespie76}.
 Interestingly, \citet{et2} have solved
 the \emph{direct} and \emph{inverse} problem for Petri nets,
-that is, the problem of constructing a Petri net
-from an energy function on $\states$ and vice versa.
+that is, they have shown what is the structure of the energy function
+for Petri nets and when a Petri net has an energy function.
+% that is, the problem of constructing a Petri net
+% from an energy function on $\states$ and vice versa.
 
 Petri nets have limitations when we take into consideration
 what happens inside molecules in a chemical reaction.
@@ -430,7 +432,7 @@ Recently,
 a formal language to describe biochemical interactions
 using rewriting rules,
 where molecules not just react but also can bind other molecules
-has been proposed by \citet{danoslaneve2002a}.
+has been proposed by \citet{kappa}.
 In the next section we introduce this language, called Kappa,
 keeping in mind that we want to address
 the \emph{direct} and \emph{inverse} problem mentioned above,
@@ -934,8 +936,14 @@ between any two contact maps $x,y$ is finite.
 Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
 for any fixed $m \in \states$
 and $\qm$ is a well-defined infinitesimal generator.
-Another, perhaps simpler way to construct this CTMC is
-by first defining a \emph{labelled transition system}.
+Here we use the law of mass action for the rate of rules,
+where the rate is proportional to the number of embeddings (matches)
+of the left-hand side of our rules.
+In fact, the law of mass action simply amounts to say that
+rewrites induced by rule $r$ are independent processes,
+each one occurring at rate $k(r)$.
+This is made apparent in the formulation of the CTMC
+from a \emph{labelled transition system}.
 
 \newcommand{\labels}{\Lambda}
 \begin{definition}
@@ -973,7 +981,11 @@ how do we generate a set of rules $\rules$
 with a corresponding rate map $k: \rules \to \RR^+$
 such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
 the probability distribution $\ip$ as defined in \eqn{energy}?
-A method to achieve this is presented in \chp{direct}.
+In practice, just an energy function won't be enough,
+we will have to ask for an initial set of rules (without rates)
+from which to derive the set that has detailed balance.
+We write $\generators$ for the generator set that is given as input.
+The full method is presented in \chp{direct}.
 
 On the other hand, the inverse problem is stated as,
 given a contact graph $C$,
