@@ -942,8 +942,10 @@ of the left-hand side of our rules.
 In fact, the law of mass action simply amounts to say that
 rewrites induced by rule $r$ are independent processes,
 each one occurring at rate $k(r)$.
-This is made apparent in the formulation of the CTMC
-from a \emph{labelled transition system}.
+This is clear in the formulation of
+a \emph{labelled transition system} for Kappa.
+% This is made apparent in the formulation of the CTMC
+% from a \emph{labelled transition system}.
 
 \newcommand{\labels}{\Lambda}
 \begin{definition}
@@ -983,8 +985,11 @@ such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
 the probability distribution $\ip$ as defined in \eqn{energy}?
 In practice, just an energy function won't be enough,
 we will have to ask for an initial set of rules (without rates)
-from which to derive the set that has detailed balance.
+from which to derive the set with detailed balance.
 We write $\generators$ for the generator set that is given as input.
+Finally, detailed balance only constrains the ratio between
+a rule and its inverse so to choose concrete rates we
+impose a linear model which is explained in \sct{kinetic-model}.
 The full method is presented in \chp{direct}.
 
 On the other hand, the inverse problem is stated as,
@@ -1003,8 +1008,61 @@ and an energy function can be constructed from its parameters.
 
 
 \section{Related work}
-% TODO: talk about ANC and
-% http://bib.oxfordjournals.org/content/8/4/226.long
+
+% Several authors have worked on the thermodynamics of
+% biomolecular interaction networks.
+The work of \citet{anc} presents the Allosteric Network Compiler
+(ANC), a language to describe biomolecular interaction networks
+that have an energy function and a tool to generate
+a chemical reaction system (\ie a Petri net) from them.
+% The language presents a restricted form of the rules and
+% energy functions studied here.
+The biomolecular interaction networks they introduce
+have ANC structures as nodes.
+These structures can contain hierarchical components and
+interaction sites, which in turn can be catalytic,
+covalently modified and ligand-binding sites.
+Hierarchical components can contain any number of
+interaction sites and nested hierarchical components.
+If a hierarchical component is marked as allosteric,
+it can transition between two conformational states.
+The transition rates can modified by the state of the sites and
+other components present in the same structure
+according to parameters given for each of them.
+An additional parameter is required for covalently modified
+and ligand-binding sites which determines the change in the ratio
+between the two conformational states when a ligand is bound
+or the site is modified.
+
+The edges of the ANC network are connections between ligand-binding sites
+or between a catalytic site and a covalently modified site.
+Rules can be of two types, binding or enzymatic,
+and can only depend on the conformational state of the participants.
+Binding rules specify the association and dissociation of
+two ligand-binding sites.
+Enzymatic rules follow a Michaelis-Menten mechanism in which
+the enzymatic site reversibly binds a covalently modified site first
+and then changes the state of the covalently modified site
+as it unbinds it.
+Each type of rule is parameterised differently.
+% Each type of rule have different type of parameters and
+% pairs of allosteric components and their contained sites and components
+The energy function is obtained implicitly
+from all the parameters of the model.
+% The language is sophisticated in terms of structure
+% and formalises concepts that are familiar to biologists.
+The language formalises concepts that are familiar to
+molecular biologists and biochemists
+in a way that reflects the apparent complexity
+of these interaction networks.
+However, the language's many concepts and classifications
+makes it difficult to see the big picture % understand
+and obfuscates the energy function. % obscures
+Also it arbitrarily restricts the form and size of the rules
+and the form of the energy function.
+We will show a similar language in \chp{inverse}
+for which the form of the energy function is uniquely determined
+from the kinetic rate parameters.
 
 
 
