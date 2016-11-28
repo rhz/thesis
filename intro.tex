@@ -354,9 +354,12 @@ The theory of CTMCs allows one to frame
 the dynamics of chemical reaction systems.
 A stochastic approach to such systems
 was pioneered by \citet{delbruck}
-and is now common practice % TODO: cite McQuarrie?
-and has provided important insights
-in the understanding of living organisms. % TODO: cite Swain?
+and is now common practice. % TODO: cite McQuarrie?
+The physical conditions under which this approach might be valid
+has been argued by \citet{gillespie76}.
+% The stochastic approach has provided insights
+% in the understanding of living organisms \citep{losick}.
+% TODO: cite others as well
 
 Since the number of molecules of a species
 is a priori unbounded and thus $\states$ might be infinite,
@@ -437,13 +440,13 @@ with
   \end{array}\right.
 \end{equation*}
 
-The physical validity of this stochastic approach
-and the physical conditions under which
-it can be used has been argued by \citet{gillespie76}.
-Interestingly, \citet{et2} have solved
+% Interestingly,
+\citet{et2} have solved
 the \emph{direct} and \emph{inverse} problem for Petri nets,
-that is, they have shown what is the structure of the energy function
-for Petri nets and when a Petri net has an energy function.
+that is, they have shown the conditions
+the set of reactions and rate map have to fulfil
+for a Petri net to have an energy function
+and what is the structure of said energy function.
 % that is, the problem of constructing a Petri net
 % from an energy function on $\states$ and vice versa.
 
