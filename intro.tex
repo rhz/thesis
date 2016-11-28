@@ -76,7 +76,7 @@ and the further developments by \citet{doob} and \citet{feller},
 who, among others, established the theoretical framework
 for continuous-time Markov chains (CTMCs).
 Below you can find the definition of (time-homogeneous) CTMCs
-and infinitesimal generators that will be used.
+and infinitesimal generators that will be used here.
 % In particular, we work with time-homogeneous CTMCs.
 
 \begin{definition}%[Infinitesimal generator]
@@ -135,10 +135,12 @@ and some $t \geqslant 0$.
   % of random variables $X_t$.
 \end{definition}
 
-% TODO: Am I here introducing something after using/mentioning it?
-An important property of CTMCs for the present work is that of
-\emph{time reversibility}, also known as \emph{detailed balance},
-which we introduce below.
+% An important property of CTMCs in the context of the present work
+% is that of \emph{time reversibility},
+% also known as \emph{detailed balance},
+% which we introduce below.
+A few important properties of CTMCs
+for the present work are given below.
 
 \begin{definition}[detailed balance]
   An infinitesimal generator $\qm$ on $\states$
@@ -153,8 +155,25 @@ which we introduce below.
   with respect to $\ip$.
 \end{definition}
 
-A related property is that of
-having an \emph{invariant} probability measure.
+% Detailed balance was first introduced by Boltzmann
+Detailed balance was first introduced,
+in a slightly stronger form
+that requires every path going from $i$ to $j$
+to have an reverse path with which it is in equilibrium,
+by \citet{wegscheider} in the context of chemical kinetics
+and its validity for other physical systems was argued by
+% and is related to the more general notion of
+% \emph{microscopic reversibility} postulated by
+\citet{lewis} and \citet{tolman}.
+% which the latter called
+% This generalised principle was called
+Tolman called the generalised principle
+\emph{microscopic reversibility}. % by Tolman.
+% The stronger form requires every path going from $i$ to $j$
+% to have an reverse path with which it is in equilibrium.
+% Detailed balance has an important consequence.
+% Detailed balance implies having ...
+% A related property is that of having an \emph{invariant} \pmf.
 
 \begin{definition}
   A \pmf $\ip$ on $\states$ is
@@ -162,13 +181,17 @@ having an \emph{invariant} probability measure.
   iff $\ip \qm = 0$, \ie
   \[ -\ip_i q_{ii} = \ip_i \sum_{j \neq i} q_{ij}
                   = \sum_{j \neq i} \ip_j q_{ji} \]
-  In other words,
-  whenever the action of $\qm$ on it does not change it.
 \end{definition}
 
-The relationship between % these two properties
-detailed balance and having an invariant probability measure
-is established by the following lemma.
+That is to say, $\ip$ is invariant
+whenever the action of $\qm$ on $\ip$ does not change $\ip$
+and thus $\ip$ is a fixpoint of $\qm$.
+% That is to say, the \pmf $\ip$ is invariant
+% when the action of the infinitesimal generator $\qm$
+% on $\ip$ does not change it,
+% \ie $\ip$ is a fixpoint of $\qm$.
+% The relationship between detailed balance and an invariant \pmf
+% is established by the following lemma.
 
 \begin{lemma}
   Suppose the infinitesimal generator $\qm$
@@ -182,28 +205,31 @@ is established by the following lemma.
   as $\sum_{i \in \states} q_{ji} = -q_{jj}$ for any fixed state $j$.
 \end{proof}
 
-Moreover, we would like to know when this invariant
-probability measure is realised by the Markov chain.
+Once an invariant \pmf is reached by the Markov chain
+it stays there forever.
+We would therefore like to know when an invariant
+\pmf is realised by the Markov chain.
 
 \begin{definition}[ergodicity]
   An infinitesimal generator $\qm$ is \emph{ergodic} when
-  there is a probability measure $\ip$ on $\states$ such that
+  there is a \pmf $\ip$ on $\states$ such that
   for all $i,j \in \states$,
   \[ \lim_{t \to \infty} P_{ij}(t) = \ip_j \]
 \end{definition}
 
 This is equivalent to say that the Markov chain
-will converge to the probability measure $\ip$
+will converge to the \pmf $\ip$
 regardless of the initial state $s(0)$.
 
 \begin{lemma}
   Suppose the infinitesimal generator $\qm$ is irreducible
-  and has an invariant probability measure $\ip$.
+  and has an invariant \pmf $\ip$.
   Then $\qm$ is ergodic and converges to $\ip$.
 \end{lemma}
 
 The proof for this lemma can be found in part 2 of theorem 1.6
 in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
+
 CTMCs have a strong kinetic flavour as they describe
 stochastic processes in terms of probability flows
 happening at a certain rate (read velocities).
@@ -215,17 +241,21 @@ It is natural to wonder then how the thermodynamic approach
 looks like in the stochastic world.
 It turns out the energy function has a very clear interpretation
 in this setting, namely, that of defining the probability $\ip_i$
-that the system finds itself in state $i \in \states$ as follows.
+that the system finds itself in state $i \in \states$ as follows.%
+\footnote{
+  We express the energy in units of $1/kT$ to avoid
+  writing this term explicitly.}
+% TODO: this needs a citation... McQuarrie
 \begin{equation}
   \label{eq:energy}
   \ip_i = \frac{e^{-E(i)}}{\sum_{j \in \states} e^{-E(j)}}
 \end{equation}
 This is known as the \emph{Boltzmann distribution}.
-Usually the energy is divided by $kT$ the product of
-the Boltzmann constant $k$ and the temperature $T$.
-However, we can omit this term by expressing the energy
-in units of $1/(kT)$.
-Note also that
+% Usually the energy is divided by $kT$, the product of
+% the Boltzmann constant $k$ and the temperature $T$,
+% but we can omit it by expressing the energy
+% in units of $1/(kT)$.
+Note that
 (i) when given the probability distribution $\ip$
 the energy function is defined uniquely
 only up to an additive constant;\footnote{
@@ -322,12 +352,18 @@ Let us go back to the stochastic modelling of
 chemical interactions mentioned above.
 The theory of CTMCs allows one to frame
 the dynamics of chemical reaction systems.
-However, since the number of molecules of a species
-is a priori unbounded and thus $\states$ is infinite,
-one would like to have a way to express these systems
-in a finite and simple form.
-A language that could do this
-came to be in the work of \citet{petri}.
+A stochastic approach to such systems
+was pioneered by \citet{delbruck}
+and is now common practice % TODO: cite McQuarrie?
+and has provided important insights
+in the understanding of living organisms. % TODO: cite Swain?
+
+Since the number of molecules of a species
+is a priori unbounded and thus $\states$ might be infinite,
+one would like to have a way to express
+these systems in a finite and simple form.
+A language that could do this was designed by \citet{petri}.
+% came to be in the work of \citet{petri}.
 This language, later called \emph{Petri nets},
 sees reactions as transformations of
 multisets of chemical species.
@@ -343,7 +379,6 @@ There is a natural partial order $\leqslant$ on multisets over $X$.
 We say $M \leqslant N$ if for each element $x \in X$,
 $M(x) \leqslant N(x)$.
 We write $\MM(X)$ for the set of all multisets over $X$.
-
 
 \begin{definition}
   Given a set of species $\species$,
@@ -392,11 +427,11 @@ we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
     0 \quad\text{if } x \neq M_0
   \end{cases} \\
   q_{MN} &= \sum_{\substack{r \in \reactions\\r = \tuple{L,R}}}
-    k(r) \; n_{MN}(L,R)
+    k(r) \; \nitoj_{MN}(L,R)
 \end{align*}
 with
 \begin{equation*}
-  n_{MN}(L,R) = \left\{\begin{array}{ll}
+  \nitoj_{MN}(L,R) = \left\{\begin{array}{ll}
     \abs{\matches{L}{M}} & \text{if } M - L + R = N \\
     0 & \text{otherwise}
   \end{array}\right.
@@ -420,7 +455,7 @@ resulting in a relocation of chemical bonds.
 In other words, (non-radioactive) reactions are all about
 the binding and unbinding of atoms,
 how they establish connections and break them.
-This is poorly captured by a change of species,
+This is poorly captured by a conversion of species,
 as it is modelled by Petri nets.
 A consequence of this lack of a formal representation for
 molecular bonds is that certain systems of chemical reactions
@@ -922,11 +957,11 @@ we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
     0 \quad\text{if } x \neq m_0
   \end{cases} \\
   q_{mn} &= \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
-    k(r) \; n_{mn}(r_L,r_R) \nonumber
+    k(r) \; \nitoj_{mn}(r_L,r_R) \nonumber
 \end{align}
 with
 \begin{equation*}
-  n_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
+  \nitoj_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
     \abs{\matches{r_L}{m}} & \text{if } \comatch{m} = n \\
     0 & \text{otherwise}
   \end{array}\right.
@@ -947,9 +982,8 @@ a \emph{labelled transition system} for Kappa.
 % This is made apparent in the formulation of the CTMC
 % from a \emph{labelled transition system}.
 
-\newcommand{\labels}{\Lambda}
 \begin{definition}
-  A \emph{labelled transition system} is a tuple
+  A \emph{labelled transition system} $\LTS$ is a tuple
   $\tuple{\states,\labels,\to}$ with
   $\states$ a set of states,
   $\labels$ a set of labels,
@@ -988,8 +1022,8 @@ we will have to ask for an initial set of rules (without rates)
 from which to derive the set with detailed balance.
 We write $\generators$ for the generator set that is given as input.
 Finally, detailed balance only constrains the ratio between
-a rule and its inverse so to choose concrete rates we
-impose a linear model which is explained in \sct{kinetic-model}.
+the rates of a rule and its inverse so to pick concrete rates
+we impose a linear model which is explained in \sct{kinetic-model}.
 The full method is presented in \chp{direct}.
 
 On the other hand, the inverse problem is stated as,
@@ -998,13 +1032,15 @@ a set of rules $\rules$ over $C$
 and a rate map $k$,
 does the CTMC $\LTS^k_\rules$ have detailed balance?
 If so, how do we obtain its invariant probability distribution
-and the energy function that defines it?
-% To much of my surprise,
-The former question has been proven to be undecidable by \citet{et1}.
-In \chp{inverse} we address this question regarding
+% and the energy function that defines it?
+and energy function?
+The former question has been proven to be undecidable by \citet{et1}
+using an encoding of the Post correspondence problem \citep{post}
+in Kappa.
+In \chp{inverse} we address the inverse problem for
 restricted versions of the Kappa language
-for which this problem is decidable
-and an energy function can be constructed from its parameters.
+that are decidable.
+% and an energy function can be constructed from its parameters.
 
 
 \section{Related work}
@@ -1060,7 +1096,8 @@ makes it difficult to see the big picture % understand
 and obfuscates the energy function. % obscures
 Also it arbitrarily restricts the form and size of the rules
 and the form of the energy function.
-We will show a similar language in \chp{inverse}
+The work presented in \chp{direct} is a generalisation of ANC.
+In \chp{inverse} we will show a language similar to ANC
 for which the form of the energy function is uniquely determined
 from the kinetic rate parameters.
 
