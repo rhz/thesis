@@ -6,6 +6,7 @@ In the history of natural sciences,
 there has been two main approaches to describe dynamical systems,
 which I call here
 \emph{kinetics} and \emph{thermodynamics}.
+% This thesis is about the relationship between the two.
 The first approach goes all the way back to
 Newton's laws of motion~\citep{newton}.
 Loosely speaking, it describes a system by
@@ -44,7 +45,7 @@ in general a kinetic description might not have an energy function
 from which it can be derived \citep{santilli}
 because of non-conservative (dissipative) forces.
 Obtaining an energy function from the equations of motion
-is referred to as the \emph{inverse problem} in classical mechanics
+is referred to as the \emph{inverse problem} % in classical mechanics
 and it was first attended to by \citet{helmholtz}.
 Both the direct and the inverse problem are the interest of this thesis
 and we aim to answer these questions
@@ -107,10 +108,10 @@ We shall work with this type of infinitesimal generators
 and assume there is a transition function $P(t)$
 whenever we have an infinitesimal generator $\qm$ and vice versa.
 
-Given a \pmf $s(0)$ on $\states$ (seen as a row vector)
+Given a \pmf $\state(0)$ on $\states$ (seen as a row vector)
 the state at $t = 0$,
-the probability distribution $s(t)$ after time $t$
-is given by $s(t) = s(0) P(t)$.
+the probability distribution $\state(t)$ after time $t$
+is given by $\state(t) = \state(0) P(t)$.
 % We can obtain the time derivative of this distribution
 % from \eqn{transition-function}.
 % % $s_i(t)$ that the Markov chain is in state $i$ at time $t$.
@@ -126,19 +127,15 @@ and some $t \geqslant 0$.
 
 \begin{definition}[CTMC]%[continuous-time Markov chain]
   A \emph{continuous-time Markov chain} is a tuple
-  $\tuple{\states, s(0), \qm}$ with
+  $\tuple{\states, \state(0), \qm}$ with
   $\states$ an at most countable set of states,
-  $s(0)$ a \pmf on $\states$
-  representing the initial probabilistic state and
+  $\state(0)$ a \pmf on $\states$
+  representing the initial state and
   $\qm$ the infinitesimal generator of the Markov chain.
   % The Markov chain can be presented as a time-indexed family
   % of random variables $X_t$.
 \end{definition}
 
-% An important property of CTMCs in the context of the present work
-% is that of \emph{time reversibility},
-% also known as \emph{detailed balance},
-% which we introduce below.
 A few important properties of CTMCs
 for the present work are given below.
 
@@ -155,25 +152,17 @@ for the present work are given below.
   with respect to $\ip$.
 \end{definition}
 
-% Detailed balance was first introduced by Boltzmann
-Detailed balance was first introduced,
+Detailed balance was first proposed,
 in a slightly stronger form
 that requires every path going from $i$ to $j$
 to have an reverse path with which it is in equilibrium,
 by \citet{wegscheider} in the context of chemical kinetics
 and its validity for other physical systems was argued by
-% and is related to the more general notion of
-% \emph{microscopic reversibility} postulated by
 \citet{lewis} and \citet{tolman}.
-% which the latter called
-% This generalised principle was called
 Tolman called the generalised principle
-\emph{microscopic reversibility}. % by Tolman.
+\emph{microscopic reversibility}.
 % The stronger form requires every path going from $i$ to $j$
 % to have an reverse path with which it is in equilibrium.
-% Detailed balance has an important consequence.
-% Detailed balance implies having ...
-% A related property is that of having an \emph{invariant} \pmf.
 
 \begin{definition}
   A \pmf $\ip$ on $\states$ is
@@ -186,10 +175,6 @@ Tolman called the generalised principle
 That is to say, $\ip$ is invariant
 whenever the action of $\qm$ on $\ip$ does not change $\ip$
 and thus $\ip$ is a fixpoint of $\qm$.
-% That is to say, the \pmf $\ip$ is invariant
-% when the action of the infinitesimal generator $\qm$
-% on $\ip$ does not change it,
-% \ie $\ip$ is a fixpoint of $\qm$.
 % The relationship between detailed balance and an invariant \pmf
 % is established by the following lemma.
 
@@ -219,7 +204,7 @@ We would therefore like to know when an invariant
 
 This is equivalent to say that the Markov chain
 will converge to the \pmf $\ip$
-regardless of the initial state $s(0)$.
+regardless of the initial state $\state(0)$.
 
 \begin{lemma}
   Suppose the infinitesimal generator $\qm$ is irreducible
@@ -243,18 +228,15 @@ It turns out the energy function has a very clear interpretation
 in this setting, namely, that of defining the probability $\ip_i$
 that the system finds itself in state $i \in \states$ as follows.%
 \footnote{
-  We express the energy in units of $1/kT$ to avoid
-  writing this term explicitly.}
+  We express the energy in units of $1/kT$
+  % (known as inverse temperature)
+  to avoid writing this term explicitly.}
 % TODO: this needs a citation... McQuarrie
 \begin{equation}
   \label{eq:energy}
   \ip_i = \frac{e^{-E(i)}}{\sum_{j \in \states} e^{-E(j)}}
 \end{equation}
 This is known as the \emph{Boltzmann distribution}.
-% Usually the energy is divided by $kT$, the product of
-% the Boltzmann constant $k$ and the temperature $T$,
-% but we can omit it by expressing the energy
-% in units of $1/(kT)$.
 Note that
 (i) when given the probability distribution $\ip$
 the energy function is defined uniquely
@@ -396,8 +378,8 @@ We write $\MM(X)$ for the set of all multisets over $X$.
 \end{definition}
 
 \begin{definition}%[PN]%[Petri net]
-  A \emph{Petri net} is a pair $\tuple{\species, \reactions}$ with
-  a set of species $\species$ and a set of reactions $\reactions$.
+  A \emph{Petri net} is a pair $\tuple{\species, \reactions}$ of
+  sets of species $\species$ and reactions $\reactions$.
 \end{definition}
 
 A state of a Petri net is a multiset over $\species$,
@@ -406,16 +388,16 @@ A reaction can occur in a given state $M$ only if
 its left-hand side $L \leqslant M$.
 
 \begin{definition}
-  A \emph{match} $m$ of the left-hand side $L$ of a reaction
-  on a state $M$ is an injective function from $L$ to $M$,
-  \ie a map that identifies each copy of $a \in \species$ in $L$
-  with a copy of $a$ in $M$.
+  A \emph{match} of the left-hand side $L$ of a reaction
+  on a state $M$ is an injective function from $L$ to $M$
+  that identifies each copy of species $s$ in $L$
+  with a copy of $s$ in $M$.
 \end{definition}
 
 We write $\matches{L}{M}$ for the set of matches from $L$ to $M$.
 From this definition we have that the number of matches
 $\abs{\matches{L}{M}}$ from $L$ to $M$ is
-\[ \abs{\matches{L}{M}} = \prod_{a \in \species} \binom{L(a)}{M(a)} \]
+\[ \abs{\matches{L}{M}} = \prod_{s \in \species} \binom{L(s)}{M(s)} \]
 A reaction is said to be elementary iff its rate is
 proportional to the number of matches of its left-hand side.
 This is known as the \emph{law of mass action} in chemistry.
@@ -425,11 +407,12 @@ Petri nets can be given a stochastic interpretation
 in terms of a CTMC.
 Given a Petri net $\tuple{\species, \reactions}$,
 an initial marking $M_0$ and
-a rate map $k: \reactions \to \RR^+$ that assigns rates to reactions,
-we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
+a rate map $k: \reactions \to \RR_{\geqslant 0}$
+that assigns rates to reactions,
+we construct a CTMC $\tuple{\states, \state(0), \qm}$ as follows.
 \begin{align*}
   \states &= \MM(\species) \\
-  s(0)(x) &= \begin{cases}
+  \state(0)(x) &= \begin{cases}
     1 \quad\text{if } x = M_0 \\
     0 \quad\text{if } x \neq M_0
   \end{cases} \\
@@ -515,7 +498,7 @@ It tell us which sites a site \emph{can} bind
 instead of what is actually bound to at a given moment.
 
 To make these ideas formal we will use
-the category-theoretical approach % presented by \citet{kappadpo}.
+the category-theoretical approach
 introduced in the work of \citet{kappadpo}.
 We first define the networks where types live and then
 use them as a basis to construct the actual biomolecular networks.%
@@ -954,12 +937,12 @@ every rule $r$ must be in balance with its inverse $\inv{r}$.
 
 Given a finite set of rules $\generators$ over $C$,
 an initial mixture $m_0$
-and a rate map $k$ from $\generators$ to $\RR^+$,
-we construct a CTMC $\tuple{\states, s(0), \qm}$ as follows.
+and a rate map $k$ from $\generators$ to $\RR_{\geqslant 0}$,
+we construct a CTMC $\tuple{\states, \state(0), \qm}$ as follows.
 \begin{align}
   \label{eq:kappa-ctmc}
   \states &= \MM(C) \nonumber \\
-  s(0)(x) &= \begin{cases}
+  \state(0)(x) &= \begin{cases}
     1 \quad\text{if } x = m_0 \\
     0 \quad\text{if } x \neq m_0
   \end{cases} \\
@@ -986,8 +969,6 @@ rewrites induced by rule $r$ are independent processes,
 each one occurring at rate $k(r)$.
 This is clear in the formulation of
 a \emph{labelled transition system} for Kappa.
-% This is made apparent in the formulation of the CTMC
-% from a \emph{labelled transition system}.
 
 \begin{definition}
   A \emph{labelled transition system} $\LTS$ is a tuple
@@ -1021,7 +1002,7 @@ the direct problem is stated as,
 given a contact graph $C$ and
 an energy function on mixtures over $C$,
 how do we generate a set of rules $\rules$
-with a corresponding rate map $k: \rules \to \RR^+$
+with a corresponding rate map $k: \rules \to \RR_{\geqslant 0}$
 such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
 the probability distribution $\ip$ as defined in \eqn{energy}?
 In practice, just an energy function won't be enough,
