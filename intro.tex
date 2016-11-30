@@ -101,9 +101,16 @@ where $P(t)$ is the $\states \times \states$ matrix
 with elements $p_{ij}(t) \in \RR$ the probability that
 we were in state $i$ at time $0$ and are in state $j$ at time $t$.
 % transition probability from state $i$ to $j$ at time $t$.
-When the infinitesimal generator is stable and conservative
+% When the infinitesimal generator is stable and conservative
+Under weak assumptions
 there is a unique minimal solution to \eqn{transition-function}
 \citep{anderson}.
+% TODO: explain minimal
+% Properties of transition functions and infinitesimal generators:
+% P(t) is stable if \ddt p_{ii}(t) is finite at t = 0 for all i. (p 4)
+% P(t) is standard if \lim_{t \to 0} p_{ii} = 1 for all i. (p 6)
+% Q is stable if q_{ii} > -\infty for all i. (p 9)
+% Q is conservative if \sum_j q_{ij} = 0 for all i. (p 13)
 We shall work with this type of infinitesimal generators
 and assume there is a transition function $P(t)$
 whenever we have an infinitesimal generator $\qm$ and vice versa.
