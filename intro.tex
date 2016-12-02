@@ -81,12 +81,14 @@ and infinitesimal generators that will be used here.
 % In particular, we work with time-homogeneous CTMCs.
 
 \begin{definition}%[Infinitesimal generator]
-  An \emph{infinitesimal generator} $\qm$
+  A (stable and conservative) \emph{infinitesimal generator} $\qm$
   on an at most countable set of states $\states$
   is an $\states \times \states$ matrix
   with elements $q_{ij} \in \RR$, $i,j \in \states$
   such that $0 \leqslant q_{ij} < \infty$ when $i \neq j$
-  and $q_{ii} = - \sum_{j \neq i} q_{ij} > -\infty$.
+  and $q_{ii} = - \sum_{j \neq i} q_{ij} > -\infty$.\footnote{
+    If unstable $q_{ii}$ can be $-\infty$ and if non-conservative
+    $q_{ii} \leqslant - \sum_{j \neq i} q_{ij}$.}
 \end{definition}
 
 The infinitesimal generator plays the role of
@@ -101,9 +103,8 @@ where $P(t)$ is the $\states \times \states$ matrix
 with elements $p_{ij}(t) \in \RR$ the probability that
 we were in state $i$ at time $0$ and are in state $j$ at time $t$.
 % transition probability from state $i$ to $j$ at time $t$.
-% When the infinitesimal generator is stable and conservative
-Under weak assumptions
-there is a unique minimal solution to \eqn{transition-function}
+When the infinitesimal generator is stable and conservative
+there exists a unique minimal solution to \eqn{transition-function}
 \citep{anderson}.
 % TODO: explain minimal
 % Properties of transition functions and infinitesimal generators:
@@ -181,7 +182,7 @@ Tolman called the generalised principle
 
 That is to say, $\ip$ is invariant
 whenever the action of $\qm$ on $\ip$ does not change $\ip$
-and thus $\ip$ is a fixpoint of $\qm$.
+or equivalently when $\ip$ is a fixpoint of $\qm$.
 % The relationship between detailed balance and an invariant \pmf
 % is established by the following lemma.
 
