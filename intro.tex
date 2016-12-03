@@ -261,30 +261,47 @@ so lower energies represent more favourable states; and
 we obtain $e^{E(j)-E(i)} = q_{ji}/q_{ij}$
 by combining \eqn{energy} and \eqn{detailed-balance}.
 
-The next question is how do we construct a CTMC
-from an energy function.
-What else do we need?
-Clearly, we need to know the state space $\states$.
-Also, unlike in classical mechanics,
-we would need to know which transitions between states are possible
-since there are no assumptions of continuity on $\states$.
+% The next question is
+How do we construct a CTMC
+from an energy function?
+% What else do we need?
+% Clearly, we need to know the state space $\states$.
+% Also, unlike in classical mechanics,
+% we would need to know which transitions between states are possible
+% since there are no assumptions of continuity on $\states$.
 The first formulation to shed light on this problem
 was proposed by \citet{metropolis}.
-The algorithm asks for an energy function and an \emph{a priori},
-one-step transition probability matrix
-that is assumed to be symmetric,
-\ie that for any two states $i,j \in \states$
-the elements $a_{ij}$ and $a_{ji}$ of the matrix are equal.
-This matrix plays the role of the \qmatrix in the
-discrete-time setting (\ie where time is indexed by the naturals)
-and each element $a_{ij}$ denotes the probability that
+The algorithm asks for an energy function and
+an \emph{a priori} one-step transition probability matrix $A$
+where each element $a_{ij}$ ($i,j \in \states$)
+denotes the probability that
 we choose to jump to state $j$ when we are at state $i$.
 Hence $\sum_{j \in \states} a_{ij} = 1$ for any fixed $i$
 and we write $a_{i-}$ for this probability distribution.
-The algorithm has been generalised to the case of asymmetric
-a priori probability matrices by \citet{hastings}.
+The $A$ matrix is assumed to be symmetric,
+\ie $a_{ij} = a_{ji}$ for all $i,j \in \states$,
+% This matrix plays the role of the \qmatrix in the
+% discrete-time setting (\ie where time is indexed by the naturals)
+% and each element $a_{ij}$ denotes the probability that
+% we choose to jump to state $j$ when we are at state $i$.
+although the algorithm has been later generalised
+to the asymmetric case by \citet{hastings}.
+%
+The $A$ matrix asserts which transitions are possible.
+By symmetry, their reverse transitions are also possible.
+This extra ingredient was unnecesary in classical mechanics
+because implicit assumptions of continuity on $\states$
+gives us this information.
+% In addition to the energy function and the state space,
+% we would need to know which transitions are possible.
+% This is unlike classical mechanics,
+% where assumptions of continuity on $\states$
+% make this unnecesary.
+The method that will be presented in \chp{direct}
+does not ask for a priori transition probabilities
+but only which transitions are possible.
 
-The construction gives a discrete-time Markov chain that
+The construction gives a \emph{discrete-time} Markov chain that
 converges to the probability distribution $\ip$ in \eqn{energy}.
 For the sake of simplicity we present here
 only the original formulation.
@@ -1115,6 +1132,7 @@ from the kinetic rate parameters.
 % the growing membrane, and others
 
 
+\if0
 Finally, it is important to note that the thermodynamic approach
 is not exempt of criticism ... % cite Addy Pross
 
@@ -1140,6 +1158,7 @@ which we might call near equilibrium graph thermodynamics,
 where the present work might serve as a reference for comparison.
 % TODO: mention also the linear kinetic model and how kinetics
 % can be explored in a thermodynamically consistent way.
+\fi
 
 
 
