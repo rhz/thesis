@@ -111,6 +111,7 @@ there exists a unique minimal\footnote{
   then $p_{ij}(t) \leqslant p'_{ij}(t)$
   for all $i, j \in \states$ and $t \geqslant 0$.}
 solution $P(t)$ of \eqn{transition-function} \citep{anderson}.
+% Proved in Th 2.2.2, page 70, of Anderson's book
 % Properties of transition functions and q-matrices:
 % P(t) is stable if \ddt p_{ii}(t) is finite at t = 0 for all i. (p 4)
 % P(t) is standard if \lim_{t \to 0} p_{ii} = 1 for all i. (p 6)
@@ -229,11 +230,12 @@ in chapter 5 of Anderson's book (\cite*[][pages 160--161]{anderson}).
 
 CTMCs have a strong kinetic flavour as they describe
 stochastic processes in terms of probability flows
-happening at a certain rate (read velocities).
-They are the most detailed description in the stochastic world
-and all approaches to describe these processes
-are interpreted in terms of them.
-
+happening at a certain rate. % (read velocities).
+% They are the most explicit description in the stochastic world
+% for discrete state, continuous time processes.
+% and all approaches to describe these processes
+% are interpreted in terms of them.
+%
 It is natural to wonder then how the thermodynamic approach
 looks like in the stochastic world.
 It turns out the energy function has a very clear interpretation
@@ -284,22 +286,34 @@ The $A$ matrix is assumed to be symmetric,
 % discrete-time setting (\ie where time is indexed by the naturals)
 % and each element $a_{ij}$ denotes the probability that
 % we choose to jump to state $j$ when we are at state $i$.
-although the algorithm has been later generalised
-to the asymmetric case by \citet{hastings}.
-%
-The $A$ matrix asserts which transitions are possible.
-By symmetry, their reverse transitions are also possible.
-This extra ingredient was unnecesary in classical mechanics
-because implicit assumptions of continuity on $\states$
-gives us this information.
+although this is not strictly necessary
+and the algorithm has been later generalised
+to work under a weaker assumption ($a_{ij} = 0$ iff $a_{ji} = 0$)
+by \citet{hastings}.
+
+% The $A$ matrix asserts which transitions are possible.
+% By symmetry, their reverse transitions are also possible.
+Note that when addressing the direct problem for CTMCs
+we require an extra ingredient, the $A$ matrix,
+that was not needed in classical mechanics.
+% This extra ingredient was unnecesary
+% when addressing the direct problem in classical mechanics
+% because implicit assumptions of continuity on $\states$
+% supply us with this information.
+This is because in classical mechanics there are
+implicit assumptions of continuity on $\states$
+that supply us with this information.
 % In addition to the energy function and the state space,
 % we would need to know which transitions are possible.
 % This is unlike classical mechanics,
 % where assumptions of continuity on $\states$
 % make this unnecesary.
-The method that will be presented in \chp{direct}
+%
+On the other hand,
+the method that will be presented in \chp{direct}
 does not ask for a priori transition probabilities
-but only which transitions are possible.
+% (\ie an $A$ matrix)
+but only which reversible transitions are possible at all.
 
 The construction gives a \emph{discrete-time} Markov chain that
 converges to the probability distribution $\ip$ in \eqn{energy}.
@@ -366,7 +380,7 @@ the dynamics of chemical reaction systems.
 A stochastic approach to such systems
 was pioneered by \citet{delbruck}
 and is now common practice. % TODO: cite McQuarrie?
-The physical conditions under which this approach might be valid
+The physical conditions under which this approach is plausibly valid
 has been argued by \citet{gillespie76}.
 % The stochastic approach has provided insights
 % in the understanding of living organisms. Posible refs:
