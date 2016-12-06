@@ -294,15 +294,20 @@ by \citet{hastings}.
 % The $A$ matrix asserts which transitions are possible.
 % By symmetry, their reverse transitions are also possible.
 Note that when addressing the direct problem for CTMCs
-we require an extra ingredient, the $A$ matrix,
-that was not needed in classical mechanics.
+by using the Metropolis algorithm
+we require an extra ingredient --- the $A$ matrix ---
+which was not needed in classical mechanics.
 % This extra ingredient was unnecesary
 % when addressing the direct problem in classical mechanics
 % because implicit assumptions of continuity on $\states$
 % supply us with this information.
 This is because in classical mechanics there are
 implicit assumptions of continuity on $\states$
-that supply us with this information.
+that supply this information.
+The state space is $\RR^{2 \cdot 3}$
+and, intuitively, an allowed transition in this continuous space
+is a differential change in any direction,
+\ie $dx$, $dy$, $dz$.
 % In addition to the energy function and the state space,
 % we would need to know which transitions are possible.
 % This is unlike classical mechanics,
@@ -317,9 +322,9 @@ but only which reversible transitions are possible at all.
 
 The construction gives a \emph{discrete-time} Markov chain that
 converges to the probability distribution $\ip$ in \eqn{energy}.
-For the sake of simplicity we present here
-only the original formulation.
-The algorithm then works as follows.
+% For the sake of simplicity we present here
+% only the original formulation.
+The algorithm works as follows.
 Given any state $i \in \states$ we pick a neighbour state $j$
 at random according to the probability distribution $a_{i-}$.
 We evaluate the energy function at $i$ and $j$
@@ -328,32 +333,35 @@ with probability $1$ if $\Delta E < 0$ and
 probability $e^{-\Delta E}$ if $\Delta E > 0$.
 Otherwise we stay at state $i$.
 In both cases time (a natural number) is increased by 1.
+We repeat for state $j$ if the transition was successful
+and $i$ otherwise.
 
-To see that $\ip$ as defined in \eqn{energy} is the invariant
-probability distribution of the discrete-time Markov chain
+To see that $\ip$, as defined in \eqn{energy},
+is the invariant probability distribution
+of the discrete-time Markov chain
 we show that it has (the discrete-time version of)
 detailed balance with respect to $\ip$.
 The probability $p_{ij}$ of jumping from $i$ to $j$ is
-a combination of the a priori probability and
+a combination of the a priori probability $a_{ij}$ and
 the probability of accepting that transition,
 which depends on $\Delta E$.
 \[ p_{ij} = a_{ij}\; \min(1, e^{-\Delta E}) \]
-By taking the ratio of $p_{ij}$ and $p_{ji}$ we have
+By taking the ratio of $p_{ij}$ and $p_{ji}$ we obtain
 \[ \frac{p_{ij}}{p_{ji}} =
    \frac{a_{ij}\; \min(1, e^{E(i)-E(j)})}{
          a_{ji}\; \min(1, e^{E(j)-E(i)})} =
    \frac{\min(1, e^{E(i)-E(j)})}{
          \min(1, e^{E(j)-E(i)})} \]
-since $a_{ij} = a_{ji}$ by symmetry of the
-a priori transition probability matrix.
-Suppose $E(i)-E(j) > 0 > E(j)-E(i)$,
+since $a_{ij} = a_{ji}$ by symmetry of $A$.
+% of the a priori transition probability matrix.
+Suppose $E(i)-E(j) > 0 > E(j)-E(i)$, then
 \[ \frac{p_{ij}}{p_{ji}} = e^{E(i)-E(j)}
      = \frac{e^{-E(j)}}{e^{-E(i)}} = \frac{\ip_{j}}{\ip_{i}} \]
 It is easy to see that when
 $E(j)-E(i) > 0 > E(i)-E(j)$ we obtain the same equation.
 Hence the discrete-time Markov chain has detailed balance
-with respect to $\ip$ as defined in \eqn{energy}.
-Provided the a priori transition probability matrix
+with respect to $\ip$. % as defined in \eqn{energy}.
+Provided the a priori transition probability matrix $A$
 makes it possible to reach any state from any other state,
 the Markov chain will converge to $\ip$ as $t \to \infty$.
 
