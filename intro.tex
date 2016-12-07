@@ -241,11 +241,10 @@ looks like in the stochastic world.
 It turns out the energy function has a very clear interpretation
 in this setting, namely, that of defining the probability $\ip_i$
 that the system finds itself in state $i \in \states$ as follows
-\citep{mcquarrie}.\footnote{
+\citep{mcquarrie-stat-mech}.\footnote{
   We express the energy in units of $1/kT$
   % (known as inverse temperature)
   to avoid writing this term explicitly.}
-% TODO: this needs a citation... McQuarrie
 \begin{equation}
   \label{eq:energy}
   \ip_i = \frac{e^{-E(i)}}{\sum_{j \in \states} e^{-E(j)}}
@@ -387,7 +386,8 @@ The theory of CTMCs allows one to frame
 the dynamics of chemical reaction systems.
 A stochastic approach to such systems
 was pioneered by \citet{delbruck}
-and is now common practice. % TODO: cite McQuarrie?
+and has been common practice for decades
+\citep{mcquarrie-stoch-kinetics}.
 The physical conditions under which this approach is plausibly valid
 has been argued by \citet{gillespie76}.
 % The stochastic approach has provided insights
