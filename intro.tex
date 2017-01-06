@@ -1087,7 +1087,7 @@ that are decidable.
 
 % Several authors have worked on the thermodynamics of
 % biomolecular interaction networks.
-The work of \citet{anc} presents the Allosteric Network Compiler
+\citet{anc} have developed the Allosteric Network Compiler
 (ANC), a language to describe biomolecular interaction networks
 that have an energy function and a tool to generate
 a chemical reaction system (\ie a Petri net) from them.
@@ -1097,12 +1097,12 @@ The biomolecular interaction networks they introduce
 have ANC structures as nodes.
 These structures can contain hierarchical components and
 interaction sites, which in turn can be catalytic,
-covalently modified and ligand-binding sites.
+covalently modified or ligand-binding sites.
 Hierarchical components can contain any number of
 interaction sites and nested hierarchical components.
 If a hierarchical component is marked as allosteric,
 it can transition between two conformational states.
-The transition rates can modified by the state of the sites and
+The transition rates can be modified by the state of the sites and
 other components present in the same structure
 according to parameters given for each of them.
 An additional parameter is required for covalently modified
@@ -1141,13 +1141,43 @@ In \chp{inverse} we will show a language similar to ANC
 for which the form of the energy function is uniquely determined
 from the kinetic rate parameters.
 
-...
+% Herzfeld and Stanley general allosteric model
 
-% Herzfeld and Stanley general allosteric model?
+Another related development is that of
+biomolecular interaction databases.
+% At the beginning of this century
+During the last two decades
+databases like BindingDB \citep{bindingdb,bindingdb15},
+BIND \citep{bind}, MINT \citep{mint,mint12},
+% NOTE: Because matrixdb09 and matrixdb11 have different author
+% lists, biblatex will show two names in the citation before "et al".
+% To make it show just one we can use the option uniquelist=false.
+% and MatrixDB \citep{matrixdb09,matrixdb11} have appeared
+MatrixDB \citep{matrixdb09} and BioLiP \citep{biolip} have appeared
+% with the aim to collect data associated to biomolecular interactions
+with the aim to collect data pertinent to biomolecular interactions
+that have been described in the scientific literature.
+Of particular interest to us is that they gather information
+about thermodynamic and kinetic parameters
+like equilibrium and rate constants for these interactions.
+The proliferation of molecular interaction databases
+have prompted the creation of common data formats like
+the Human Proteome Organization Proteomics Standards Initiative
+Molecular Interactions (HUPO-PSI-MI) format
+\citep{hupo-psi-mi-1,hupo-psi-mi-2.5}
+and groups like % associations like
+the International Molecular Exchange (IMEx) consortium \citep{imex}.
+The latest version of the HUPO-PSI-MI format provides
+a means for the specification of (thermodynamic and kinetic)
+parameters of an interaction.
+Together, all this infrastructure facilitates the construction
+of thermodynamic models of biomolecular interaction networks.
+% of thermodynamic models like the ones our method uses.
 
+
+% Calculus of biochemical complexes at equilibrium
 % http://bib.oxfordjournals.org/content/8/4/226.long
 
-% perhaps also mention BIND
 % thermodynamic models in systems biology like the flagelum,
 % the growing membrane, and others
 
@@ -1158,7 +1188,7 @@ the relationship between animate and inanimate matter.
 It has been argued by \citet{pross},
 in an attempt to bridge the worlds of animate and inanimate matter,
 that the former % animate matter (\ie life)
-corresponds to the set of persisting molecular replicators.
+corresponds to the set of \emph{persisting molecular replicators}.
 A molecular replicator is a molecule or set of molecules that,
 usually in several steps,
 can fulfil the following transformation,
@@ -1168,6 +1198,7 @@ $F$ is a molecule consumed by $R$ to construct a second $R$
 (mnemonically named $F$ for food)
 and $W$ (for waste) is what is left of $F$
 that was not used for the replication.
+This transformation is known as \emph{autocatalysis}.
 Under unlimited resources a molecular replicator
 grows exponentially fast.
 On the other hand, when $F$ is exhausted
