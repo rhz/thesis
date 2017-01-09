@@ -1046,7 +1046,7 @@ Thus we write $\LTS^k_\generators$ for the CTMC.
 Note that the (strongly) connected components of $\LTS_\generators$
 are finite as agents cannot be destroyed nor created by rules.
 
-With all the ingredients on the table % in place
+With all the ingredients on the table
 we can proceed now to formulate more precisely
 the main question addressed in this thesis.
 In the context of the dynamics of biomolecular networks,
@@ -1071,22 +1071,18 @@ given a contact graph $C$,
 a set of rules $\rules$ over $C$
 and a rate map $k$,
 does the CTMC $\LTS^k_\rules$ have detailed balance?
-If so, how do we obtain its invariant probability distribution
-% and the energy function that defines it?
-and energy function?
+If so, how do we obtain
+its invariant probability distribution and energy function?
 The former question has been proven to be undecidable by \citet{et1}
 using an encoding of the Post correspondence problem \citep{post}
 in Kappa.
 In \chp{inverse} we address the inverse problem for
 restricted versions of the Kappa language
 that are decidable.
-% and an energy function can be constructed from its parameters.
 
 
 \section{Related work}
 
-% Several authors have worked on the thermodynamics of
-% biomolecular interaction networks.
 \citet{anc} have developed the Allosteric Network Compiler
 (ANC), a language to describe biomolecular interaction networks
 that have an energy function and a tool to generate
@@ -1121,18 +1117,14 @@ the enzymatic site reversibly binds a covalently modified site first
 and then changes the state of the covalently modified site
 as it unbinds it.
 Each type of rule is parameterised differently.
-% Each type of rule have different type of parameters and
-% pairs of allosteric components and their contained sites and components
 The energy function is obtained implicitly
 from all the parameters of the model.
-% The language is sophisticated in terms of structure
-% and formalises concepts that are familiar to biologists.
 The language formalises concepts that are familiar to
 molecular biologists and biochemists
 in a way that reflects the apparent complexity
 of these interaction networks.
 However, the language's many concepts and classifications
-makes it difficult to see the big picture % understand
+makes it difficult to see the big picture
 and obfuscates the energy function. % obscures
 Also it arbitrarily restricts the form and size of the rules
 and the form of the energy function.
@@ -1152,16 +1144,10 @@ from the kinetic rate parameters.
 
 Another related development is that of
 biomolecular interaction databases.
-% At the beginning of this century
 During the last two decades
 databases like BindingDB \citep{bindingdb,bindingdb15},
 BIND \citep{bind}, MINT \citep{mint,mint12},
-% NOTE: Because matrixdb09 and matrixdb11 have different author
-% lists, biblatex will show two names in the citation before "et al".
-% To make it show just one we can use the option uniquelist=false.
-% and MatrixDB \citep{matrixdb09,matrixdb11} have appeared
 MatrixDB \citep{matrixdb09} and BioLiP \citep{biolip} have appeared
-% with the aim to collect data associated to biomolecular interactions
 with the aim to collect data pertinent to biomolecular interactions
 that have been described in the scientific literature.
 Of particular interest to us is that they gather information
@@ -1177,7 +1163,6 @@ Molecular Interactions (HUPO-PSI-MI) format
 The latest version of this format,
 which is used by all molecular interaction databases,
 % provides a means for the specification of
-% provides a means for the researcher to specify
 % provides the possibility of specifying
 provides a means to specify
 thermodynamic and kinetic parameters of an interaction.
@@ -1188,10 +1173,11 @@ Also of interest are databases
 specialised in the thermodynamic properties of reactions like
 the Thermodynamics of Enzyme-Catalyzed Reactions Database
 at the National Institute of Standards and Technology (NIST)
-\citep{tecrdb}
-% What happened to biocoda?
-and others % the Biochemical Reactions Thermodynamics Database
-\citep{biocoda-thermo}.
+\citep{tecrdb} and others \citep{biocoda-thermo}.
+% NOTE: What happened to biocoda?
+% NOTE: Biocoda uses ThermoML, so I thought it was related
+% but it seems it's much more focused in organic chemistry
+% than biochemistry. (see the files in the repository).
 % The NIST % Thermodynamics Research Center at the NIST
 % has also developed an XML-based format to store
 % experimental thermophysical and thermochemical property data
@@ -1202,11 +1188,9 @@ and others % the Biochemical Reactions Thermodynamics Database
 Moreover, sometimes it is possible to predict these % parameters
 thermodynamic constants and how they vary in different solutions
 \citep{equilibrator,group-contrib}.
-% Together all this infrastructure facilitates the construction
 Together all of these tools, databases and algorithms
 provide a strong infrastructure that facilitates the construction
 of thermodynamic models of biomolecular interaction networks.
-% of thermodynamic models like the ones our method uses.
 
 Thermodynamic models have already been used successfully
 in many areas of biology.
@@ -1266,10 +1250,9 @@ far-from-equilibrium graph thermodynamics.
 The convergence properties
 of thermodynamically-consistent sets of rules
 presented in \sct{energy-gp}
-% , which would not hold in such a regime,
-% might serve as a reference for comparison.
-would not hold in a far-from-equilibrium regime.
-However the rates calculated for the rules by the method
+would not hold in a far-from-equilibrium regime
+but might nevertheless serve as a reference for comparison.
+Moreover, the rates calculated for the rules by the method
 would still be valid as these depend only on
 the chemical properties of molecules in solution
 (reactants, products, solvent, etc).
@@ -1279,70 +1262,32 @@ some of these chemical considerations.
 It allows the exploration of kinetics
 in a thermodynamically consistent way.
 Hence this framework might play an important role
-% Hence the framework proposed in \sct{kinetic-model}
-% to compute the rates would play an important role
 in the study of far-from-equilibrium systems.
 
-
 \if0
-The importance of the relationship between kinetics and thermodynamics
-% for understanding fundamental principles of biology
+The importance of the relationship
+between kinetics and thermodynamics
 in the understanding of fundamental
 physico-chemical principles of living systems
 is also highlighted by the recent work of \citet{pross}.
-% in the understanding of the fundamental nature of living systems and
-% the origin of life is highlighted by the recent work of \citet{pross}.
-The author generalises Darwin's concept of evolution and natural selection
-to the realm of autocatalytic replicating molecules
-and molecular assemblies.
-% It does so by pointing to general physico-chemical principles
-% that might have made life possible.
+The author generalises Darwin's concept of evolution
+and natural selection to the realm of autocatalytic
+replicating molecules and molecular assemblies.
 In particular, he extends the idea of fitness
 to that of \emph{kinetic stability}.
-% which is a measure of the time it takes for a reaction to occur.
 A kinetically stable replicator is defined as
 one that can maintain a significant equilibrium population
 of members under the existing environmental conditions.
-% TODO: far from equilibrium
 He argues that elements within the non-replicative region
 of general chemical space are directed toward lower free energy states,
-% and thus thermodynamically driven,
 whereas elements of replicator space are driven by autocatalysis
-% the kinetic power of autocatalysis
 and tend from kinetically less stable to kinetically more stable.
-% TODO: make connection to our use of thermodynamics and kinetics
 Replicators may indeed constantly stay out of equilibrium
 by using a source of energy,
 a phenomenon that is ubiquitous in living systems.
 It is therefore perhaps questionable
 whether using a thermodynamic approach
 can shed any light on the understanding of these systems.
-\fi
-
-\if0
-% TODO: rewrite this, it's unclear what a thermodynamic equivalent is
-% On the relationship to Addy Pross' paper
-Here we do not attempt to refute this point.
-On the contrary, we believe that
-by generating a set of rules (\ie a kinetic description)
-from an energy function (\ie a thermodynamic description)
-we can more easily explore systems that are not in equilibrium
-by introducing additional rules
-that do not necessarily have a thermodynamic equivalent.\footnote{
-  Note that when the additional irreversible rules do not intersect
-  the reversible ones we still can get an extended notion
-  of detailed balance by an analogous argument to
-  that put forward by \citet{gorban}.}
-% Our approach can be extended to the case where we have
-% irreversible rules that do not intersect the reversible rules
-% in an analogous way to that shown by \citet{gorban}.
-% The field of near equilibrium graph thermodynamics is yet to be explored
-% and perhaps this work might serve as a reference for comparison.
-This opens up a possible new line of work,
-which we might call near equilibrium graph thermodynamics,
-where the present work might serve as a reference for comparison.
-% TODO: mention also the linear kinetic model and how kinetics
-% can be explored in a thermodynamically consistent way.
 \fi
 
 
