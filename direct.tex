@@ -1,19 +1,25 @@
+In this chapter we show how to construct
+a set of rules and their forward and backward rate constants
+from an energy function.
+In the spirit of rule based modelling languages like Kappa
+where rules and observables are defined in terms of patterns ---
+contact maps $g$ used to compute $\matches{g}{m}$ with $m$ a state.
+% primarily used
+We assign an energy cost $\cost(g)$ to pattern $g$
+and construct energy functions as linear combinations
+of the number of ocurrences of each energy pattern $g \in \shapes$.
+\[ E(m) = \sum_{g \in \shapes} \cost(g) \matches{g}{m} \]
+This is reminiscent of group contribution methods
+used to estimate the standard Gibbs free energy of formation
+of biomolecules \citep{group-contrib}.
+
+
+
+
+
 
 
 \if0
-Whenever a contact map $g$ is used to compute $\matches{g}{m}$
-where $m$ is a state, we say $g$ is a pattern.
-
-In the spirit of rule based modelling languages like Kappa,
-our energy function depends on the number of occurrences of a pattern.
-
-% TODO: relate our energy function to group contribution methods
-% This is reminiscent of group contribution methods
-% used to estimate the standard Gibbs free energy of formation
-% of biomolecules.
-% http://www.jbc.org/content/266/22/14440.short
-% http://www.jbc.org/content/266/22/14440.full.pdf
-
 We suppose hereafter that $\generators$ is closed under
 rule inversion, \ie $\generators = \inv{\generators}$.
 Hence every $(r,\psi)$-transition
@@ -24,12 +30,15 @@ and $\LTS_\generators$ is symmetric.
 \section{Minimal glueings}
 \label{sec:mg}
 
+
 \section{Refinements} % and growth policies
 \label{sec:gp}
 \fi
 
+
 \section{Energy-based refinement}
 \label{sec:energy-gp}
+
 
 \section{Linear kinetic model}
 \label{sec:kinetic-model}
@@ -54,8 +63,11 @@ and $\LTS_\generators$ is symmetric.
 % do we get additional constraints on kinetic rates from cycles
 % in the transition graph? when two cycles share an edge?
 
+
 \section{Flagellum's motor}
 \label{sec:alloring}
+
+
 
 
 %%% Local Variables:
