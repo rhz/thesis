@@ -7,6 +7,12 @@ where $m$ is a state, we say $g$ is a pattern.
 In the spirit of rule based modelling languages like Kappa,
 our energy function depends on the number of occurrences of a pattern.
 
+% TODO: relate our energy function to group contribution methods
+% This is reminiscent of group contribution methods
+% used to estimate the standard Gibbs free energy of formation
+% of biomolecules.
+% http://www.jbc.org/content/266/22/14440.short
+% http://www.jbc.org/content/266/22/14440.full.pdf
 
 We suppose hereafter that $\generators$ is closed under
 rule inversion, \ie $\generators = \inv{\generators}$.
@@ -39,9 +45,17 @@ and $\LTS_\generators$ is symmetric.
 % "it should then be possible to predict
 %  the free energy of the transition state by a linear combination of
 %  the predictions made for the reagents and for the products"
+%
 % if we then relate the free energy of the transition state to
 % the rate constants using Arrhenius?
+% this has been done in transition state theory
+% https://en.wikipedia.org/wiki/Eyring_equation
+%
+% do we get additional constraints on kinetic rates from cycles
+% in the transition graph? when two cycles share an edge?
 
+\section{Flagellum's motor}
+\label{sec:alloring}
 
 
 %%% Local Variables:
