@@ -583,11 +583,12 @@ Each realisable site graph represents a
   Below you can find the definition of a fully specified state,
   which we call a mixture.})
 state in which our biomolecular network can be.
-Note however that it contains no typing information.
+However it contains no typing information.
+% Note however that it contains no typing information.
 We give a type to each agent and site in the graph
 by assigning to it an agent and site in the type graph.
 More precisely,
-we need a map from a realisable site graph to a site graph.
+we use a map from a realisable site graph to a site graph.
 Below we introduce such maps.
 
 \begin{flushleft}
@@ -1057,13 +1058,18 @@ how do we generate a set of rules $\rules$
 with a corresponding rate map $k: \rules \to \RR_{\geqslant 0}$
 such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
 the probability distribution $\ip$ as defined in \eqn{energy}?
-In practice, just an energy function won't be enough,
-we will have to ask for an initial set of rules (without rates)
+% This problem is underdetermined,
+% just an energy function won't be enough.
+To add flexibility
+we ask as well for an initial set of rules (without rates)
 from which to derive the set with detailed balance.
-We write $\generators$ for the generator set that is given as input.
+We write $\generators$ for the set of generator rules
+that is given as input.
+This set delimits which moves are possible at all.
 Finally, detailed balance only constrains the ratio between
 the rates of a rule and its inverse so to pick concrete rates
-we impose a linear model which is explained in \sct{kinetic-model}.
+we impose a linear model in \sct{kinetic-model}.
+% which is explained in \sct{kinetic-model}.
 The full method is presented in \chp{direct}.
 
 On the other hand, the inverse problem is stated as,
