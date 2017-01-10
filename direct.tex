@@ -13,14 +13,13 @@ This is reminiscent of group contribution methods
 used to estimate the standard Gibbs free energy of formation
 of biomolecules \citep{group-contrib}.
 
-In our previous example (\sct{kappa}) we might want to favour
+In our previous example (\sct{kappa}), we might want to favour
 the formation of triangles over chains and other cycles.
 For this we would give a negative energy cost to $t$,
 \ie $\cost(t) < 0$.
 If $t$ is the only energy pattern,
 then the energy of a state $m$ is
 $E(m) = \cost(t) \abs{\matches{t}{m}}$.
-% In this model we might want to know, for instance,
 In this model one might wonder, for instance,
 how low the energy cost of $t$ must be
 to have at least $90\%$ of all agents in a triangle
@@ -29,19 +28,22 @@ at equilibrium at least $90\%$ of the time.
 As mentioned at the end of \sct{kappa},
 we will derive the set of rules with detailed balance
 from a set of generator rules $\generators$ (without rates).
+We suppose that $\generators$ is closed under
+rule inversion, \ie $\generators = \inv{\generators}$.
 Given a contact graph $C$,
 a simple option would be to include
 every possible minimal rule in this set,
-that is, include a creation and destruction rule
-for each edge in the contact graph
-that only asks for the presence of
+that is, include a creation and a destruction rule
+for each edge in the contact graph.
+Each of these rules is minimal in the sense that
+it only asks for the presence of
 the two participating agents and sites.
-The example rule in \sct{kappa},
+The example rule in \sct{kappa}
 where agents of type $1$ and $2$ bind
 % regardless of the binding state of any other site,
 regardless of the context
 in which these two agents happen to be,
-% (call it $r^+_{12}$)
+which we denote by $r^+_{12}$,
 is one such minimal rule
 that can be derived from contact graph $T$.
 This option is \emph{maximally permissive}
@@ -54,23 +56,67 @@ with respect to the contact graph.\footnote{
   where, a priori, movement is not constrained along in coordinate.}
 Even if all transformations are possible,
 many of them may be unlikely due to having a high energy.
-However, one might prefer to forbid certain transformations
+Still one might prefer to forbid certain transformations
 in some scenarios.
 This is indeed the case in the example
 that will be presented in \sct{alloring}.
 
+Let us return to our example.
+% we would like to find a rule that,
+% by providing more context ...
+% that is a refinement of a rule in $\generators$ ---
+% intuitively, a refinement provides more context
+% while performing the same action ---
+% and has detailed balance.
+We would like to find a set of rules that have detailed balance
+with respect to the energy function
+$E(m) = \cost(t) \abs{\matches{t}{m}}$.
+Consider the rule $r^+_{12}$ and its inverse $r^-_{12}$,
+the unbinding of agents $1$ and $2$.
+We first ask ourselves if this pair of rules
+% Given the maximally permissive set of generator rules
+% $\generators = \set{r^+_{12},r^-_{12},r^+_{23},r^-_{23},r^+_{31},r^-_{31}}$,
+% where $r^+_{12}$ is the binding rule between agents $1$ and $2$
+% presented in \sct{kappa} and $r^-_{12}$ its inverse,
+% we first ask ourselves if these reversible rules
+could have detailed balance
+for some assignment of kinetic rates.
+% to the forward and backward rule.
+% For that to be true, each application of the rule
+% should give $\ip_i q_{ij} = \ip_j q_{ji}$.
+% For that to be true, the rule would have to produce
+% the same change in energy wherever it is applied.
+Suppose we assign kinetic rates $k^+$ and $k^-$
+to $r^+_{12}$ and $r^-_{12}$.
+% In \sct{bg} we obtained $e^{E(j)-E(i)} = q_{ji}/q_{ij}$
+% by combining \eqn{energy} and \eqn{detailed-balance}.
+Recall that $e^{E(n)-E(m)} = q_{nm}/q_{mn}$
+for systems with detailed balance. % and that
+% By expanding $q_{mn}$ and $q_{nm}$ according to \eqn{kappa-ctmc}
+From \eqn{kappa-ctmc}
+\[ q_{mn} = \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
+   k(r) \; \abs{\setof{\psi \in \matches{r_L}{m}}{m^{(r,\psi)} = n}}
+\]
+The number of matches of $r^+_{12}$
+in the numerator of $q_{nm}/q_{mn}$ will cancel out
+with the number of matches of $r^-_{12}$ in the denominator
+due to rule reversibility (\lem{reversibility}) and vice versa.
+If $r^+_{12}$ induces a rewrite of $m$ into $n$ we obtain
+$e^{E(n)-E(m)} = k^+/k^-$.
+In words, the change in energy produced by the rule application
+fixes the ratio between the kinetic rates.
+Hence each rule application should produce the same energy change
+for there to be an assignment of kinetic rates with detailed balance.
+Whenever a rule produces the same energy change
+regardless of where it is applied
+we say that the rule has an \emph{unambiguous energy balance}.
 
 
 
 
 
 
-\if0
-We suppose hereafter that $\generators$ is closed under
-rule inversion, \ie $\generators = \inv{\generators}$.
-Hence every $(r,\psi)$-transition
-has an inverse $(\inv{r},\comatch{\psi})$
-and $\LTS_\generators$ is symmetric.
+
 
 
 \section{Minimal glueings}
@@ -79,7 +125,6 @@ and $\LTS_\generators$ is symmetric.
 
 \section{Refinements} % and growth policies
 \label{sec:gp}
-\fi
 
 
 \section{Energy-based refinement}
