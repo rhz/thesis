@@ -1,6 +1,7 @@
 % \input{epigraph}
 % \noindent
 \section{Historical background}
+\label{sec:bg}
 
 In the history of natural sciences,
 there has been two main approaches to describe dynamical systems,
@@ -623,10 +624,10 @@ The diagram to the right is the corresponding
 commutative diagram in the category $\Set$
 of sets and total functions
 to condition (i) in the definition.
-We say the homomorphism $h: G \to C$ is
+We say the homomorphism $g: G \to C$ is
 a \emph{contact map} over $C$ iff
 (i) $G$ is realisable and
-(ii) whenever $h_\sites(s_1) = h_\sites(s_2)$
+(ii) whenever $g_\sites(s_1) = g_\sites(s_2)$
 and $\sitemap_G(s_1) = \sitemap_G(s_2)$, then $s_1 = s_2$.
 Condition (ii) means that every agent in $G$ has at most
 one copy of each site of its corresponding agent in $C$.
@@ -827,7 +828,7 @@ as the subscript can be deduced from the colour of the agent as well.
 Whenever a contact map $g: G \to C$ specifies all sites
 that its type $C$ permits for all its agents, that is,
 if for all $a \in \agents_G$,
-$h_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(h_\agents(a))$,
+$g_\sites(\sitemap_G^{-1}(a)) = \sitemap_C^{-1}(g_\agents(a))$,
 then we say $g$ is a \emph{mixture}.
 We write $\MM(C)$ for the set of all mixtures in $\rSGe_C$.
 In the above example, $g$ is a mixture.
@@ -920,14 +921,22 @@ regardless of whether those sites are bound or free.
   \vspace{-1.7em}
   \begin{equation}
     \label{eq:rewrite-step}
-    \tikz[baseline=-2.5]{
-      \matrix (m) [matrix of math nodes,row sep=35pt,column sep=35pt] {
-        r_L & r_R \\
-        h & \comatch{h} \\};
-      \draw[hom,dotted] (m-1-1) -- (m-1-2);
-      \draw[hom,dotted] (m-2-1) -- (m-2-2);
-      \draw[hom] (m-1-1) -- node[left] {$\psi$} (m-2-1);
-      \draw[hom] (m-1-2) -- node[right] {$\comatch{\psi}$} (m-2-2);
+    \tikz[baseline=-1.1cm,x=2cm,y=2cm]{
+      \node (rl) at (0,0) {$r_L$};
+      \node (rr) at (1,0) {$r_R$};
+      \node (ml) at (0,-1) {$m$};
+      \node (mr) at (1,-1) {$m^{(r,\psi)}$};
+      \draw[hom,dotted] (rl) -- (rr);
+      \draw[hom,dotted] (ml) -- (mr);
+      \draw[hom] (rl) -- node[left] {$\psi$} (ml);
+      \draw[hom] (rr) -- node[right] {$\comatch{\psi}$} (mr);
+      % \matrix (m) [matrix of math nodes,row sep=35pt,column sep=35pt] {
+      %   r_L & r_R \\
+      %   m & m^{(r,\psi)} \\};
+      % \draw[hom,dotted] (m-1-1) -- (m-1-2);
+      % \draw[hom,dotted] (m-2-1) -- (m-2-2);
+      % \draw[hom] (m-1-1) -- node[left] {$\psi$} (m-2-1);
+      % \draw[hom] (m-1-2) -- node[right] {$\comatch{\psi}$} (m-2-2);
     }
   \end{equation}
 \end{wrapfigure}
@@ -936,7 +945,8 @@ When a rule $r$ is applied to an embedding $\psi: r_L \to m$
 it induces a \emph{rewrite} of the mixture $m$
 by modifying the edge structure of the image of $\psi$
 from that of $r_L$ to that of $r_R$.
-The result of rewriting is a new mixture $\comatch{m}$
+The result of rewriting is a new mixture $m^{(r,\psi)}$
+(or simply $\comatch{m}$ when $(r,\psi)$ is clear from the context)
 and an embedding $\comatch{\psi}: r_R \to \comatch{m}$, where
 $\anon{\comatch{m}}$ has the same agents and sites as $\anon{m}$,
 \ie $\agents_{\anon{\comatch{m}}} = \agents_{\anon{m}}$,
@@ -947,7 +957,10 @@ $\comatch{m}_\sites = m_\sites$,
 and $\edges_{\anon{\comatch{m}}} = \edges_{\anon{m}} -
 \psi_\sites(\edges_{\anon{r_L}}) +
 \comatch{\psi}_\sites(\edges_{\anon{r_R}})$.
-The embedding $\comatch{\psi}$ is simply defined by
+Since the set of agents and sites are equal,
+% of $\anon{m}$ and $\anon{\comatch{m}}$ are equal,
+$\comatch{\psi}$ is given by
+% The embedding $\comatch{\psi}$ is simply given by % simply defined by
 $\comatch{\psi}_\agents = \psi_\agents$ and
 $\comatch{\psi}_\sites = \psi_\sites$.
 The inverse of $r$,
@@ -958,6 +971,7 @@ we recover $m$ and $\psi$.
 % we recover $m$ and $\psi$.
 
 \begin{lemma}
+  \label{lemma:reversibility}
   Let $r = (r_L, r_R)$ be a rule,
   $r_L/\rSGe_C$ the coslice category under $r_L$, and
   $r_R/\rSGe_C$ the coslice category under $r_R$.
@@ -967,7 +981,7 @@ we recover $m$ and $\psi$.
   We construct a functor $F: r_L/\rSGe_C \to r_R/\rSGe_C$
   by mapping an embedding $\psi: r_L \to m$
   to the result of applying $r$ to it,
-  $\comatch{\psi}: r_R \to \comatch{m}$.
+  $\comatch{\psi}: r_R \to m^{(r,\psi)}$.
   By definition $\comatch{\psi}_\agents = \psi_\agents$ and
   $\comatch{\psi}_\sites = \psi_\sites$.
   Hence, the mapping of embeddings induced by $F$ is injective:
@@ -996,19 +1010,21 @@ we construct a CTMC $\tuple{\states, \state(0), \qm}$ as follows.
   \label{eq:kappa-ctmc}
   \states &= \MM(C) \nonumber \\
   \state(0)(x) &= \begin{cases}
-    1 \quad\text{if } x = m_0 \\
-    0 \quad\text{if } x \neq m_0
+    1 \quad\text{if } x \simeq m_0 \\
+    0 \quad\text{otherwise} % x \neq m_0
   \end{cases} \\
   q_{mn} &= \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
-    k(r) \; \nitoj_{mn}(r_L,r_R) \nonumber
+    k(r) \; \abs{\setof{\psi \in \matches{r_L}{m}}{
+      m^{(r,\psi)} \simeq n}}
+  \nonumber
 \end{align}
-with
-\begin{equation*}
-  \nitoj_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
-    \abs{\matches{r_L}{m}} & \text{if } \comatch{m} = n \\
-    0 & \text{otherwise}
-  \end{array}\right.
-\end{equation*}
+% with
+% \begin{equation*}
+%   \nitoj_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
+%     \abs{\matches{r_L}{m}} & \text{if } m^{(r,\psi)} = n \\
+%     0 & \text{otherwise}
+%   \end{array}\right.
+% \end{equation*}
 It is easy to see that the number of embeddings
 between any two contact maps $x,y$ is finite.
 Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
