@@ -169,7 +169,7 @@ for the present work are given below.
 Detailed balance was first proposed,
 in a slightly stronger form
 that requires every path going from $i$ to $j$
-to have an reverse path with which it is in equilibrium,
+to have a reverse path with which it is in equilibrium,
 by \citet{wegscheider} in the context of chemical kinetics.
 Its validity for other physical systems was argued by
 \citet{lewis} and \citet{tolman}.
@@ -547,7 +547,7 @@ In the same way a molecule is of a certain species,
 agents can be of different types.
 These types also live in a network,
 a static network which represents the ``network of possibilities''.
-It tell us which sites a site \emph{can} bind
+It tells us which sites a site \emph{can} bind
 instead of what is actually bound to at a given moment.
 
 To make these ideas formal we use a simpler version of
@@ -1072,14 +1072,14 @@ In the context of the dynamics of biomolecular networks,
 the direct problem is stated as,
 given a contact graph $C$ and
 an energy function on mixtures over $C$,
-how do we generate a set of rules $\rules$
+how do we generate a finite set of rules $\rules$
 with a corresponding rate map $k: \rules \to \RR_{\geqslant 0}$
 such that the CTMC $\LTS^k_\rules$ has detailed balance with respect to
 the probability distribution $\ip$ as defined in \eqn{energy}?
 % This problem is underdetermined,
 % just an energy function won't be enough.
 To add flexibility
-we ask as well for an initial set of rules (without rates)
+we ask as well for an initial set of (rate-less) rules % (without rates)
 from which to derive the set with detailed balance.
 We write $\generators$ for the set of generator rules
 that is given as input.
