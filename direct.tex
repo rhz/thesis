@@ -295,7 +295,7 @@ We see that, while the application on the left
 does not produce any change in energy ($\Delta E = 0$),
 the one on the right creates a triangle
 and thus $\Delta E = \cost(t)$.\footnote{
-  We can't tolerate energetical ambiguity, heresy!}
+  We can't tolerate energetical ambiguity! Heresy!}
 We must then split $r^+_{12}$ into subrules that check
 the surroundings of the rule application
 to make sure that, for instance,
@@ -307,7 +307,8 @@ In particular, one would like that every match of the rule
 can be mapped to exactly one match of one of the subrules.
 Prior work by \citet{refinement} has shown how
 one can obtain a partition of rules with this property
-and will be presented briefly in the next section. % \sct{refinements}.
+and will be presented, in a slightly modified version,
+in the next section. % \sct{refinements}.
 
 % For the partitioning of rules
 % we need a guiding principle.
@@ -490,6 +491,101 @@ The pair of contact maps $(g,g^{(r,\psi)})$
 % with $g^{(r,\psi)}$ the result of the rewrite
 is itself a valid rule
 since they only differ in their edge structure.
+In this way, an extension of a rule
+is determined uniquely by an embedding.
+
+% Epis of $\rSGe_C$ are characterised as follows:
+% suppose $s: G \to C$ and $t: H \to C$ are contact maps then
+% $\phi: s \to t$ in $\rSGe_C$ is an epi iff
+% every connected component of $H$ contains at least
+% one agent in the image of $\phi_\agents$.
+Epis\footnote{
+  Epi, mono and iso are short for
+  epimorphism, monomorphism and isomorphism.}
+% of $\rSGe_C$ are used to add context to rules
+% of $\rSGe_C$ are useful when adding context to rules
+% of $\rSGe_C$ are a good candidate to use as embeddings
+% when adding context to rules.
+% because every connected component of their codomain
+% has at least one agent with a pre-image.
+of $\rSGe_C$ are good candidates for extensions.
+They are characterised as follows:
+$\psi: s \to t$ is an epi iff
+every connected component of $s$ contains
+at least one agent in the image of $\psi_\agents$.
+This ensures that no new connected component is added to the rule
+while extending it.
+However, for technical reasons
+that will become apparent in \thm{unique-decomposition},
+we use prefixes of epis
+instead of epis to extend rules ---
+an embedding $\psi: s \to t$ is said to be
+a \emph{prefix} of $\phi: s \to t'$
+if there is some embedding $\theta: t \to t'$
+that makes the composition of $\psi$ and $\theta$ equal to $\phi$
+(\ie $\theta \, \psi = \phi$) % psychology + tetas = philosophy
+and write $\psi \leq \phi$ for this.
+We refer to a prefix of an epi
+\begin{wrapfigure}[4]{r}{0.3\textwidth}
+  \vspace{-2em}
+  \begin{center}
+    \begin{tikzpicture}
+      \matrix (m) [matrix of math nodes,row sep=25pt,column sep=25pt] {
+        & s & \\
+        t_1 & & t_2 \\};
+      \draw[hom] (m-1-2) -- node[above left] {$\psi$} (m-2-1);
+      \draw[hom] (m-1-2) -- node[above right] {$\phi$} (m-2-3);
+      \draw[hom] (m-2-1) -- node[below] {$\theta$} (m-2-3);
+    \end{tikzpicture}
+  \end{center}
+\end{wrapfigure}
+$\phi: s \to t$ as an \emph{extension} of $s$.
+In the category of extensions of $s$,
+a morphism between objects $\psi: s \to t_1$ and $\phi: s \to t_2$
+is an embedding $\theta: t_1 \to t_2$
+such that the triangle on the right commutes.
+If $\theta$ is an iso we write $\psi \cong_s \phi$.
+
+Rule application preserves epis
+and in fact also prefixes of epis:
+\begin{lemma}
+  \label{lem:epi-prefix}
+  Let $r = \tuple{r_L,r_R}$ be a rule
+  and $\psi: r_L \to g$ be an embedding
+  with $r_L,r_R,g$ contact maps in $\rSGe_C$.
+  The embedding $\comatch{\psi}: r_R \to \comatch{g}$
+  that results from applying $r$ to $\psi$
+  is a prefix of an epi iff $\psi$ is.
+\end{lemma}
+\begin{proof}
+  This amounts to proving that
+  some embedding $\comatch{\phi} \geq \comatch{\psi}$
+  is an epi if there is an epi $\phi \geq \psi$;
+  the converse is true by symmetry of rules.
+  For this it is enough to consider the case
+  where the rule adds or deletes exactly one edge
+  since rules that modify more than one edge at a time
+  can be decomposed as sequences of deletions and insertions of edges;
+  given that each deletion and insertion preserves the property,
+  the sequence will preserve it as well.
+
+  The case of adding an edge is easy as the image of $\comatch{\phi}$
+  has fewer connected components to intersect than $\phi$.
+  The case where $r$ deletes an edge
+  can introduce new connected components,
+  however in this case both ends $u,v$
+  of the deleted edge must be in $r_L$,
+  so whether the deletion disconnects or not the codomain of $\psi$,
+  the components of $\comatch{\phi}(u)$ and $\comatch{\phi}(v)$
+  will have a pre-image, namely $u$ and $v$.
+\end{proof}
+
+It follows that the category of extensions
+of $r_L$ and $r_R$ are isomorphic.
+
+\begin{theorem}
+  \label{thm:unique-decomposition}
+\end{theorem}
 
 
 
