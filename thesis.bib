@@ -372,33 +372,6 @@
   year=1996
 }
 
-@incollection{gp2010,
-  author={Murphy, E. and
-          Danos, V. and
-          Feret, J. and
-          Harmer, R. and
-          Krivine, J.},
-  title={Rule-based modelling and model refinement},
-  editor={H. Lohdi and S. Muggleton},
-  booktitle={Elements of Computational Systems Biology},
-  publisher={Wiley},
-  year={2010}
-}
-
-% TODO: repeated entry. clarify year.
-@inbook{ecsb:2009,
-  author = {Elaine Murphy and
-            Vincent Danos and
-            J{\'er\^o}me Feret and
-            Russell Harmer and
-            Jean Krivine},
-  chapter = {Rule Based Modelling and Model Refinement},
-  publisher = {Wiley Book Series on Bioinformatics},
-  title = {Elements of Computational Systems Biology},
-  year = {2009},
-}
-
-
 @article{tsai2009,
   author = {Tsai, C.J. and Sol, A. and Nussinov, R.}, 
   journal = {Molecular BioSystems},
@@ -2175,7 +2148,7 @@
   pages = {475},
   pmid = {21407212},
   date = {2011-01-01},
-  issn = {1744-4292, 1744-4292},
+  issn = {1744-4292},
   doi = {10.1038/msb.2011.8},
   url = {http://msb.embopress.org/content/7/1/475},
   urldate = {2017-01-07},
@@ -2278,20 +2251,38 @@
   urldate = {2017-01-09},
 }
 
-  pages = {2006.0024},
+% 2006.0024 is the "article number" (not the issue number)
+% but there's no field for that, so zotero puts it in pages.
+% tried all possible fields and eid fits best
+% the way I've seen it cited elsewhere.
+% pages = {1--11},
+% number = {1},
 @article{saiz,
   title = {Stochastic dynamics of macromolecular-assembly networks},
   author = {Saiz, Leonor and Vilar, Jose M. G.},
   journaltitle = {Molecular Systems Biology},
   volume = {2},
-  number = {1},
-  pages = {1--11},
+  eid = {2006.0024},
   date = {2006-01-01},
   pmid = {16738569},
-  issn = {1744-4292, 1744-4292},
+  issn = {1744-4292},
   doi = {10.1038/msb4100061},
   url = {http://msb.embopress.org/content/2/1/2006.0024},
   urldate = {2017-01-09},
+  langid = {english},
+}
+
+@incollection{refinement,
+  title = {Rule-Based Modeling and Model Refinement},
+  author = {Murphy, Elaine and Danos, Vincent and Féret, Jérôme and Krivine, Jean and Harmer, Russell},
+  editor = {Lodhi, Huma M. and Muggleton, Stephen H.},
+  booktitle = {Elements of Computational Systems Biology},
+  publisher = {John Wiley \& Sons, Inc.},
+  pages = {83--114},
+  date = {2010},
+  isbn = {978-0-470-55675-7},
+  url = {http://onlinelibrary.wiley.com/doi/10.1002/9780470556757.ch4/summary},
+  urldate = {2017-01-11},
   langid = {english},
 }
 
