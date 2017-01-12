@@ -585,6 +585,23 @@ and in fact also prefixes of epis:
   is a prefix of an epi iff $\psi$ is.
 \end{lemma}
 \begin{proof}
+  % Here we just prove that rule application preserves epis.
+  % For prefixes of epis we have to make sure that
+  % the mediating arrow (ie the witness of \phi \geq \psi)
+  % is preserved as well.
+  % This works because the new connected components in g
+  % (added in the codomain of the prefix of epi)
+  % are then connected to those in r_L through sites
+  % that are not involved in the action of the rule,
+  % since an edge addition requires the sites to be free
+  % and an edge deletion requires them to be bound
+  % but in no case they can be used to bind
+  % the new connected components.
+  % Embeddings preserve edges and free sites
+  % so the sites involved in the action of the rule
+  % have to be mentioned in the codomain of the prefix of epi.
+  % Because rule applications will leave everything else intact
+  % the mediating arrow is preserved.
   This amounts to proving that
   some embedding $\comatch{\phi} \geq \comatch{\psi}$
   is an epi if there is an epi $\phi \geq \psi$;
