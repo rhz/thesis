@@ -295,7 +295,7 @@ We see that, while the application on the left
 does not produce any change in energy ($\Delta E = 0$),
 the one on the right creates a triangle
 and thus $\Delta E = \cost(t)$.\footnote{
-  We can't tolerate energetical ambiguity! Heresy!}
+  We won't tolerate energetical ambiguity in this house!}
 We must then split $r^+_{12}$ into subrules that check
 the surroundings of the rule application
 to make sure that, for instance,
@@ -494,24 +494,13 @@ since they only differ in their edge structure.
 In this way, an extension of a rule
 is determined uniquely by an embedding.
 
-% Epis of $\rSGe_C$ are characterised as follows:
-% suppose $s: G \to C$ and $t: H \to C$ are contact maps then
-% $\phi: s \to t$ in $\rSGe_C$ is an epi iff
-% every connected component of $H$ contains at least
-% one agent in the image of $\phi_\agents$.
 Epis\footnote{
   Epi, mono and iso are short for
   epimorphism, monomorphism and isomorphism.}
-% of $\rSGe_C$ are used to add context to rules
-% of $\rSGe_C$ are useful when adding context to rules
-% of $\rSGe_C$ are a good candidate to use as embeddings
-% when adding context to rules.
-% because every connected component of their codomain
-% has at least one agent with a pre-image.
 of $\rSGe_C$ are good candidates for extensions.
 They are characterised as follows:
-$\psi: s \to t$ is an epi iff
-every connected component of $s$ contains
+an embedding $\psi: g \to h$ is an epi iff
+every connected component of $\anon{h}$ contains
 at least one agent in the image of $\psi_\agents$.
 This ensures that no new connected component is added to the rule
 while extending it.
@@ -519,32 +508,70 @@ However, for technical reasons
 that will become apparent in \thm{unique-decomposition},
 we use prefixes of epis
 instead of epis to extend rules ---
-an embedding $\psi: s \to t$ is said to be
-a \emph{prefix} of $\phi: s \to t'$
-if there is some embedding $\theta: t \to t'$
+an embedding $\psi: g \to h$ is said to be
+a \emph{prefix} of $\phi: g \to h'$
+if there is some embedding $\theta: h \to h'$
 that makes the composition of $\psi$ and $\theta$ equal to $\phi$
 (\ie $\theta \, \psi = \phi$) % psychology + tetas = philosophy
 and write $\psi \leq \phi$ for this.
-We refer to a prefix of an epi
-\begin{wrapfigure}[4]{r}{0.3\textwidth}
+We refer to a prefix
+\begin{wrapfigure}[5]{r}{0.27\textwidth}
   \vspace{-2em}
   \begin{center}
     \begin{tikzpicture}
       \matrix (m) [matrix of math nodes,row sep=25pt,column sep=25pt] {
-        & s & \\
-        t_1 & & t_2 \\};
+        & g & \\
+        h & & h' \\};
       \draw[hom] (m-1-2) -- node[above left] {$\psi$} (m-2-1);
       \draw[hom] (m-1-2) -- node[above right] {$\phi$} (m-2-3);
       \draw[hom] (m-2-1) -- node[below] {$\theta$} (m-2-3);
     \end{tikzpicture}
   \end{center}
 \end{wrapfigure}
-$\phi: s \to t$ as an \emph{extension} of $s$.
-In the category of extensions of $s$,
-a morphism between objects $\psi: s \to t_1$ and $\phi: s \to t_2$
-is an embedding $\theta: t_1 \to t_2$
+of an epi $\psi: g \to h$ as an \emph{extension} of $g$.
+In the category of extensions of $g$,
+a morphism between objects $\psi: g \to h$ and $\phi: g \to h'$
+is an embedding $\theta: h \to h'$
 such that the triangle on the right commutes.
 If $\theta$ is an iso we write $\psi \cong_s \phi$.
+
+One might wonder when the prefix of an epi is not itself an epi.
+The following diagram illustrates such a situation,
+% where $\theta$ is the witness of $\psi \leq \phi$.
+where $\psi$ is a prefix of epi $\phi$
+but is not itself an epi since the connected component
+of the blue node in the codomain of $\psi$
+is not in the image of $\psi_\agents$.
+\begin{center}
+  \begin{tikzpicture}
+    \node[grphnode,outer sep=.3cm] (g) at (0,0) {
+      \tikz[ingrphdiag]{
+        \n[n1]{x}{0,0};
+      }};
+    \node[grphnode,outer sep=.3cm] (h) at (-135:3) {
+      \tikz[ingrphdiag]{
+        \n[n1]{x}{0,0};
+        \n[n2]{y}{.9,0};
+      }};
+    \node[grphnode,outer sep=.3cm] (h') at (-45:3) {
+      \tikz[ingrphdiag,outer sep=0]{
+        \e{0,0}{1.1,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+    \path (g) edge[rule] node[above left] {$\psi$} (h);
+    \path (g) edge[rule] node[above right] {$\phi$} (h');
+    \path (h) edge[rule] node[below] {$\theta$} (h');
+  \end{tikzpicture}
+\end{center}
 
 Rule application preserves epis
 and in fact also prefixes of epis:
