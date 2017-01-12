@@ -626,6 +626,20 @@ and in fact also prefixes of epis:
 
 It follows that the category of extensions
 of $r_L$ and $r_R$ are isomorphic.
+Hence, any extension $\phi$ to a rule $r$ can be mapped to
+an extension of its inverse rule $\inv{r}$.
+
+A family of epis $\phi_i: g \to g_i$ \emph{uniquely decomposes} $g$,
+or is a \emph{refinement} of $g$, if,
+for all mixtures $m$ and embeddings $\psi: g \to m$,
+there exists a unique $i$ and $\psi'$ such that $\psi = \psi' \phi_i$.
+%; uniqueness of $i$ prevents the $\phi_i$s from overlapping.
+%; since $\phi_i$ is an epi, there can be at most one such $\psi$.
+This is the basic requirement
+for a reasonable notion of rule refinement:
+it guarantees that the left-hand side $g$ of a given rule
+splits into a non-overlapping and exhaustive collection
+of more specific cases $g_i$.
 
 \begin{theorem}
   \label{thm:unique-decomposition}
