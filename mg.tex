@@ -1,0 +1,410 @@
+\begin{center}
+  \resizebox{.9\linewidth}{!}{%
+  \begin{tikzpicture}[thick]
+
+    % TODO: 23123 is missing
+
+    \begin{scope}[shift={(0,0)}]
+      %%% Empty intersection %%%
+      \node[grphnode,anchor=south] (pb1) at (0,0) {
+        \tikz[ingrphdiag]{
+          \node {\large $\varnothing$};
+          \node[yshift=.1em] {\large\phantom{$\varnothing$}};
+        }};
+
+      %%% 1-2-3 %%%
+      \node[grphnode] (g1-1) at (-135:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 2-3-1 %%%
+      \node[grphnode] (g2-1) at (-45:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \site{r3}{n3.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n1]{n1}{0,0};
+            \site{l1}{n1.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      % cos(45) = 0.7071, * 3 = 2.1213, * 2 = 4.2426
+      %%% Disjoint union: 1-2-3 2-3-1 %%%
+      \node[grphnode,anchor=north] (po1) at (-90:4.2426) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+
+          \e{0,-.9526}{2.2,-.9526};
+          \begin{scope}[shift={(0,-.9526)}]
+            \n[n2]{n4}{0,0};
+            \site{r4}{n4.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,-.9526)}]
+            \n[n3]{n5}{0,0};
+            \site{l5}{n5.west};
+            \site{r5}{n5.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,-.9526)}]
+            \n[n1]{n6}{0,0};
+            \site{l6}{n6.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      \arrsn[opacity=.7]{pb1}{g1-1};
+      \arrsn[opacity=.7]{pb1}{g2-1};
+      \arrsn[opacity=.7]{g1-1}{po1};
+      \arrsn[opacity=.7]{g2-1}{po1};
+    \end{scope}
+
+    \begin{scope}[shift={(8,0)}]
+      %%% 1 %%%
+      \node[grphnode,anchor=south] (pb2) at (0,0) {
+        \tikz[ingrphdiag]{
+          \n[n1]{n1}{0,0};
+        }};
+
+      %%% 1-2-3 %%%
+      \node[grphnode] (g1-2) at (-135:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 2-3-1 %%%
+      \node[grphnode] (g2-2) at (-45:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \site{r3}{n3.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n1]{n1}{0,0};
+            \site{l1}{n1.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 2-3-1-2-3 %%%
+      \node[grphnode,anchor=north] (po2) at (-90:4.2426) {
+        \tikz[ingrphdiag]{
+          \e{-2.2,0}{2.2,0};
+          \begin{scope}[shift={(-2.2,0)}]
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(-1.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \site{r3}{n3.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{l1}{n1.west};
+            \site{r1}{n1.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      \arrsn[opacity=.7]{pb2}{g1-2};
+      \arrsn[opacity=.7]{pb2}{g2-2};
+      \arrsn[opacity=.7]{g1-2}{po2};
+      \arrsn[opacity=.7]{g2-2}{po2};
+    \end{scope}
+
+    \begin{scope}[shift={(0,-9)}]
+      %%% 2-3 %%%
+      \node[grphnode,anchor=south] (pb3) at (0,0) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{1.1,0};
+          \begin{scope}
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 1-2-3 %%%
+      \node[grphnode] (g1-3) at (-135:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 2-3-1 %%%
+      \node[grphnode] (g2-3) at (-45:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \site{r3}{n3.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n1]{n1}{0,0};
+            \site{l1}{n1.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 1-2-3-1 %%%
+      \node[grphnode,anchor=north] (po3) at (-90:4.2426) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{3.3,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \site{r3}{n3.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(3.3,0)}]
+            \n[n1]{n4}{0,0};
+            \site{l4}{n4.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      \arrsn[opacity=.7]{pb3}{g1-3};
+      \arrsn[opacity=.7]{pb3}{g2-3};
+      \arrsn[opacity=.7]{g1-3}{po3};
+      \arrsn[opacity=.7]{g2-3}{po3};
+    \end{scope}
+
+    \begin{scope}[shift={(8,-9)}]
+      %%% 1 2-3 %%%
+      \node[grphnode,anchor=south] (pb4) at (0,0) {
+        \tikz[ingrphdiag]{
+          \e{1,0}{2.2,0};
+          \n[n1]{n1}{0,0};
+          \begin{scope}[shift={(1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 1-2-3 %%%
+      \node[grphnode] (g1-4) at (-135:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \site{r2}{n2.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% 2-3-1 %%%
+      \node[grphnode] (g2-4) at (-45:3) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{2.2,0};
+          \begin{scope}
+            \n[n2]{n2}{0,0};
+            \site{r2}{n2.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n3]{n3}{0,0};
+            \site{l3}{n3.west};
+            \site{r3}{n3.east};
+            \node at (206:.42) {\scriptsize $l$};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(2.2,0)}]
+            \n[n1]{n1}{0,0};
+            \site{l1}{n1.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% Triangle %%%
+      \node[grphnode,anchor=north] (po4) at (-90:4.2426) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0:1.1};
+          \e{0,0}{-60:1.1};
+          \e{0:1.1}{-60:1.1};
+          \begin{scope}[shift={(0,0)}]
+            \n[n1]{x}{0,0};
+            \site{r1}{0:7pt};
+            \site{l1}{-60:7pt};
+            \node at (-86:12pt) {\scriptsize $l$};
+            \node at (26:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(0:1.1)}]
+            \n[n2]{y}{0,0};
+            \site{r2}{180:7pt};
+            \site{l2}{-120:7pt};
+            \node at (154:12pt) {\scriptsize $l$};
+            \node at (-94:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(-60:1.1)}]
+            \n[n3]{z}{0,0};
+            \site{r3}{120:7pt};
+            \site{l3}{60:7pt};
+            \node at (146:12pt) {\scriptsize $r$};
+            \node at (34:12pt) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      \arrsn[opacity=.7]{pb4}{g1-4};
+      \arrsn[opacity=.7]{pb4}{g2-4};
+      \arrsn[opacity=.7]{g1-4}{po4};
+      \arrsn[opacity=.7]{g2-4}{po4};
+    \end{scope}
+
+  \end{tikzpicture}}%
+\end{center}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:

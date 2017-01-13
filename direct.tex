@@ -294,8 +294,8 @@ $r^+_{12}$ is not $\shapes$-balanced.
 We see that, while the application on the left
 does not produce any change in energy ($\Delta E = 0$),
 the one on the right creates a triangle
-and thus $\Delta E = \cost(t)$.\footnote{
-  We won't tolerate energetical ambiguity in this house!}
+and thus $\Delta E = \cost(t)$. %\footnote{
+%   And we won't tolerate energetical ambiguity in this house!}
 We must then split $r^+_{12}$ into subrules that check
 the surroundings of the rule application
 to make sure that, for instance,
@@ -308,10 +308,331 @@ can be mapped to exactly one match of one of the subrules.
 Prior work by \citet{refinement} has shown how
 one can obtain a partition of rules with this property
 and will be presented, in a slightly modified version,
-in the next section. % \sct{refinements}.
+in \sct{refinements}. % the next section.
+% NOTE: not possible to put refinement section
+% before minimal glueings because the proof of the
+% unique decomposition theorem uses minimal glueings.
 
-% For the partitioning of rules
-% we need a guiding principle.
+But before diving into rule partitioning,
+or rule refinement as we call it,
+it would be good to have a more rigourous idea of
+when a rule is $\shapes$-balanced or not.
+In the examples shown above we see that
+our energy pattern, the triangle,
+must be either fully incorporated into
+either the left- or the right-hand side of the rule
+to be sure it produces or consumes in every application.
+On the other hand, we must make sure a rule
+is incompatible with our energy pattern,
+making it impossible to match a triangle.
+This is true whenever it becomes impossible to have a union
+of the left-hand side of a rule with the energy pattern
+where they overlap.
+In the next section, we introduce the concept overlapping unions
+of graphs (\ie contact maps) by means of multi-sums,
+a concept related to coproducts and relative pushouts,
+in $\rSGe_C$.
+
+
+\section{Minimal glueings}
+\label{sec:mg}
+
+The category $\SG$ has all pullbacks,
+constructed from those in $\Set$,
+and they indeed restrict to $\rSGe_C$.
+
+\begin{lemma}\label{lemma:pullbacks}
+  Given a cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2$
+  there is a unique span $\psi_1: g_1 \gets p \to g_2 :\psi_2$
+  (up to unique isomorphism)
+  such that any span $\omega_1: g_1 \gets q \to g_2 :\omega_2$
+  that forms a commuting square $\omega_1,\omega_2,\phi_1,\phi_2\;$
+  factors \emph{uniquely} through it.
+  \begin{center}
+    \begin{tikzpicture}
+      \node (h1) at (0,0) {$g_1$};
+      \node (h2) at (6,0) {$g_2$};
+      \node (h) at (3,-1) {$h$};
+      \node (p) at (3,1) {$p$};
+      \node (q) at (3,2.2) {$q$};
+      \draw (q) edge[hom,bend right=20] node[above left] {$\omega_1$} (h1);
+      \draw (q) edge[hom,bend left=20] node[above right] {$\omega_2$} (h2);
+      \draw[hom] (p) -- node[above] {$\psi_1$} (h1);
+      \draw[hom] (p) -- node[above] {$\psi_2$} (h2);
+      \draw[hom] (h1) -- node[below] {$\phi_1$} (h);
+      \draw[hom] (h2) -- node[below] {$\phi_2$} (h);
+      \draw[hom,dotted] (q) -- node[right] {$!$} (p);
+    \end{tikzpicture}
+  \end{center}
+\end{lemma}
+\begin{proof}
+  We construct contact map $p: G \to C$ by taking the intersection
+  of the agents, sites and edges in the image of $\phi_1,\phi_2$
+  and restricting $\sitemap$ accordingly.
+  With some abuse of notation, we have
+  \begin{alignat*}{3}
+    \agents_G & {}= \img(\phi_{1,\agents}) \intersection{}
+                    \img(\phi_{2,\agents}) \quad \quad \quad &
+  % \sitemap_G = \set{s \mapsto \sitemap_{\anon{h}}(s) \st s \in \sites_G},
+    \sitemap_G & {}= \rest{\sitemap_{\anon{h}}}{\sites_G} \\
+    \sites_G & {}= \img(\phi_{1,\sites}) \intersection{}
+                   \img(\phi_{2,\sites}) &
+  % \edges_G & {}= \set{\tuple{\phi_{1,\sites}(s),\phi_{1,\sites}(t)} \st
+  %     \tuple{s,t} \in \edges_{\anon{g_1}}} \intersection
+  %   \set{\tuple{\phi_{2,\sites}(s),\phi_{2,\sites}(t)} \st
+  %     \tuple{s,t} \in \edges_{\anon{g_2}}}
+    \edges_G & {}= \phi_{1,\sites}(\edges_{\anon{g_1}}) \intersection{}
+                \, \phi_{2,\sites}(\edges_{\anon{g_2}})
+  \end{alignat*}
+  where $\phi(\edges) =
+  \set{\tuple{\phi(x),\phi(y)} \st \tuple{x,y} \in \edges}$.
+  Functions $p_\agents,p_\sites$ are the restriction of
+  $h_\agents,h_\sites$ to $\agents_G,\sites_G$, respectively.
+  Embeddings $\psi_1$ and $\psi_2$ map agents and sites
+  in $G$ to their pre-images along $\phi_1$ and $\phi_2$;
+  by construction, all agents and sites in $G$
+  are guaranteed to have such a pre-image.
+  It is easy to see that
+  (i) $\psi_1$ and $\psi_2$ are type-preserving
+  and thus embeddings in $\rSGe_C$; and that
+  (ii) the square formed by $\psi_1,\psi_2,\phi_1,\phi_2$ commutes.
+
+  Consider any span $\omega_1: g_1 \gets q \to g_2 :\omega_2$ in $\rSGe_C$.
+  If the square formed by $\omega_1$, $\omega_2,\phi_1,\phi_2$ commutes,
+  then $q$ can have at most one copy of each agent and site
+  in the intersection of the images of $\phi_1$ and $\phi_2$
+  because $\phi_1\,\omega_1$ and $\phi_2\,\omega_2$ are injective.
+  Hence, every agent and site in the image of $\omega_1,\omega_2$
+  has a \emph{unique} pre-image along $\psi_1,\psi_2$, respectively,
+  with the same type.
+  This fixes a pair of functions $\omega_\agents,\omega_\sites$
+  that map agents and sites in $q$ to those in $p$ injectively
+  % that map the agents and sites in $q$ to those in $p$ \emph{uniquely}
+  % due to the injectivity of $\omega_1,\omega_2,\psi_1$ and $\psi_2$.
+  % Since $\omega_\agents,\omega_\sites$ are each a restriction on
+  % $\phi_{1,\agents}\,\omega_{1,\agents}$ and
+  % $\phi_{1,\sites}\,\omega_{1,\sites}$
+  and form an embedding $\omega$ in $\rSGe_C$.
+  % This pair of functions form an embedding $\omega$ in $\rSGe_C$
+  % % TODO: by composing?
+  % because they have been created by composing type-preserving embeddings.
+  Since the pre-image along $\psi_1,\psi_2$ always exists and is unique,
+  any embedding $\omega': p \to q$ must be equal to $\omega$
+  whenever $\phi_1\,\omega' = \omega_1$ and
+  $\phi_2\,\omega' = \omega_2$.
+\end{proof}
+
+$\SG$ also has all pushouts and all sums,
+but these do not in general restrict to $\rSGe_C$, %.\footnote{
+just as pushouts and sums in $\Set$ do not restrict to
+the subcategory of injective functions. %}
+% all pushouts; but these do not generally restrict to $\rSGe_C$ since
+% (i) the pushout object need not be realisable,
+% even if all objects in the starting span were;
+% (ii) the arrows in the resulting cospan need not be embeddings,
+% even if all arrows in the starting span were;
+% and (iii) the mediating arrow need not even be injective
+% (on agents or sites).
+However, $\rSGe_C$ has \emph{multi-sums}.
+
+\begin{lemma}\label{lemma:mg}
+  For all pairs of contact maps over $C$,
+  $g_1: G_1 \to C$ and $g_2: G_2 \to C$,
+  there exists a finite family of cospans
+  $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$,
+  such that any cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2\;$
+  factors through \emph{exactly one} of the family
+  and does so \emph{uniquely}.
+  \begin{center}
+    \begin{tikzpicture}
+      \node (h1) at (0,0) {$g_1$};
+      \node (si) at (1.8,0) {$s_i$};
+      \node (h2) at (3.6,0) {$g_2$};
+      \node (h) at (1.8,-1.8) {$h$};
+      \draw[hom] (h1) -- node[above] {$\theta^i_1$} (si);
+      \draw[hom] (h2) -- node[above] {$\theta^i_2$} (si);
+      \draw[hom] (h1) -- node[below left] {$\phi_1$} (h);
+      \draw[hom] (h2) -- node[below right] {$\phi_2$} (h);
+      \draw[hom,dotted] (si) -- node[right] {$!$} (h);
+    \end{tikzpicture}
+  \end{center}
+\end{lemma}
+\begin{proof}
+  % First, we construct a family of spans
+  % $\psi^i_1: g_1 \gets p_i \to g_2 :\psi^i_2$ by taking ...
+  Take subsets $A_i$ of the cartesian product
+  of $\agents_{\anon{g_1}}$ and $\agents_{\anon{g_2}}$
+  that are type-compatible,
+  \ie $g_{1,\agents}(a) = g_{2,\agents}(b)$
+  for all $(a,b) \in A_i$.
+  To each $A_i$ assign all subsets $S_{ij}$ of
+  $\sites_{\anon{g_1}} \times \sites_{\anon{g_2}}$
+  that are type-compatible
+  and whose elements belong to agents paired in $A_i$,
+  that is, if $(x,y) \in S_i$
+  then $g_{1,\sites}(x) = g_{2,\sites}(y)$
+  and $(\sitemap_{\anon{g_1}}(x),\sitemap_{\anon{g_2}}(y)) \in A_i$.
+  % Note that the latter predicate fixes a correspondence $\sitemap_{ij}$
+  Note this fixes a correspondence $\sitemap_{ij}$
+  between elements of $S_{ij}$ to elements of $A_i$.
+  In particular,
+  % For each pair $A_i,S_i$ build a function $\sitemap_i$
+  % that maps elements of $S_i$ to elements of $A_i$ as follows
+  $\sitemap_{ij}((x,y)) =
+     (\sitemap_{\anon{g_1}}(x),\sitemap_{\anon{g_2}}(y))$.
+  % Discard all sets $S_i$ that are subsets of a set $S_j$
+  % with $j \neq i$.
+  For each $A_i$ keep only the set $S_{ij}$
+  that is a superset of all other sets $S_{ik}$ ($k \neq j$).
+  % and discard all others.
+  There must be one such maximal set because
+  if any two pairs of sites $(x_1,y_1),(x_2,y_2)$
+  are type-preserving and belong to the same agents,
+  then there will be one set among the $S_{ij}$s that has both.
+  Hence, we can drop the $j$ subscript
+  in $S_{ij}$ and $\sitemap_{ij}$.
+  Intuitively, the maximal set $S_i$ is the set of all sites
+  that are defined in both agents at the same time.
+  Next we discard those pairs $A_i,S_i$
+  whose elements do not agree on their edge structure;
+  if $(x,y) \in S_i$ then either both sites must be free
+  or connected to sites $(x',y') \in S_i$.
+  % that is, for which,
+  % if $(x_1,y_1) \in S_i$ and $(x_1,x_2) \in \edges_{\anon{g_1}}$
+  % and $(y_1,y_2) \in \edges_{\anon{g_2}}$
+  % then $(x_2,y_2) \in S_i$ or
+  % $x_2$ and $y_2$ do not appear in $S_i$.
+
+  We construct a family of contact maps $p_i: P_i \to C$
+  using $A_i$ as its agents, $S_i$ as its sites,
+  % $\sitemap_i$ and the common edge structure.
+  $\sitemap_{P_i} = \sitemap_i$ and
+  $\edges_{P_i} = \{((x_1,y_1), (x_2,y_2)) \in S_i \times S_i \st
+     x_1 \edges_{\anon{g_1}} x_2 \wedge
+     y_1 \edges_{\anon{g_2}} y_2\}$.
+  % \begin{alignat*}{3}
+  %   \agents_{P_i} & {}= A_i \quad \quad \quad &
+  %   \sitemap_{P_i} & {}= \sitemap_i \\
+  %   \sites_{P_i} & {}= S_i &
+  %   \edges_{P_i} & {}= \setof{((x_1,y_1), (x_2,y_2)) \in S_i^2}{
+  %     x_1 \edges_{\anon{g_1}} x_2 \text{ and }
+  %     y_1 \edges_{\anon{g_2}} y_2}
+  % \end{alignat*}
+  Functions $p_{i,\agents},p_{i,\sites}$
+  are defined straightforwardly.
+  Spans $\psi^i_1: g_1 \gets p_i \to g_2 :\psi^i_2$
+  are then obtained by mapping agents $(a,b)$ in $p_i$
+  to $a$ in $g_1$ and $b$ in $g_2$
+  and similarly for sites.
+  Multi-sums $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$
+  are pushouts of such spans:
+  they are obtained by adding to $p_i$
+  all the missing agents, sites and edges from $g_1$ and $g_2$.
+  Since all sites that are in $g_1$ but not in $p_i$
+  cannot be in $g_2$ by construction of $S_i$,
+  there can be no conflict when adding sites or edges.
+  The same argument holds for sites in $g_2$ that are not in $p_i$.
+
+  % Given a cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2$ in $\rSGe_C$,
+  % we construct the corresponding sum
+  % $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$ (for some $i$)
+  % by first taking its pullback
+  % % $\psi_1: g_1 \gets p_i \to g_2 :\psi_2$
+  % as in \lem{pullbacks} and then the pushout
+  % % $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$
+  % of the pullback span.
+  % % by taking the union of $g_1$ and $g_2$ quotiened by the
+  % % equivalence relation induced by having a common pre-image in $p_i$.
+  % This is equivalent to taking the union of
+  % the images of $\phi_1$ and $\phi_2$.
+  % % in an analogous way to \lem{pullbacks}.
+  % % Even though $\rSGe_C$ does not have all pushouts,
+  % % If $s_i: H \to C$, then
+  % \begin{alignat*}{3}
+  % % \begin{align*}
+  %   \agents_H & {}= \img(\phi_{1,\agents}) \union{}
+  %                   \img(\phi_{2,\agents}) \quad \quad \quad &
+  % % \agents_H & {}= \agents_{\anon{p_i}} \union{}
+  % %                 \psi_{1,\agents}(\agents_{\anon{g_1}} \setminus
+  % %                 \img(\phi_{1,\agents})) \union{}
+  % %                 \psi_{2,\agents}(\agents_{\anon{g_2}} \setminus
+  % %                 \img(\phi_{2,\agents})) \quad \\
+  %   \sitemap_H & {}= \rest{\sitemap_{\anon{h}}}{\sites_H} \\
+  %   \sites_H & {}= \img(\phi_{1,\sites}) \union{}
+  %                  \img(\phi_{2,\sites}) &
+  % % \sites_H & {}= \sites_{\anon{p_i}} \union{}
+  % %                \psi_{1,\sites}(\sites_{\anon{g_1}} \setminus
+  % %                \img(\phi_{1,\sites})) \union{}
+  % %                \psi_{2,\sites}(\sites_{\anon{g_2}} \setminus
+  % %                \img(\phi_{2,\sites})) \\
+  %   \edges_H & {}= \phi_{1,\sites}(\edges_{\anon{g_1}}) \union{}
+  %               \, \phi_{2,\sites}(\edges_{\anon{g_2}})
+  % % \end{align*}
+  % \end{alignat*}
+  % Functions $s_{i,\agents}$, $s_{i,\sites}$,
+  % $\theta^i_{1,\agents}$, $\theta^i_{1,\sites}$,
+  % $\theta^i_{2,\agents}$, $\theta^i_{2,\sites}$
+  % are simply restrictions of $h_\agents$, $h_\sites$,
+  % $\phi_{1,\agents}$, $\phi_{1,\sites}$, $\phi_{2,\agents}$,
+  % $\phi_{2,\sites}$ to $\agents_H,\sites_H$ accordingly.
+  % As restrictions, all $\theta^i$ functions maintain
+  % the injectivity from their $\phi$ counterparts
+  % and preserve types.
+  % Thus they are embeddings in $\rSGe_C$.
+  % % and thus form embeddings $\theta^i_1,\theta^i_2$ in $\rSGe$.
+  % % These embeddings respect the type $C$
+  % % in the same way $\phi_1$ and $\phi_2$ do,
+  % % making them embeddings in $\rSGe_C$ too.
+  % Importantly, there is a unique embedding $\theta^i$
+  % from $s_i$ to $h$ that makes two triangles in the diagram commute,
+  % namely, the identity functions on $\agents_H$ and $\sites_H$.
+
+  % The multi-sum is then a choice of pushout
+  % for each (isomorphism class of) pullback.
+  % There can only be finitely many of them because
+  % (i) there are only finitely many possible ways to intersect
+  % the agents and sites in $g_1$ and $g_2$,
+  % % TODO: I'm really cheating here because I haven't proved that
+  % % the construction above is a pushout.
+  % % I should check that the s_i constructed from h is the only one
+  % % that factors h and no other s_i can do.
+  % and (ii) multi-sums are in a one-to-one correspondence
+  % with (isomorphism classes of) pullbacks. % by construction.
+  % Also, (ii) implies that there is only one multi-sum
+  % that factors any given cospan.
+
+  Note that the family $A_i$ is finite
+  and thus the family of multi-sums is finite as well.
+  Also, it is easy to see that the spans $\psi^i_1,\psi^i_2$
+  are pullbacks of $\theta^i_1,\theta^i_2$.
+  Hence, multi-sums are in a one-to-one correspondence
+  with (isomorphism classes of) pullbacks.
+  This implies that there is only one multi-sum
+  that factors any given cospan.
+\end{proof}
+
+The pairs $\theta^i_1,\theta^i_2$ enumerate
+all minimal ways in which one can glue $g_1$ and $g_2$.
+% We refer to them as minimal glueings.
+%
+The notion of multi-sum dates back to \citet{diers}.
+We call them \emph{minimal glueings} in $\rSGe_C$
+according to their intuition in this concrete context
+and use them in \sct{energy-gp} to construct balanced rules.
+% TODO: elaborate on relation to RPOs and cite Montanari
+They are very close to relative pushouts \citep{leifer}
+and will be used in the same way,
+to minimise rewriting contexts.
+
+To illustrate how this construction operates,
+consider the minimal glueings of the following
+two contact maps over $T$ % (the triangle)
+with their respective pullbacks.
+% as shown in the following diagram.
+\input{mg}
+
+I have implemented an online tool that computes minimal glueings
+which is available at \url{https://rhz.github.com/thesis/}.
 
 
 \section{Refinements}
@@ -641,6 +962,9 @@ it guarantees that the left-hand side $g$ of a given rule
 splits into a non-overlapping and exhaustive collection
 of more specific cases $g_i$.
 
+% For the partitioning of rules
+% we need a guiding principle.
+
 \begin{theorem}
   \label{thm:unique-decomposition}
 \end{theorem}
@@ -651,11 +975,7 @@ of more specific cases $g_i$.
 
 
 
-\section{Minimal glueings}
-\label{sec:mg}
-
-
-\section{Energy-based refinement}
+\section{Thermodynamical growth policy} % Energy-based refinement}
 \label{sec:energy-gp}
 
 
@@ -683,7 +1003,7 @@ of more specific cases $g_i$.
 % in the transition graph? when two cycles share an edge?
 
 
-\section{Flagellum's motor}
+\section{Example: Flagellum's motor}
 \label{sec:alloring}
 
 
