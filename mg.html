@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Minimal glueings</title>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="thesis.css">
+  <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+  <!-- <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script> -->
+  <script src="https://unpkg.com/parsimmon@1.2.0"></script>
+  <!-- <script src="https://d3js.org/d3.v3.min.js"></script> -->
+  <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
+  <script src="mg.js"></script>
+</head>
+<body>
+  <div class="container">
+    <div class="row" style="margin-top: 20px">
+      <div class="col-md-12">
+        <h2>&nbsp;Minimal glueings</h2>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+      <div class="col-md-12">
+        <h4>Kappa syntax</h4>
+        <div class="centre" style="width: 26em; text-align: left;">
+          <pre>graph = agent(sites),graph | &epsilon;
+agent is any string of letters or numbers
+sites = site!bond,sites | site,sites | &epsilon;
+site is any string of letters or numbers
+bond is any natural number</pre>
+        </div>
+        <p class="centre" style="width: 40em">
+          Example: <code>A(x!1),A(y!1,x)</code> is a graph
+          with two agents of type <code>A</code>.
+          The first agent has a site <code>x</code> that is
+          connected to the second agent's <code>y</code> site.
+          The second agent has a free <code>x</code> site
+          while the first agent does not mention its <code>y</code>,
+          meaning it can be bound or free.
+        </p>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 10px">
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="g">g</label>
+          <input class="form-control input-lg" type="text"
+                 name="g" value="A(x!1),A(y!1)"/>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="form-group">
+          <label for="h">h</label>
+          <input class="form-control input-lg" type="text"
+                 name="h" value="A(x!1),A(y!1)"/>
+        </div>
+      </div>
+    </div>
+    <div class="row" style="margin-top: 20px">
+      <div class="col-md-2 col-md-offset-5">
+        <button class="btn btn-default btn-lg" name="go"
+                onclick="go();">Compute</button>
+      </div>
+    </div>
+    <div class="row" id="results" style="margin-top: 20px">
+    </div>
+  </div>
+</body>

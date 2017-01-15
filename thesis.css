@@ -1,0 +1,7 @@
+body { font-family: "Helvetica"; }
+h2 { font-family: "Times New Roman"; }
+body, p, pre, .input-lg, .btn-lg { font-size: 1.5vw; }
+h2 { font-size: 215%; }
+h4 { font-size: 125%; }
+.row { text-align: center; }
+.centre { margin: 0 auto; }
