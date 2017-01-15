@@ -97,17 +97,17 @@ function buildGraph(g) {
            sitetype: sitetype };
 }
 
-function flatten(xss) {
-  return xss.reduce((xs, ys) => xs.concat(ys), []);
-}
-
 function buildContactGraph(gs) {
   return { agents: new Set(flatten(gs.map(g => g.agenttype))),
            sites: new Set(flatten(gs.map(g => g.sitetype))) };
 }
 
-// the following two functions aren't used anymore
-// but they are cool to have around
+function flatten(xss) {
+  return xss.reduce((xs, ys) => xs.concat(ys), []);
+}
+
+// the following function isn't used anymore
+// but it's cool to have around
 // cartesian product
 function cartesian() {
   var args = Array.from(arguments);
@@ -126,12 +126,9 @@ function powerset(xs) {
   }
 }
 
-// function combine() {
-//   // return args.reduce(
-//   //   (a, b) => a.map(x => x.concat(b. ???
-//   return cross(Array.from(arguments), new Set());
-// }
-
+// from an array of arrays it construct another array of arrays
+// in which there's one element of each one of the given arrays.
+// it's like a non-deterministic zip.
 function cross(xss, seen = new Set()) {
   if (xss.length == 0) return [ [] ];
   else {
@@ -147,21 +144,13 @@ function nub(xs) {
   return _.uniqWith(xs, _.isEqual);
 }
 
-function mix(g, h) {
-  var xs = g.agents, ys = h.agents;
-  // type-compatible pairs
-  var t = xs.map(x => ys.filter(
-    y => g.agenttype[x] === h.agenttype[y]).map(
-      y => [x, y]));
-  return nub(flatten(cross(t).map(ai => powerset(ai))));
-}
-
 // cap as in the latex symbol for intersection
 // set intersection
 function cap(xs, ys) {
   return xs.reduce((a, x) => ys.includes(x) ? [x].concat(a) : a, []);
 }
 
+// for easy debugging
 function d() {
   console.log(...arguments);
   return arguments[arguments.length-1];
@@ -177,13 +166,13 @@ function eqIn(x, xs) {
 // graph (multi-)intersections
 function intersections(g, h) {
   // construct sets of type-compatible agent pairs
-  // var agents = powerset(cartesian(g.agents, h.agents).filter(
-  //   x => g.agenttype[x[0]] === h.agenttype[x[0]]));
-  // var agents = combine(g.agents, h.agents);//.filter(xs => xs.every(
-  //   //([x, y]) => g.agenttype[x] === h.agenttype[y]));
+  // first get the type-compatible pairs
+  var t = g.agents.map(x => h.agents.filter(
+    y => g.agenttype[x] === h.agenttype[y]).map(
+      y => [x, y]));
   // ais is an array of arrays, each array ai with as many elements
   // as agents in the intersection represented by ai.
-  var ais = mix(g, h);
+  var ais = nub(flatten(cross(t).map(ai => powerset(ai))));
   console.log("ais", ais);
   // construct sets of type- and agent-compatible site pairs
   // sis is an array of arrays, each array si with as many elements
@@ -204,16 +193,6 @@ function intersections(g, h) {
                         else return xys;
                       }, []);
                   }));
-  // var sis = ais.map(
-  //   ai => ai.map(
-  //     ([a, b]) => cap(g.sitesOf[a].map(x => g.sitetype[x]),
-  //                     h.sitesOf[b].map(y => h.sitetype[y]))));
-  // var sis = ais.map(
-  //   ai => ai.map(
-  //     [a, b] => g.sitesOf[a].map(
-  //       x => h.sitesOf[b].filter(
-  //         y => (g.sitetype[x] == g.sitetype[y])).map(
-  //           y => [x, y]))));
   console.log("sis", sis);
   // discard by edge incompatibility
   // mis is an array of pairs [ai, si], ai and si as above.
@@ -260,18 +239,6 @@ function intersections(g, h) {
   ps.forEach(p => console.log("p", toString(p)));
   return ps;
 }
-
-// function intersperse(sep, xs) {
-//   if (xs.length <= 1) return xs;
-//   else {
-//     var ys = [xs[0]];
-//     for (var i = 1; i < xs.length; i++) {
-//       ys.push(sep);
-//       ys.push(xs[i]);
-//     }
-//     return ys;
-//   }
-// }
 
 function toString(g) {
   var agents = [],
