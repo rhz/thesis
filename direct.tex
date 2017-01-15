@@ -458,13 +458,23 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   \end{center}
 \end{lemma}
 \begin{proof}
-  % First, we construct a family of spans
-  % $\psi^i_1: g_1 \gets p_i \to g_2 :\psi^i_2$ by taking ...
+  % Take pairs
+  % $(A_i \subset \agents_{\anon{g_1}} \times \agents_{\anon{g_2}},
+  %   S_i \subset \sites_{\anon{g_1}} \times \sites_{\anon{g_2}})$
+  % such that
+  % i) all agent pairs in $A_i$ are type-compatible
+  % (\ie $g_{1,\agents}(a) = g_{2,\agents}(b)$),
+  % ii) each agent of $g_1$ and $g_2$ is at most once in $A_i$,
+  % iii) ...
   Take subsets $A_i$ of the cartesian product
   of $\agents_{\anon{g_1}}$ and $\agents_{\anon{g_2}}$
-  that are type-compatible,
-  \ie $g_{1,\agents}(a) = g_{2,\agents}(b)$
-  for all $(a,b) \in A_i$.
+  that have each agent of $g_1$ and $g_2$ at most once
+  and where each pair $(a,b) \in A_i$ has the same type,
+  % that are type-compatible,
+  \ie $g_{1,\agents}(a) = g_{2,\agents}(b)$.
+  % for all $(a,b) \in A_i$,
+  % and such that each agent in $g_1$ and $g_2$
+  % is at most once in a pair in $A_i$.
   To each $A_i$ assign all subsets $S_{ij}$ of
   $\sites_{\anon{g_1}} \times \sites_{\anon{g_2}}$
   that are type-compatible
@@ -472,16 +482,14 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   that is, if $(x,y) \in S_i$
   then $g_{1,\sites}(x) = g_{2,\sites}(y)$
   and $(\sitemap_{\anon{g_1}}(x),\sitemap_{\anon{g_2}}(y)) \in A_i$.
-  % Note that the latter predicate fixes a correspondence $\sitemap_{ij}$
-  Note this fixes a correspondence $\sitemap_{ij}$
+  % Note that the latter predicate fixes ...
+  Note how this fixes a correspondence $\sitemap_{ij}$
   between elements of $S_{ij}$ to elements of $A_i$.
   In particular,
-  % For each pair $A_i,S_i$ build a function $\sitemap_i$
-  % that maps elements of $S_i$ to elements of $A_i$ as follows
   $\sitemap_{ij}((x,y)) =
      (\sitemap_{\anon{g_1}}(x),\sitemap_{\anon{g_2}}(y))$.
-  % Discard all sets $S_i$ that are subsets of a set $S_j$
-  % with $j \neq i$.
+  % Discard all sets $S_ij$ that are subsets
+  % of a set $S_jk$ with $j \neq k$.
   For each $A_i$ keep only the set $S_{ij}$
   that is a superset of all other sets $S_{ik}$ ($k \neq j$).
   % and discard all others.
@@ -497,27 +505,13 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   whose elements do not agree on their edge structure;
   if $(x,y) \in S_i$ then either both sites must be free
   or connected to sites $(x',y') \in S_i$.
-  % that is, for which,
-  % if $(x_1,y_1) \in S_i$ and $(x_1,x_2) \in \edges_{\anon{g_1}}$
-  % and $(y_1,y_2) \in \edges_{\anon{g_2}}$
-  % then $(x_2,y_2) \in S_i$ or
-  % $x_2$ and $y_2$ do not appear in $S_i$.
 
   We construct a family of contact maps $p_i: P_i \to C$
   using $A_i$ as its agents, $S_i$ as its sites,
-  % $\sitemap_i$ and the common edge structure.
   $\sitemap_{P_i} = \sitemap_i$ and
   $\edges_{P_i} = \{((x_1,y_1), (x_2,y_2)) \in S_i \times S_i \st
      x_1 \edges_{\anon{g_1}} x_2 \wedge
      y_1 \edges_{\anon{g_2}} y_2\}$.
-  % \begin{alignat*}{3}
-  %   \agents_{P_i} & {}= A_i \quad \quad \quad &
-  %   \sitemap_{P_i} & {}= \sitemap_i \\
-  %   \sites_{P_i} & {}= S_i &
-  %   \edges_{P_i} & {}= \setof{((x_1,y_1), (x_2,y_2)) \in S_i^2}{
-  %     x_1 \edges_{\anon{g_1}} x_2 \text{ and }
-  %     y_1 \edges_{\anon{g_2}} y_2}
-  % \end{alignat*}
   Functions $p_{i,\agents},p_{i,\sites}$
   are defined straightforwardly.
   Spans $\psi^i_1: g_1 \gets p_i \to g_2 :\psi^i_2$
@@ -532,74 +526,6 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   cannot be in $g_2$ by construction of $S_i$,
   there can be no conflict when adding sites or edges.
   The same argument holds for sites in $g_2$ that are not in $p_i$.
-
-  % Given a cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2$ in $\rSGe_C$,
-  % we construct the corresponding sum
-  % $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$ (for some $i$)
-  % by first taking its pullback
-  % % $\psi_1: g_1 \gets p_i \to g_2 :\psi_2$
-  % as in \lem{pullbacks} and then the pushout
-  % % $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$
-  % of the pullback span.
-  % % by taking the union of $g_1$ and $g_2$ quotiened by the
-  % % equivalence relation induced by having a common pre-image in $p_i$.
-  % This is equivalent to taking the union of
-  % the images of $\phi_1$ and $\phi_2$.
-  % % in an analogous way to \lem{pullbacks}.
-  % % Even though $\rSGe_C$ does not have all pushouts,
-  % % If $s_i: H \to C$, then
-  % \begin{alignat*}{3}
-  % % \begin{align*}
-  %   \agents_H & {}= \img(\phi_{1,\agents}) \union{}
-  %                   \img(\phi_{2,\agents}) \quad \quad \quad &
-  % % \agents_H & {}= \agents_{\anon{p_i}} \union{}
-  % %                 \psi_{1,\agents}(\agents_{\anon{g_1}} \setminus
-  % %                 \img(\phi_{1,\agents})) \union{}
-  % %                 \psi_{2,\agents}(\agents_{\anon{g_2}} \setminus
-  % %                 \img(\phi_{2,\agents})) \quad \\
-  %   \sitemap_H & {}= \rest{\sitemap_{\anon{h}}}{\sites_H} \\
-  %   \sites_H & {}= \img(\phi_{1,\sites}) \union{}
-  %                  \img(\phi_{2,\sites}) &
-  % % \sites_H & {}= \sites_{\anon{p_i}} \union{}
-  % %                \psi_{1,\sites}(\sites_{\anon{g_1}} \setminus
-  % %                \img(\phi_{1,\sites})) \union{}
-  % %                \psi_{2,\sites}(\sites_{\anon{g_2}} \setminus
-  % %                \img(\phi_{2,\sites})) \\
-  %   \edges_H & {}= \phi_{1,\sites}(\edges_{\anon{g_1}}) \union{}
-  %               \, \phi_{2,\sites}(\edges_{\anon{g_2}})
-  % % \end{align*}
-  % \end{alignat*}
-  % Functions $s_{i,\agents}$, $s_{i,\sites}$,
-  % $\theta^i_{1,\agents}$, $\theta^i_{1,\sites}$,
-  % $\theta^i_{2,\agents}$, $\theta^i_{2,\sites}$
-  % are simply restrictions of $h_\agents$, $h_\sites$,
-  % $\phi_{1,\agents}$, $\phi_{1,\sites}$, $\phi_{2,\agents}$,
-  % $\phi_{2,\sites}$ to $\agents_H,\sites_H$ accordingly.
-  % As restrictions, all $\theta^i$ functions maintain
-  % the injectivity from their $\phi$ counterparts
-  % and preserve types.
-  % Thus they are embeddings in $\rSGe_C$.
-  % % and thus form embeddings $\theta^i_1,\theta^i_2$ in $\rSGe$.
-  % % These embeddings respect the type $C$
-  % % in the same way $\phi_1$ and $\phi_2$ do,
-  % % making them embeddings in $\rSGe_C$ too.
-  % Importantly, there is a unique embedding $\theta^i$
-  % from $s_i$ to $h$ that makes two triangles in the diagram commute,
-  % namely, the identity functions on $\agents_H$ and $\sites_H$.
-
-  % The multi-sum is then a choice of pushout
-  % for each (isomorphism class of) pullback.
-  % There can only be finitely many of them because
-  % (i) there are only finitely many possible ways to intersect
-  % the agents and sites in $g_1$ and $g_2$,
-  % % TODO: I'm really cheating here because I haven't proved that
-  % % the construction above is a pushout.
-  % % I should check that the s_i constructed from h is the only one
-  % % that factors h and no other s_i can do.
-  % and (ii) multi-sums are in a one-to-one correspondence
-  % with (isomorphism classes of) pullbacks. % by construction.
-  % Also, (ii) implies that there is only one multi-sum
-  % that factors any given cospan.
 
   Note that the family $A_i$ is finite
   and thus the family of multi-sums is finite as well.
