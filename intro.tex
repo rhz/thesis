@@ -70,10 +70,24 @@ This body of work came to be known as \emph{statistical mechanics}
 and was used to explain Brownian motion by \citet{einstein-brownian},
 which after its experimental verification \citep{perrin}
 settled the debate about the existence of atoms.
-This work however did not attempt to explain
+It tried to explain, however unsuccessfully,
+the second law of thermodynamics
+and thus how irreversible processes arise from reversible ones.
+% Here we do not attempt to explain irreversible processes
+% in biomolecular interaction networks.
+Perhaps it failed because the second law does not hold
+in general, \eg in small systems and short time scales \citep{ft-lab}.
+A theorem in probability theory generalises the second law
+and can explain these results \citep{ft}.
+Here, however, we concern ourselves with equilibrium thermodynamics
+and all processes considered are reversible.
+
+Statistical mechanics had to be extended in order to explain
+% This work however did not attempt to explain
 the chemical interactions and reactions that molecules undergo.
-That would have to wait yet half a century
-for the axiomatisation of probability theory by \citet{kolmogorov}
+% That would have to wait yet half a century for
+It was greatly helped by
+the axiomatisation of probability theory by \citet{kolmogorov}
 and the further developments by \citet{doob} and \citet{feller},
 who, among others, established the theoretical framework
 for continuous-time Markov chains (CTMCs).
@@ -498,7 +512,7 @@ resulting in a relocation of chemical bonds.
 In other words, (non-radioactive) reactions are all about
 the binding and unbinding of atoms,
 how they establish connections and break them.
-This is poorly captured by a conversion of species,
+This is poorly captured by a conversion of species
 as it is modelled by Petri nets.
 A consequence of this lack of a formal representation for
 molecular bonds is that certain systems of chemical reactions
@@ -509,11 +523,14 @@ cannot be described in a finite way using Petri nets,
 Recently,
 a formal language to describe biochemical interactions
 using rewriting rules,
-where molecules not just react but also can bind other molecules
+where molecules not just react but can also bind other molecules
 has been proposed by \citet{kappa}.
-In the next section we introduce this language, called Kappa,
-keeping in mind that we want to address
-the \emph{direct} and \emph{inverse} problem mentioned above,
+In the next section we introduce this language, called Kappa.
+% keeping in mind that we want to address
+The language shall give us a formal foundation
+from which we can address
+% , in the context of biomolecular interactions,
+the \emph{direct} and \emph{inverse} problems mentioned above,
 namely, the problem of generating a set of rewriting rules
 from an energy function and vice versa.
 
@@ -535,30 +552,28 @@ of the connections that make up the network.
 Due to spatial constraints,
 molecules can physically interact with
 just so many other molecules at once.
-Exactly how many will depend on multiple factors like
-the size of the two interacting molecules and
-the region where they come in contact.
+Exactly how many will depend on multiple factors
+like the size of the two interacting molecules
+and the region where they come in contact.
 These regions, known in molecular biology by the names of domains,
 motifs or binding sites, are simply called \emph{sites} in Kappa.
 Any such site can bind at most one other site at a time.
 These sites belong to the nodes of the graph,
-which Kappa calls \emph{agents}.
+which Kappa calls \emph{agents}. % and uses to represent biomolecules.
 In the same way a molecule is of a certain species,
 agents can be of different types.
 These types also live in a network,
-a static network which represents the ``network of possibilities''.
-It tells us which sites a site \emph{can} bind
-instead of what is actually bound to at a given moment.
+a static «network of possibilities» which
+informs us of the set of sites an agent can have
+and the possible connections that sites can form.
 
 To make these ideas formal we use a simpler version of
 the category-theoretical approach
 introduced by \citet{kappadpo}.
 We first define the networks where types live and then
-use them as a basis to construct the actual biomolecular networks.%
-% build on them to construct the actual biomolecular networks.%
-\footnote{
-  Below we use the words graph and edge
-  as synonyms for network and connection.}
+use them as a basis to construct the actual biomolecular networks.
+Graphs are used as a mathematical model of networks
+and site graphs in particular for biomolecular interaction networks.
 
 \begin{definition}%[site graph]
   A \emph{site graph} $G$ consists of
@@ -656,11 +671,9 @@ using the identity functions of the corresponding sets.
 A homomorphism $\psi: G \to G'$ is an \emph{embedding} iff
 (i) $\psi_\agents$ and $\psi_\sites$ are injective and
 (ii) if $s$ is free in $G$, so is $\psi_\sites(s)$ in $G'$.
-Injectivity of $\psi_\agents$ and $\psi_\sites$ implies that
-whenever $\psi: G \to G'$ is an embedding and $G'$ is realisable
-then $G$ is also
-\begin{wrapfigure}[3]{r}{0.28\textwidth}
-  \vspace{-1.5em}
+Injectivity of $\psi_\agents$ and $\psi_\sites$ implies
+\begin{wrapfigure}[4]{r}{0.28\textwidth}
+  \vspace{-2em}
   \begin{center}
     \begin{tikzpicture}
       \matrix (m) [matrix of math nodes,row sep=20pt,column sep=20pt] {
@@ -674,7 +687,8 @@ then $G$ is also
     \end{tikzpicture}
   \end{center}
 \end{wrapfigure}
-realisable.
+that whenever $\psi: G \to G'$ is an embedding
+and $G'$ is realisable then $G$ is also realisable.
 An embedding $\psi: G \to G'$ between realisable site graphs
 can be lifted to a morphism between contact maps $g: G \to C$
 and $g': G' \to C$ iff the diagram on the right commutes in $\SG$.
@@ -855,7 +869,7 @@ We jump from state to state by the applications of \emph{rules}.
 \end{definition}
 
 In the context of the contact graph $T$,
-we define a rule that binds
+we obtain a rule that binds
 agents of type $1$ with agents of type $2$ as follows.
 
 \vspace{-.6cm}
@@ -1004,22 +1018,23 @@ Intuitively, this property characterises a \emph{reversible} rule.
 Reversibility will be important to obtain detailed balance as
 every rule $r$ must be in balance with its inverse $\inv{r}$.
 
-Given a finite set of rules $\generators$ over $C$,
+Given a finite set of rules $\rules$ over $C$,
 an initial mixture $m_0$
-and a rate map $k$ from $\generators$ to $\RR_{\geqslant 0}$,
-we construct a CTMC $\tuple{\states, \state(0), \qm}$ as follows.
-\begin{align}
+and a rate map $k$ from $\rules$ to $\RR_{\geqslant 0}$,
+we construct a CTMC $\tuple{\states, \state(0), \qm}$ % as follows.
+with $\states = \MM(C)$ and
+\[ \state(0)(x) = \delta_{x,m_0} \quad\text{(Kronecker delta)} \]
+\begin{equation}
   \label{eq:kappa-ctmc}
-  \states &= \MM(C) \nonumber \\
-  \state(0)(x) &= \begin{cases}
-    1 \quad\text{if } x \simeq m_0 \\
-    0 \quad\text{otherwise} % x \neq m_0
-  \end{cases} \\
-  q_{mn} &= \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
+  % \states &= \MM(C) \nonumber \\
+  % \state(0)(x) &= \begin{cases}
+  %   1 \quad\text{if } x \simeq m_0 \\
+  %   0 \quad\text{otherwise} % x \neq m_0
+  % \end{cases} \nonumber \\
+  q_{mn} = \sum_{\substack{r \in \rules\\r = \tuple{r_L,r_R}}}
     k(r) \; \abs{\setof{\psi \in \matches{r_L}{m}}{
       m^{(r,\psi)} \simeq n}}
-  \nonumber
-\end{align}
+\end{equation}
 % with
 % \begin{equation*}
 %   \nitoj_{mn}(r_L,r_R) = \left\{\begin{array}{ll}
@@ -1033,13 +1048,15 @@ Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
 for any fixed $m \in \states$
 and $\qm$ is a well-defined \qmatrix.
 Here we use the law of mass action for the rate of rules,
-where the rate is proportional to the number of embeddings (matches)
-of the left-hand side of our rules.
+where the rate is proportional to the number of embeddings % (matches)
+of their left-hand sides. % of our rules.
 In fact, the law of mass action simply amounts to say that
 rewrites induced by rule $r$ are independent processes,
 each one occurring at rate $k(r)$.
-This is clear in the formulation of
-a \emph{labelled transition system} for Kappa.
+% The CTMC can indeed be derived from
+This is clear when we derive the CTMC from
+% This is clear in the formulation from % that derives the CTMC from
+a \emph{labelled transition system}. % for Kappa.
 
 \begin{definition}
   A \emph{labelled transition system} $\LTS$ is a tuple
@@ -1052,18 +1069,20 @@ a \emph{labelled transition system} for Kappa.
   labelled by $\alpha \in \labels$.
 \end{definition}
 
-Given $\generators$,
-we define a labelled transition system $\LTS_\generators$
+Given $\rules$,
+we define a labelled transition system $\LTS_\rules$
 on mixtures over $C$ where
 a transition from a mixture $m$ is labelled by
 an \emph{event} $(r,\psi)$, as in \diagram{rewrite-step},
-with $r$ in $\generators$ and $\psi$ in $\matches{r_L}{m}$.
-The CTMC presented in \eqn{kappa-ctmc} can then be equivalently
-constructed from $\LTS_\generators$ by simply assigning
+with $r$ in $\rules$ and $\psi$ in $\matches{r_L}{m}$.
+The CTMC % presented in \eqn{kappa-ctmc}
+can then be equivalently
+constructed from $\LTS_\rules$ by assigning
 rate $k(r)$ to an event of the form $(r,\psi)$.
-Thus we write $\LTS^k_\generators$ for the CTMC.
-Note that the (strongly) connected components of $\LTS_\generators$
-are finite as agents cannot be destroyed nor created by rules.
+We write $\LTS^k_\rules$ for the CTMC.
+Note that the (strongly) connected components of $\LTS_\rules$
+are finite as agents cannot be destroyed nor created by rules
+and there can only be one edge between two sites.
 
 With all the ingredients on the table
 we can proceed now to formulate more precisely
@@ -1084,10 +1103,11 @@ from which to derive the set with detailed balance.
 We write $\generators$ for the set of generator rules
 that is given as input.
 This set delimits which moves are possible at all.
-Finally, detailed balance only constrains the ratio between
-the rates of a rule and its inverse so to pick concrete rates
-we impose a linear model in \sct{kinetic-model}.
-% which is explained in \sct{kinetic-model}.
+% TODO: uncomment the following
+% Finally, detailed balance only constrains the ratio between
+% the rates of a rule and its inverse so to pick concrete rates
+% we impose a linear model in \sct{kinetic-model}.
+% % which is explained in \sct{kinetic-model}.
 The full method is presented in \chp{direct}.
 
 On the other hand, the inverse problem is stated as,
@@ -1107,39 +1127,45 @@ that are decidable.
 
 \section{Related work}
 
-\citet{anc} have developed the Allosteric Network Compiler
-(ANC), a language to describe biomolecular interaction networks
-that have an energy function and a tool to generate
-a chemical reaction system (\ie a Petri net) from them.
+\citet{anc} have developed a language
+to describe biomolecular interaction networks
+that have an energy function
+and a tool, called the \emph{Allosteric Network Compiler} (ANC),
+to generate chemical reaction systems (\ie Petri nets) from them.
 % The language presents a restricted form of the rules and
 % energy functions studied here.
 The biomolecular interaction networks they introduce
 have ANC structures as nodes.
 These structures can contain hierarchical components and
-interaction sites, which in turn can be catalytic,
-covalently modified or ligand-binding sites.
-Hierarchical components can contain any number of
-interaction sites and nested hierarchical components.
+interaction sites. %, which in turn can be catalytic,
+The latter can be catalytic sites,
+covalently modified sites or ligand-binding sites.
+Hierarchical components on the other hand
+can contain any number of interaction sites
+and nested hierarchical components.
 If a hierarchical component is marked as allosteric,
-it can transition between two conformational states.
-The transition rates can be modified by the state of the sites and
-other components present in the same structure
+it transitions between two conformational states.
+The transition rates are modified by the state of the sites
+and other components present in the same structure
 according to parameters given for each of them.
 An additional parameter is required for covalently modified
 and ligand-binding sites which determines the change in the ratio
 between the two conformational states when a ligand is bound
 or the site is modified.
 
-The edges of the ANC network are connections between ligand-binding sites
+The edges of the ANC network
+are connections between ligand-binding sites
 or between a catalytic site and a covalently modified site.
 Rules can be of two types, binding or enzymatic,
-and can only depend on the conformational state of the participants.
+and are only allowed to depend on
+the conformational state of the two participants.
+% (no more than two participants can be mentioned by the rule).
 Binding rules specify the association and dissociation of
 two ligand-binding sites.
 Enzymatic rules follow a Michaelis-Menten mechanism in which
 the enzymatic site reversibly binds a covalently modified site first
 and then changes the state of the covalently modified site
-as it unbinds it.
+as it unbinds it (with each step following the law of mass action).
 Each type of rule is parameterised differently.
 The energy function is obtained implicitly
 from all the parameters of the model.
@@ -1148,8 +1174,8 @@ molecular biologists and biochemists
 in a way that reflects the apparent complexity
 of these interaction networks.
 However, the language's many concepts and classifications
-makes it difficult to see the big picture
-and obfuscates the energy function. % obscures
+make it difficult to see the big picture
+and obfuscate the energy function. % obscures
 Also it arbitrarily restricts the form and size of the rules
 and the form of the energy function.
 The work presented in \chp{direct} is a generalisation of ANC.
