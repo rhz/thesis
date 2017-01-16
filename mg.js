@@ -3,7 +3,13 @@ function go() {
   var [gast, hast] = parseGraphs();
   var g = buildGraph(gast),
       h = buildGraph(hast);
-  intersections(g, h);
+  var ps = intersections(g, h);
+  var mgs = unions(g, h);
+  for (var i = 0; i < ps.length; i++) {
+    console.log("p", toString(ps[i]));
+    console.log("mg", toString(mgs[i]));
+    console.log("mg", mgs[i]);
+  }
 }
 
 function parseGraphs() {
@@ -87,6 +93,10 @@ function buildGraph(g) {
       sid++;
     }
   }
+  // sitemap, sitesOf, edges, edgemap, agenttype and sitetype
+  // should refer to agents and site by their index in the
+  // agents and sites arrays.
+  // TODO: didn't use edges in the end, edgemap is enough.
   return { agents: agents,
            sites: sites,
            sitemap: sitemap,
@@ -167,33 +177,30 @@ function eqIn(x, xs) {
 function intersections(g, h) {
   // construct sets of type-compatible agent pairs
   // first get the type-compatible pairs
-  var t = g.agents.map(x => h.agents.filter(
-    y => g.agenttype[x] === h.agenttype[y]).map(
-      y => [x, y]));
+  var t = g.agents.map((a, i) => h.agents.filter(
+    (b, j) => g.agenttype[i] === h.agenttype[j]).map(
+      (b, j) => [i, j]));
   // ais is an array of arrays, each array ai with as many elements
   // as agents in the intersection represented by ai.
   var ais = nub(flatten(cross(t).map(ai => powerset(ai))));
-  console.log("ais", ais);
   // construct sets of type- and agent-compatible site pairs
   // sis is an array of arrays, each array si with as many elements
   // as agents in the intersection. then each agent array in si
   // has as many elements as sites that agent has in the intersection.
-  var sis = ais.map(
-    ai => ai.map(
-      ([a, b]) => { var tys = {};
-                    h.sitesOf[b].forEach(
-                      y => tys[h.sitetype[y]] = y);
-                    // maximal set of type-compatible sites
-                    return g.sitesOf[a].reduce(
-                      (xys, x) => {
-                        var tx = g.sitetype[x];
-                        // only take type-compatible sites
-                        if (tx in tys)
-                          return [ [x, tys[tx]] ].concat(xys);
-                        else return xys;
-                      }, []);
+  var sis = ais.map(ai => ai.map(
+    ([a, b]) => { var tys = {};
+                  h.sitesOf[b].forEach(
+                    y => tys[h.sitetype[y]] = y);
+                  // maximal set of type-compatible sites
+                  return g.sitesOf[a].reduce(
+                    (xys, x) => {
+                      var tx = g.sitetype[x];
+                      // only take type-compatible sites
+                      if (tx in tys)
+                        return [ [x, tys[tx]] ].concat(xys);
+                      else return xys;
+                    }, []);
                   }));
-  console.log("sis", sis);
   // discard by edge incompatibility
   // mis is an array of pairs [ai, si], ai and si as above.
   var mis = _.zip(ais, sis).filter(
@@ -204,18 +211,16 @@ function intersections(g, h) {
           (y in h.edgemap &&
            eqIn([g.edgemap[x], h.edgemap[y]], sitePairs))
           : !(y in h.edgemap)))));
-  console.log("mis", mis);
   // create the pullback graphs
-  var ps = mis.map(([ai, si]) => {
-    var sitemap = [], sitesOf = [], sid = 0;
-    for (var i in si) {
+  return mis.map(([ai, si]) => {
+    var sitemap = [], sitesOf = [];
+    si.forEach((xs, i) => {
       sitesOf.push([]);
-      for (var j in si[i]) {
-        sitemap[sid] = i;
-        sitesOf[i].push(sid);
-        sid++;
-      }
-    }
+      xs.forEach(x => {
+        sitesOf[i].push(sitemap.length);
+        sitemap.push(i);
+      });
+    });
     var sites = flatten(si);
     var edges = [], edgemap = {};
     sites.forEach(([x, y], i) => {
@@ -235,12 +240,85 @@ function intersections(g, h) {
              edgemap: edgemap,
              agenttype: ai.map(([a, b]) => g.agenttype[a]),
              sitetype: sites.map(([x, y]) => g.sitetype[x]) }; });
-  console.log("ps", ps);
-  ps.forEach(p => console.log("p", toString(p)));
-  return ps;
+}
+
+function or(x, y) { return _.isEmpty(x) ? y : x; }
+
+// graph (multi-)unions
+function unions(g, h) {
+  // there's a bijection between intersections and unions
+  return intersections(g, h).map(p => {
+    var sl = p.sites.length,
+        al = p.agents.length,
+        [pa1, pa2] = or(_.unzip(p.agents), [[], []]),
+        [ps1, ps2] = or(_.unzip(p.sites), [[], []]);
+    // agents that have to be added
+    // are those in g and h that are not in p.
+    var a1 = _.difference(Array.from(g.agents.keys()), pa1),
+        a2 = _.difference(Array.from(h.agents.keys()), pa2);
+    // map agents in g and h to those in the union
+    // we offset the agent indices due to the concatenation
+    // of arrays p.agents.concat(a1).concat(a2)
+    var ga_mg = g.agents.map(
+          (a, i) => pa1.includes(i) ?
+            pa1.indexOf(i) : a1.indexOf(i) + al),
+        ha_mg = h.agents.map(
+          (a, i) => pa2.includes(i) ?
+            pa2.indexOf(i) : a2.indexOf(i) + al + a1.length);
+    // same for sites
+    var s1 = _.difference(Array.from(g.sites.keys()), ps1),
+        s2 = _.difference(Array.from(h.sites.keys()), ps2);
+    var gs_mg = g.sites.map(
+          (x, i) => ps1.includes(i) ?
+            ps1.indexOf(i) : s1.indexOf(i) + sl),
+        hs_mg = h.sites.map(
+          (y, i) => ps2.includes(i) ?
+            ps2.indexOf(i) : s2.indexOf(i) + sl + s1.length);
+    // map agent and site types
+    var at1 = a1.map(a => g.agenttype[a]),
+        at2 = a2.map(b => h.agenttype[b]);
+    var st1 = s1.map(x => g.sitetype[x]),
+        st2 = s2.map(y => h.sitetype[y]);
+    // sitemap
+    var sm1 = s1.map(x => ga_mg[g.sitemap[x]]),
+        sm2 = s2.map(y => ha_mg[h.sitemap[y]]);
+    // sitesOf (inverse of sitemap)
+    var so1 = a1.map(a => g.sitesOf[a].map(x => gs_mg[x])),
+        so2 = a2.map(b => h.sitesOf[b].map(y => hs_mg[y])),
+        so3 = p.agents.map(([a, b]) => {
+          var xs = g.sitesOf[a].map(x => gs_mg[x]),
+              ys = h.sitesOf[b].map(y => hs_mg[y]);
+          return nub(xs.concat(ys));
+        });
+    // new edges are obtained by offseting the indices
+    var edgemap = p.edgemap;
+    function addEdges(si, g, offset) {
+      s1.forEach((x, i) => {
+        if (x in g.edgemap)
+          // g.edgemap[x] must be in si because all sites
+          // coming from p are either already bound or free.
+          // remember that sites in si might belong to
+          // agents that come from p.
+          edgemap[i + offset] = g.edgemap[x] + offset;
+      });
+    }
+    addEdges(s1, g, sl);
+    addEdges(s2, h, sl + sm1.length);
+    // create the graph
+    return { agents: p.agents.concat(a1).concat(a2),
+             sites: p.sites.concat(s1).concat(s2),
+             sitemap: p.sitemap.concat(sm1).concat(sm2),
+             sitesOf: so3.concat(so1).concat(so2),
+             edges: _.toPairs(edgemap).map(
+               ([x, y]) => [_.toNumber(x), y]),
+             edgemap: edgemap,
+             agenttype: p.agenttype.concat(at1).concat(at2),
+             sitetype: p.sitetype.concat(st1).concat(st2) };
+  });
 }
 
 function toString(g) {
+  if (g.agents.length == 0) return "&empty;";
   var agents = [],
       eid = 0,
       bond = {};
