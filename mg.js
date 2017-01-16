@@ -4,12 +4,8 @@ function go() {
   var g = buildGraph(gast),
       h = buildGraph(hast);
   var ps = intersections(g, h);
-  var mgs = unions(g, h);
-  for (var i = 0; i < ps.length; i++) {
-    console.log("p", toString(ps[i]));
-    console.log("mg", toString(mgs[i]));
-    console.log("mg", mgs[i]);
-  }
+  var us = unions(g, h);
+  addResults(_.zip(ps, us));
 }
 
 function parseGraphs() {
@@ -315,6 +311,37 @@ function unions(g, h) {
              agenttype: p.agenttype.concat(at1).concat(at2),
              sitetype: p.sitetype.concat(st1).concat(st2) };
   });
+}
+
+function addCol() {
+  return $("#results").append(
+    `<div class="col-md-12"></div>`).find("div");
+}
+
+function addResults(mgs) {
+  var col = addCol();
+  _.chunk(mgs, 2).forEach(res => addRow(col, res));
+  col.find(".glyphicon").css("margin-top", "10px");
+  col.find(".row").css("margin-top", "100px");
+}
+
+function addRow(ctn, res) {
+  var p1, m1, p2, m2;
+  if (res.length == 2) [[p1, m1], [p2, m2]] = res;
+  else [[p1, m1]] = res;
+  if (res.length == 2) ctn.append(
+    `<div class="row">${unionDiv(p1, m1)}${unionDiv(p2, m2)}</div>`);
+  else ctn.append(
+    `<div class="row">${unionDiv(p1, m1, 3)}</div>`);
+}
+
+function unionDiv(p, m, offset = 0) {
+  var cls = offset == 0 ? "" : ` col-md-offset-${offset}`;
+  return `<div class="col-md-6${cls}">
+    <div class="centre alert alert-info" role="alert">${toString(p)}</div>
+    <div class="centre glyphicon glyphicon-arrow-down"></div>
+    <div class="centre alert alert-info" role="alert">${toString(m)}</div>
+  </div>`;
 }
 
 function toString(g) {
