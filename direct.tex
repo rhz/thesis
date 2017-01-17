@@ -654,7 +654,10 @@ Another refinement of $r^+_{12}$ could be
 Here we have added a free site to the blue node.
 This second refinement is also $\shapes$-balanced
 because the free $r$ site on the blue node guarantees that
-the rule will never create a triangle.
+(i) the rule will never create a triangle and
+(ii) there is no embedding from the left-hand side
+into a triangle and hence no triangle can be destroyed
+by the action of the rule.
 The following refinement, however, is not $\shapes$-balanced.
 \begin{center}
   \begin{tikzpicture}
@@ -722,7 +725,7 @@ is determined uniquely by an embedding.
 Epis\footnote{
   Epi, mono and iso are short for
   epimorphism, monomorphism and isomorphism.}
-of $\rSGe_C$ are good candidates for extensions.
+of $\rSGe_C$ are good candidates for extensions. % relevant
 They are characterised as follows:
 an embedding $\psi: g \to h$ is an epi iff
 every connected component of $\anon{h}$ contains
@@ -758,7 +761,7 @@ In the category of extensions of $g$,
 a morphism between objects $\psi: g \to h$ and $\phi: g \to h'$
 is an embedding $\theta: h \to h'$
 such that the triangle on the right commutes.
-If $\theta$ is an iso we write $\psi \cong_s \phi$.
+If $\theta$ is an iso we write $\psi \cong_g \phi$.
 
 One might wonder when the prefix of an epi is not itself an epi.
 The following diagram illustrates such a situation,
@@ -869,14 +872,193 @@ of more specific cases $g_i$.
 % For the partitioning of rules
 % we need a guiding principle.
 
+A method to easily construct such decompositions
+was proposed by \citet{refinement}
+which works by detailing
+which agents and sites should be added to $g$.
+This ``extension plan'' is called growth policy.
+A \emph{growth policy} $\gp$ for contact map $g$ over $C$
+is a family of functions $\gp_\phi$,
+indexed by all extensions $\phi: g \to h$,
+where $\gp_\phi$ maps $u \in \agents_{\anon{h}}$ to
+a subset $\gp_\phi(u)$ of $\sitemap_C^{-1}(h_\agents(u))$,
+\ie each agent in $\anon{h}$ is allocated
+a subset of the sites belonging to the agent type $h_\agents(u)$
+it is mapped to in the contact graph.
+%
+An agent in $\anon{h}$ may cover some, or all,
+of these sites or even completely extraneous sites:
+if the former, \ie if for all $u$ in $\agents_{\anon{h}}$,
+$h_\sites(\sitemap_{\anon{h}}^{-1}(u)) \subset \gp_\phi(u)$,
+we say that $\phi$ is \emph{immature};
+if for all $u$s the inclusion is an equality
+and $\phi$ is an epi,
+% $h_\sites(\sitemap_{\anon{h}}^{-1}(u)) = \gp_\phi(u)$,
+we say that $\phi$ is \emph{mature};
+otherwise $\phi$ is said to be \emph{overgrown}.
+The functions $\gp_\phi$ must satisfy,
+for all extensions $\phi$ and $\phi' \geq \phi$,
+the \emph{faithfulness} property,
+$\gp_\phi = \gp_{\phi'} \, \psi_\agents$
+with $\psi$ such that $\psi \, \phi = \phi'$;
+so a site requested by $\phi$
+must be requested by any further extension.
+Additionally, this property forces $\gp$ to eagerly ask
+for all sites that will be eventually requested
+at any given agent in the codomain of $\phi$.
+If $\phi$ is not overgrown
+then no $\phi' \leq \phi$ is overgrown either.
+% Also, note that the union of two growth policies
+% is itself a growth policy.
+
+Given a contact map $g$ over $C$ and a growth policy $\gp$ for $g$,
+we define $\gp(g)$ by choosing one representative
+per $\cong_g$-isomorphism class of the set of all extensions of $g$
+which are mature according to $\gp$.
+
+The following theorem guarantees that
+factorisations through $\gp(g)$ are unique when they exist,
+but \emph{not} that they necessarily do exist.
+In section \sct{energy-gp},
+we will construct a specific growth policy % of interest
+for which this property of exhaustivity of the decomposition
+can be proved by hand.
+As such, it fulfils our desired criteria of providing
+an exhaustive collection of mutually exclusive sub-cases.
+
 \begin{theorem}
   \label{thm:unique-decomposition}
+  % If $\gp$ is a growth policy for $g$,
+  % $\gp(g)$ uniquely decomposes $g$.
+  Let $g$ and $m$ be contact maps over $C$
+  and $\gp$ a growth policy for $g$.
+  If an embedding $\psi: g \to m$ can be decomposed
+  in two ways as $\gamma_1 \phi_1$ and $\gamma_2 \phi_2$
+  with $\phi_i: g \to h_i$ in $\gp(g)$ and $\gamma_i: h_i \to m$,
+  then $\phi_1 = \phi_2$ and $\gamma_1 = \gamma_2$.
+  \begin{equation}
+    \label{eq:gp}
+    \tikz[baseline=-4.3]{
+      \matrix (m) [matrix of math nodes,row sep=25pt,column sep=25pt]{
+        g & & & h_1 \\
+        & p & & \\
+        & & m & \\
+        h_2 & & & m \\};
+      % outer square
+      \draw[hom] (m-1-1) -- node[above] {$\phi_1$} (m-1-4);
+      \draw[hom] (m-1-1) -- node[left] {$\phi_2$} (m-4-1);
+      \draw[hom] (m-4-1) -- node[below] {$\gamma_2$} (m-4-4);
+      \draw[hom] (m-1-4) -- node[right] {$\gamma_1$} (m-4-4);
+      % inner square
+      \draw[hom] (m-2-2) -- node[onarrow] {$\pi_1$} (m-4-1);
+      \draw[hom] (m-2-2) -- node[onarrow] {$\pi_2$} (m-1-4);
+      \draw[hom] (m-4-1) -- node[onarrow] {$\theta_1$} (m-3-3);
+      \draw[hom] (m-1-4) -- node[onarrow] {$\theta_2$} (m-3-3);
+      % mediating arrows
+      \draw[hom] (m-1-1) -- node[onarrow] {$\phi$} (m-2-2);
+      \draw[hom,dashed] (m-3-3) -- (m-4-4);
+    }
+  \end{equation}
 \end{theorem}
+\begin{proof}
+  Suppose that $\gamma_1 \phi_1 = \gamma_2 \phi_2$,
+  where $\phi_1$ and $\phi_2$ are mature extensions of $g$
+  according to $\gp$ and $\phi_1 \neq \phi_2$.
+  As shown in \diagram{gp},
+  we have an inner square formed by the pullback $\pi_1,\pi_2$,
+  and the minimal glueing $\theta_1,\theta_2$ of $h_1,h_2$
+  that factors $\gamma_1,\gamma_2$.
+  Every connected component of $m$
+  has a pre-image in $h_1$ or $h_2$,
+  and thus also in $g$,
+  since $\phi_1$ and $\phi_2$ are epis
+  as mature extensions.
+  Because every connected component of $m$
+  has an image in $h_1$ and $h_2$,
+  then evey connected component of $m$
+  has a pre-image in both $h_1$ and $h_2$.
+  Hence $\theta_1$ and $\theta_2$ are epis.
+  % Also $\theta_1$ and $\theta_2$ are epis,
+  % as every connected component of $m$
+  % has a pre-image in $h_1$ or $h_2$
+  % and so also in $g$, since the $\phi_i$s are epis,
+  % and so also in the other of $h_2$ and $h_1$.
 
+  % If $\theta_1,\theta_2$ are not both isomorphisms
+  % then either the nodes in their images are the same or they differ.
+  % If they differ, some site $z$ sitting on a node
+  The nodes in the images of $\theta_1$ and $\theta_2$
+  might be the same or differ.
+  When they differ, some site $z$ sitting on a node
+  in the intersection of the images of $\theta_1,\theta_2$
+  is connected to a node outside the image,
+  since $\theta_1,\theta_2$ are epis.
+  % Thus $z$ cannot be present in the image of the other $\theta_i$,
+  % otherwise $h_1$ and $h_2$ would not be glueable.
+  However, $z$ cannot be in the intersection of the images
+  unless the site it is connected to is also part of the intersection
+  (\lem{mg}).
+  Therefore the nodes in the images must be the same.
+  % If the nodes in the images of $\theta_1,\theta_2$ are the same
+  % then there has to be a site $z$ that is not in the image
+  % of one of them because they are not both isos.
+  In this case there has to be a site $z$
+  that is not in the image of one of them
+  or $\theta_1,\theta_2$ are both isos.
+  So there must be a pair $u,z$,
+  % not every node in m has a pre-image in both h1 and h2,
+  % but every connected component does
+  % and the node has a pre-image in at least one of them.
+  % hence there must be some site in a node in the intersection
+  % of the images of \theta_1,\theta_2 that is connected to
+  % the node that is not in both h1,h2.
+  % this site can't be present in the other h,
+  % otherwise they wouldn't be glueable.
+  consisting of a node $u$ in $m$
+  with pre-images $u_1,u_2$ in $h_1,h_2$
+  and a site $z$ of $u$,
+  such that $z$ has no pre-image
+  in exactly one of $\theta_1,\theta_2$.
+  Say it is $\theta_2$.
+  Since $\phi_1$ is not overgrown,
+  $z \in \gp_{\phi_1}(u_1)$ and, by faithfulness,
+  $z \in \gp_\phi(\tuple{u_1,u_2})$,
+  where $\tuple{u_1,u_2}$ is
+  the pullback pre-image of $u_1$ and $u_2$.
+  So again, by faithfulness, $z \in \gp_{\phi_2}(u_2)$
+  which contradicts our original assumption.
+  Hence, $\theta_1$ and $\theta_2$ are isos.
+  It follows that $\phi_1 = \phi_2$ as there is only
+  one representative per $\cong_g$-isomorphism class in $\gp(g)$.
+  Finally, $\gamma_1 = \gamma_2$ because $\phi_1$ is an epi.
+\end{proof}
+% NB: the argument uses the faithful condition
+% in both directions to push around the $z$ site.
 
+Given a rule $r$ and an extension $\phi: r_L \to g$, % of $r_L$,
+$r_\phi$ denotes the refined rule associated to $\phi$,
+% we write $r_\phi$ for the refined rule associated to $\phi$;
+that is, $r_\phi$ is the pair $(g,g^{(r,\phi)})$.
+% with $\comatch{g}$ the codomain of the extension $\comatch{\phi}$
+% corresponding to $\phi$.
+%
+Given $\gp$ a growth policy for $r_L$,
+we write $\gp(r)$ for the family of rules
+obtained by refining $r$ according to $\gp$,
+that is, $\gp(r)$ is the family of rules $r_\phi$
+for $\phi$ ranging in $\gp(r_L)$.
 
-
-
+An example of growth policy is the \emph{ground} policy
+which assigns all possible sites to all agents.
+In this case, $\gp(g)$ is simply the set, possibly infinite,
+of all epis of $g$ into mixtures, considered up to $\cong_g$.
+$\gp(r)$, the ground refinement of $r$,
+contains all refinements of $r$ along those epis,
+which therefore directly manipulate mixtures.
+It is easy to see that the ground refinement
+of our example is infinite,
+since each of the three rules
+can trigger the extension of a chain of any length.
 
 
 \section{Thermodynamical growth policy} % Energy-based refinement}
