@@ -319,19 +319,20 @@ it would be good to have a more rigourous idea of
 when a rule is $\shapes$-balanced or not.
 In the examples shown above we see that
 our energy pattern, the triangle,
-must be either fully incorporated into
-either the left- or the right-hand side of the rule
-to be sure it produces or consumes in every application.
-On the other hand, we must make sure a rule
-is incompatible with our energy pattern,
-making it impossible to match a triangle.
-This is true whenever it becomes impossible to have a union
+must be fully incorporated into
+the left- or the right-hand side of the rule
+to be sure it produces or consumes it in every application.
+On the other hand, a rule that is incompatible
+with our energy pattern will also be $\shapes$-balanced
+by making it impossible for the rule to match a triangle.
+This is true whenever there is no glueing % union
 of the left-hand side of a rule with the energy pattern
-where they overlap.
-In the next section, we introduce the concept overlapping unions
-of graphs (\ie contact maps) by means of multi-sums,
-a concept related to local coproducts and relative pushouts,
-in $\rSGe_C$.
+where they overlap in a site that is modified by the rule.
+In the next section,
+we introduce the concept of overlapping glueings
+of contact maps by means of multi-sums,
+a concept related to local coproducts and relative pushouts.
+% in $\rSGe_C$.
 
 
 \section{Minimal glueings}
@@ -371,21 +372,14 @@ and they indeed restrict to $\rSGe_C$.
   and restricting $\sitemap$ accordingly.
   With some abuse of notation, we have
   \begin{alignat*}{3}
-    \agents_G & {}= \img(\phi_{1,\agents}) \intersection{}
-                    \img(\phi_{2,\agents}) \quad \quad \quad &
-  % \sitemap_G = \set{s \mapsto \sitemap_{\anon{h}}(s) \st s \in \sites_G},
-    \sitemap_G & {}= \rest{\sitemap_{\anon{h}}}{\sites_G} \\
-    \sites_G & {}= \img(\phi_{1,\sites}) \intersection{}
-                   \img(\phi_{2,\sites}) &
-  % \edges_G & {}= \set{\tuple{\phi_{1,\sites}(s),\phi_{1,\sites}(t)} \st
-  %     \tuple{s,t} \in \edges_{\anon{g_1}}} \intersection
-  %   \set{\tuple{\phi_{2,\sites}(s),\phi_{2,\sites}(t)} \st
-  %     \tuple{s,t} \in \edges_{\anon{g_2}}}
-    \edges_G & {}= \phi_{1,\sites}(\edges_{\anon{g_1}}) \intersection{}
-                \, \phi_{2,\sites}(\edges_{\anon{g_2}})
+    \agents_G & {}= \phi_{1,\agents}(\agents_{\anon{g_1}}) & {}\cap{} &
+                  \,\phi_{2,\agents}(\agents_{\anon{g_2}}) \\
+    \sites_G & {}= \,\phi_{1,\sites}(\sites_{\anon{g_1}}) & {}\cap{} &
+                 \,\,\phi_{2,\sites}(\sites_{\anon{g_2}}) \\
+    \edges_G & {}= \,\phi_{1,\sites}(\edges_{\anon{g_1}}) & {}\cap{} &
+                 \,\,\phi_{2,\sites}(\edges_{\anon{g_2}})
   \end{alignat*}
-  where $\phi(\edges) =
-  \set{\tuple{\phi(x),\phi(y)} \st \tuple{x,y} \in \edges}$.
+  and $\sitemap_G = \rest{\sitemap_{\anon{h}}}{\sites_G}$.
   Functions $p_\agents,p_\sites$ are the restriction of
   $h_\agents,h_\sites$ to $\agents_G,\sites_G$, respectively.
   Embeddings $\psi_1$ and $\psi_2$ map agents and sites
@@ -407,15 +401,7 @@ and they indeed restrict to $\rSGe_C$.
   with the same type.
   This fixes a pair of functions $\omega_\agents,\omega_\sites$
   that map agents and sites in $q$ to those in $p$ injectively
-  % that map the agents and sites in $q$ to those in $p$ \emph{uniquely}
-  % due to the injectivity of $\omega_1,\omega_2,\psi_1$ and $\psi_2$.
-  % Since $\omega_\agents,\omega_\sites$ are each a restriction on
-  % $\phi_{1,\agents}\,\omega_{1,\agents}$ and
-  % $\phi_{1,\sites}\,\omega_{1,\sites}$
   and form an embedding $\omega$ in $\rSGe_C$.
-  % This pair of functions form an embedding $\omega$ in $\rSGe_C$
-  % % TODO: by composing?
-  % because they have been created by composing type-preserving embeddings.
   Since the pre-image along $\psi_1,\psi_2$ always exists and is unique,
   any embedding $\omega': p \to q$ must be equal to $\omega$
   whenever $\phi_1\,\omega' = \omega_1$ and
@@ -423,9 +409,9 @@ and they indeed restrict to $\rSGe_C$.
 \end{proof}
 
 $\SG$ also has all pushouts and all sums,
-but these do not in general restrict to $\rSGe_C$, %.\footnote{
+but these do not in general restrict to $\rSGe_C$,
 just as pushouts and sums in $\Set$ do not restrict to
-the subcategory of injective functions. %}
+the subcategory of injective functions.
 % all pushouts; but these do not generally restrict to $\rSGe_C$ since
 % (i) the pushout object need not be realisable,
 % even if all objects in the starting span were;
@@ -458,14 +444,6 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   \end{center}
 \end{lemma}
 \begin{proof}
-  % Take pairs
-  % $(A_i \subset \agents_{\anon{g_1}} \times \agents_{\anon{g_2}},
-  %   S_i \subset \sites_{\anon{g_1}} \times \sites_{\anon{g_2}})$
-  % such that
-  % i) all agent pairs in $A_i$ are type-compatible
-  % (\ie $g_{1,\agents}(a) = g_{2,\agents}(b)$),
-  % ii) each agent of $g_1$ and $g_2$ is at most once in $A_i$,
-  % iii) ...
   Take subsets $A_i$ of the cartesian product
   of $\agents_{\anon{g_1}}$ and $\agents_{\anon{g_2}}$
   that have each agent of $g_1$ and $g_2$ at most once
@@ -473,8 +451,6 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   % that are type-compatible,
   \ie $g_{1,\agents}(a) = g_{2,\agents}(b)$.
   % for all $(a,b) \in A_i$,
-  % and such that each agent in $g_1$ and $g_2$
-  % is at most once in a pair in $A_i$.
   To each $A_i$ assign all subsets $S_{ij}$ of
   $\sites_{\anon{g_1}} \times \sites_{\anon{g_2}}$
   that are type-compatible
@@ -531,7 +507,8 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   and thus the family of multi-sums is finite as well.
   Also, it is easy to see that the spans $\psi^i_1,\psi^i_2$
   are pullbacks of $\theta^i_1,\theta^i_2$.
-  Hence, multi-sums are in a one-to-one correspondence
+  Hence, (isomorphism classes of) multi-sums
+  are in a one-to-one correspondence
   with (isomorphism classes of) pullbacks.
   This implies that there is only one multi-sum
   that factors any given cospan.
@@ -539,13 +516,13 @@ However, $\rSGe_C$ has \emph{multi-sums}.
 
 The pairs $\theta^i_1,\theta^i_2$ enumerate
 all minimal ways in which one can glue $g_1$ and $g_2$.
-% We refer to them as minimal glueings.
+Hence, we refer to them as minimal glueings.
 %
 The notion of multi-sum dates back to \citet{diers}.
-We call them \emph{minimal glueings} in $\rSGe_C$
-according to their intuition in this concrete context
-and use them in \sct{energy-gp} to construct balanced rules.
-% TODO: elaborate on relation to RPOs and cite Montanari
+% We call them \emph{minimal glueings} in $\rSGe_C$
+% according to their intuition in this concrete context
+% and use them in \sct{energy-gp} to construct balanced rules.
+% TODO: elaborate on relation to RPOs
 They are very close to relative pushouts \citep{leifer}
 and will be used in the same way,
 to minimise rewriting contexts.
