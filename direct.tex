@@ -26,7 +26,7 @@ for each edge in the contact graph.
 Each of these rules is minimal in the sense that
 it only asks for the presence of
 the two participating agents and sites.
-The example rule in \sct{kappa}
+The example rule in \sct{kappa} (page~\pageref{p:example})
 where agents of type $1$ and $2$ bind
 % regardless of the binding state of any other site,
 regardless of the context
@@ -41,7 +41,7 @@ This option is \emph{maximally permissive}
 with respect to the contact graph.\footnote{
   Intuitively, this is analogous to the case of classical mechanics
   % where the topology of the space gives us the possible transformations
-  where, a priori, movement is not constrained along in coordinate.}
+  where, a priori, movement is not constrained along any coordinate.}
 Even if all transformations are possible,
 many of them may be unlikely due to having a high energy.
 Still one might prefer to forbid certain transformations
@@ -52,7 +52,7 @@ that will be presented in \sct{alloring}.
 In our previous example (\sct{kappa}),
 we might want to favour the formation of
 triangles over chains and other cycles.
-For this we give a negative energy cost to $t$,
+For this we give a negative energy cost to the trinagle $t$,
 \ie $\cost(t) < 0$.
 If $t$ is the only energy pattern,
 then the energy of a state $m$ is
@@ -97,6 +97,21 @@ Whenever a rule produces the same energy change
 regardless of where it is applied
 we say that the rule has an \emph{unambiguous energy balance}
 or is $\shapes$-balanced.
+More generally, we define $\shapes$-balanced as follows.
+
+\begin{definition}
+  Given a contact graph $C$
+  and a set $\shapes$ of contact maps over $C$,
+  a rule $r$ is $\shapes$-balanced
+  if, for all mixtures $m$ and embeddings $\psi: r_L \to m$,
+  the number of ocurrences of $p \in \shapes$
+  produced and consumed by $r$ is a fixed number $\Delta_r p$,
+  \ie $\matches{p}{m} - \matches{p}{m} = \Delta_r p$
+  holds for all $p \in \shapes$.
+  % We refer to the vector of ocurrence changes as $\Delta_r \shapes$.
+\end{definition}
+% TODO: perhaps add a remark about unambiguous stoichiometry
+
 The following two rule applications show that
 $r^+_{12}$ is not $\shapes$-balanced.
 \begin{center}
@@ -343,7 +358,7 @@ constructed from those in $\Set$,
 and they indeed restrict to $\rSGe_C$.
 
 \begin{lemma}\label{lemma:pullbacks}
-  Given a cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2$
+  Given a cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2$ in $\rSGe_C$
   there is a unique span $\psi_1: g_1 \gets p \to g_2 :\psi_2$
   (up to unique isomorphism)
   such that any span $\omega_1: g_1 \gets q \to g_2 :\omega_2$
@@ -455,13 +470,13 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   $\sites_{\anon{g_1}} \times \sites_{\anon{g_2}}$
   that are type-compatible
   and whose elements belong to agents paired in $A_i$,
-  that is, if $(x,y) \in S_i$
+  that is, if $(x,y) \in S_{ij}$
   then $g_{1,\sites}(x) = g_{2,\sites}(y)$
   and $(\sitemap_{\anon{g_1}}(x),\sitemap_{\anon{g_2}}(y)) \in A_i$.
   % Note that the latter predicate fixes ...
-  Note how this fixes a correspondence $\sitemap_{ij}$
-  between elements of $S_{ij}$ to elements of $A_i$.
-  In particular,
+  Note how this fixes a mapping $\sitemap_{ij}$
+  between elements of $S_{ij}$ to elements of $A_i$
+  defined by
   $\sitemap_{ij}((x,y)) =
      (\sitemap_{\anon{g_1}}(x),\sitemap_{\anon{g_2}}(y))$.
   % Discard all sets $S_ij$ that are subsets
@@ -472,9 +487,14 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   There must be one such maximal set because
   if any two pairs of sites $(x_1,y_1),(x_2,y_2)$
   are type-preserving and belong to the same agents,
-  then there will be one set among the $S_{ij}$s that has both.
-  Hence, we can drop the $j$ subscript
-  in $S_{ij}$ and $\sitemap_{ij}$.
+  then there will be one set among the $S_{ij}$s that has both
+  and thus $\{S_{ij}\}_j$ is a directed partial order
+  for the inclusion relation.
+  % Hence, we can drop the $j$ subscript
+  % in $S_{ij}$ and $\sitemap_{ij}$.
+  Let $S_i$ be the maximal element of $\{S_{ij}\}_j$,
+  which exists by directedness and finiteness of this family,
+  and $\sitemap_i$ the corresponding mapping to $A_i$.
   Intuitively, the maximal set $S_i$ is the set of all sites
   that are defined in both agents at the same time.
   Next we discard those pairs $A_i,S_i$
@@ -483,7 +503,8 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   or connected to sites $(x',y') \in S_i$.
 
   We construct a family of contact maps $p_i: P_i \to C$
-  using $A_i$ as its agents, $S_i$ as its sites,
+  using $\agents_{P_i} = A_i$ as its agents,
+  $\sites_{P_i} = S_i$ as its sites,
   $\sitemap_{P_i} = \sitemap_i$ and
   $\edges_{P_i} = \{((x_1,y_1), (x_2,y_2)) \in S_i \times S_i \st
      x_1 \edges_{\anon{g_1}} x_2 \wedge
@@ -499,7 +520,7 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   they are obtained by adding to $p_i$
   all the missing agents, sites and edges from $g_1$ and $g_2$.
   Since all sites that are in $g_1$ but not in $p_i$
-  cannot be in $g_2$ by construction of $S_i$,
+  cannot be in $g_2$ by maximality of $S_i$,
   there can be no conflict when adding sites or edges.
   The same argument holds for sites in $g_2$ that are not in $p_i$.
 
