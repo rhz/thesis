@@ -722,9 +722,9 @@ As an example, consider the site graph $T$ for a triangle.
   \vspace{.7cm}
   \begin{center}
     \begin{tikzpicture}[grphdiag]
-      \nn[n5]{n1}{0,0}{1};
-      \nn[n5]{n2}{0:1.4}{2};
-      \nn[n5]{n3}{60:1.4}{3};
+      \nn[n]{n1}{0,0}{1};
+      \nn[n]{n2}{0:1.4}{2};
+      \nn[n]{n3}{60:1.4}{3};
       \e{n1}{n2};
       \e{n2}{n3};
       \e{n1}{n3};
@@ -760,21 +760,21 @@ for a contact map $g: G \to T$ where
     \path[use as bounding box] (-0.8,0.4) rectangle (3.4,-0.42);
     \e{-0.6,0}{3.2,0};
     \begin{scope}
-      \nn[n5]{x}{0,0}{$x$};
+      \nn[n]{x}{0,0}{$x$};
       \site{lx}{x.west};
       \site{rx}{x.east};
       \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l_x$};
       \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r_x$};
     \end{scope}
     \begin{scope}[shift={(1.3,0)}]
-      \nn[n5]{y}{0,0}{$y$};
+      \nn[n]{y}{0,0}{$y$};
       \site{ly}{y.west};
       \site{ry}{y.east};
       \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l_y$};
       \node[anchor=south west,yshift=-1] at (0:.2) {\scriptsize $r_y$};
     \end{scope}
     \begin{scope}[shift={(2.6,0)}]
-      \nn[n5]{z}{0,0}{$z$};
+      \nn[n]{z}{0,0}{$z$};
       \site{lz}{z.west};
       \site{rz}{z.east};
       \node[anchor=north east,yshift=2] at (180:.2) {\scriptsize $l_z$};

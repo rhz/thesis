@@ -1,0 +1,331 @@
+% \tikzstyle{site}=[font=\scriptsize\itshape,inner sep=1pt,above]
+\tikzstyle{s}=[font=\scriptsize,yshift=6pt]
+\tikzstyle{emb}=[->,dashed,thin]
+\tikzstyle{relevant}=[show background rectangle,
+background rectangle/.style={fill=Green!40,rounded corners=4pt}]
+\tikzstyle{non-relevant}=[show background rectangle,
+background rectangle/.style={fill=White,rounded corners=4pt}]
+
+% Draw a chain of agents
+% Parameters:
+%  - Position of the first agent
+%  - Distance between agents
+%  - List of node ids
+%  - Name of left site
+%  - Name of right site
+\newcommand{\createchain}[5]{%
+  \draw #1
+    \foreach \aid [count=\ai] in {#3} {
+      \ifnum \ai = 1
+      \else -- node[s,pos=.33] {$#5$} node[s,pos=.65] {$#4$} ++(#2,0)
+      \fi
+      node[inner sep=5pt,n] (\aid) {} };
+  \putsites{#3}
+}
+
+\ExplSyntaxOn
+\int_new:N \sites_len 
+\newcommand{\putsites}[1]{%
+  \clist_set:Nn \sites_clist {#1}
+  \int_set:Nn \sites_len {\clist_count:N \sites_clist}
+  \int_step_inline:nnnn {1}{1}{\sites_len}
+  { \edef\aid{\clist_item:Nn \sites_clist {##1}}
+    \begin{scope}[shift={(\aid)}]
+      \int_compare:nTF { ##1 > 1 }
+      { \site{l\aid}{\aid.west}; }{}
+      \int_compare:nTF { ##1 < \sites_len }
+      { \site{r\aid}{\aid.east}; }{}
+    \end{scope}}
+}
+\ExplSyntaxOff
+
+% \newcommand{\putsites}[1]{
+%   \foreach \aid in {#1} {
+%     \begin{scope}[shift={(\aid)}]
+%       \site{l\aid}{\aid.west};
+%       \site{r\aid}{\aid.east};
+%     \end{scope}};
+% }
+
+% Draw the arrows of embeddings
+% Parameters:
+%  - List of pairs from/to of node ids
+\newcommand{\dembs}[2][.1]{% diagram embeddings
+  \foreach \ai / \aj in {#2}
+    \draw[emb] ($(\ai)!#1!(\aj.north)$) -- ($(\ai)!.9!(\aj.north)$);
+}
+
+% \newcommand{\vsep}{.3cm}
+% first row
+\begin{center}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % no overlap
+    \begin{tikzpicture}[thick, non-relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+      \createchain{(0pt,-40pt)}{30pt}{a7,a8,a9}{l}{r};
+      \createchain{(90pt,-40pt)}{30pt}{a10,a11,a12}{l}{r};
+      \dembs[.35]{a1/a7,a2/a8,a3/a9,a4/a10,a5/a11,a6/a12};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % all overlap
+    \begin{tikzpicture}[thick, relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+      \createchain{(45pt,-40pt)}{30pt}{a7,a8,a9}{l}{r};
+      \dembs[.25]{a1/a7,a4/a7,a2/a8,a5/a8,a3/a9,a6/a9};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\end{center}
+% second row
+% \vspace{\vsep}
+\begin{center}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % two overlap
+    \begin{tikzpicture}[thick, relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+      \createchain{(30pt,-40pt)}{30pt}{a7,a8,a9,a10}{l}{r};
+      \dembs[.28]{a1/a7,a4/a8,a2/a8,a5/a9,a3/a9,a6/a10};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % two overlap
+    \begin{tikzpicture}[thick, non-relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+      \createchain{(30pt,-40pt)}{30pt}{a7,a8,a9,a10}{l}{r};
+      \dembs[.2]{a4/a7,a1/a8,a5/a8,a2/a9,a6/a9,a3/a10};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\end{center}
+% third row
+% \vspace{\vsep}
+\begin{center}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % one overlap
+    \begin{tikzpicture}[thick, non-relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+      \createchain{(15pt,-40pt)}{30pt}{a7,a8,a9,a10,a11}{l}{r};
+      \dembs[.31]{a1/a7,a2/a8,a3/a9,a4/a9,a5/a10,a6/a11};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % one overlap
+    \begin{tikzpicture}[thick, non-relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+      \createchain{(15pt,-40pt)}{30pt}{a7,a8,a9,a10,a11}{l}{r};
+      \dembs[.18]{a4/a7,a5/a8,a6/a9,a1/a9,a2/a10,a3/a11};
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\end{center}
+% fourth row
+% \vspace{\vsep}
+\begin{center}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % triangle
+    \begin{tikzpicture}[thick, relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+
+      \begin{scope}[shift={(60pt,-40pt)}]
+        \e{0,0}{0:1.1};
+        \e{0,0}{-60:1.1};
+        \e{0:1.1}{-60:1.1};
+        \begin{scope}[shift={(0,0)}]
+          \n[n]{a7}{0,0};
+          \site{r7}{0:7pt};
+          \site{l7}{-60:7pt};
+          \node at (-86:12pt) {\scriptsize $l$};
+          \node at (26:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(0:1.1)}]
+          \n[n]{a8}{0,0};
+          \site{r8}{180:7pt};
+          \site{l8}{-120:7pt};
+          \node at (154:12pt) {\scriptsize $l$};
+          \node at (-94:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(-60:1.1)}]
+          \n[n]{a9}{0,0};
+          \site{r9}{120:7pt};
+          \site{l9}{60:7pt};
+          \node at (146:12pt) {\scriptsize $r$};
+          \node at (34:12pt) {\scriptsize $l$};
+        \end{scope}
+      \end{scope}
+
+      \dembs[.3]{a2/a7,a3/a8,a4/a7,a5/a8};
+      \draw[emb] ($(a1)+(-65:12pt)$) to [out=-65,in=180] ($(a9)+(180:12pt)$);
+      \draw[emb] ($(a6)+(245:12pt)$) to [out=245,in=0]   ($(a9)+(0:12pt)$);
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\begin{minipage}{.48\textwidth}
+  \begin{center} % triangle
+    \begin{tikzpicture}[thick, non-relevant]
+      \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+      \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+
+      \begin{scope}[shift={(60pt,-40pt)}]
+        \e{0,0}{0:1.1};
+        \e{0,0}{-60:1.1};
+        \e{0:1.1}{-60:1.1};
+        \begin{scope}[shift={(0,0)}]
+          \n[n]{a7}{0,0};
+          \site{r7}{0:7pt};
+          \site{l7}{-60:7pt};
+          \node at (-86:12pt) {\scriptsize $l$};
+          \node at (26:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(0:1.1)}]
+          \n[n]{a8}{0,0};
+          \site{r8}{180:7pt};
+          \site{l8}{-120:7pt};
+          \node at (154:12pt) {\scriptsize $l$};
+          \node at (-94:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(-60:1.1)}]
+          \n[n]{a9}{0,0};
+          \site{r9}{120:7pt};
+          \site{l9}{60:7pt};
+          \node at (146:12pt) {\scriptsize $r$};
+          \node at (34:12pt) {\scriptsize $l$};
+        \end{scope}
+      \end{scope}
+
+      \dembs[.2]{a5/a7,a6/a8,a1/a7,a2/a8};
+      \draw[emb] ($(a3)+(240:12pt)$) to [out=240,in=180] ($(a9)+(180:12pt)$);
+      \draw[emb] ($(a4)+(-60:12pt)$) to [out=-60,in=0]   ($(a9)+(0:12pt)$);
+    \end{tikzpicture}
+  \end{center}
+\end{minipage}
+\end{center}
+% \end{minipage}
+% \begin{minipage}{.48\textwidth}
+%   \begin{center} % all overlap
+%     \begin{tikzpicture}[thick, relevant]
+%       \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+%       \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+%       \createchain{(45pt,-40pt)}{30pt}{a7,a8,a9}{l}{r};
+%       \dembs[.25]{a1/a7,a4/a7,a2/a8,a5/a8,a3/a9,a6/a9};
+%     \end{tikzpicture}
+%   \end{center}
+%   \vspace{\vsep}
+%   \begin{center} % two overlap
+%     \begin{tikzpicture}[thick, non-relevant]
+%       \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+%       \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+%       \createchain{(30pt,-40pt)}{30pt}{a7,a8,a9,a10}{l}{r};
+%       \dembs[.2]{a4/a7,a1/a8,a5/a8,a2/a9,a6/a9,a3/a10};
+%     \end{tikzpicture}
+%   \end{center}
+%   \vspace{\vsep}
+%   \begin{center} % one overlap
+%     \begin{tikzpicture}[thick, non-relevant]
+%       \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+%       \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+%       \createchain{(15pt,-40pt)}{30pt}{a7,a8,a9,a10,a11}{l}{r};
+%       \dembs[.18]{a4/a7,a5/a8,a6/a9,a1/a9,a2/a10,a3/a11};
+%     \end{tikzpicture}
+%   \end{center}
+%   \vspace{\vsep}
+%   \begin{center} % triangle
+%     \begin{tikzpicture}[thick, non-relevant]
+%       \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+%       \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+%
+%       \begin{scope}[shift={(60pt,-40pt)}]
+%         \e{0,0}{0:1.1};
+%         \e{0,0}{-60:1.1};
+%         \e{0:1.1}{-60:1.1};
+%         \begin{scope}[shift={(0,0)}]
+%           \n[n]{a7}{0,0};
+%           \site{r7}{0:7pt};
+%           \site{l7}{-60:7pt};
+%           \node at (-86:12pt) {\scriptsize $l$};
+%           \node at (26:12pt) {\scriptsize $r$};
+%         \end{scope}
+%         \begin{scope}[shift={(0:1.1)}]
+%           \n[n]{a8}{0,0};
+%           \site{r8}{180:7pt};
+%           \site{l8}{-120:7pt};
+%           \node at (154:12pt) {\scriptsize $l$};
+%           \node at (-94:12pt) {\scriptsize $r$};
+%         \end{scope}
+%         \begin{scope}[shift={(-60:1.1)}]
+%           \n[n]{a9}{0,0};
+%           \site{r9}{120:7pt};
+%           \site{l9}{60:7pt};
+%           \node at (146:12pt) {\scriptsize $r$};
+%           \node at (34:12pt) {\scriptsize $l$};
+%         \end{scope}
+%       \end{scope}
+%
+%       \dembs[.2]{a5/a7,a6/a8,a1/a7,a2/a8};
+%       \draw[emb] ($(a3)+(240:12pt)$) to [out=240,in=180] ($(a9)+(180:12pt)$);
+%       \draw[emb] ($(a4)+(-60:12pt)$) to [out=-60,in=0]   ($(a9)+(0:12pt)$);
+%     \end{tikzpicture}
+%   \end{center}
+% \end{minipage}
+% \end{center}
+%
+% fifth row
+% \vspace{\vsep}
+\begin{center} % square
+  \begin{tikzpicture}[thick, non-relevant]
+    \createchain{(0pt,0pt)}{30pt}{a1,a2,a3}{l}{r};
+    \createchain{(90pt,0pt)}{30pt}{a4,a5,a6}{l}{r};
+
+    \begin{scope}[shift={(75pt,-40pt)}]
+      \draw (0,0) -- ++(-30:1.1) coordinate (c8)
+                  -- ++(-150:1.1) coordinate (c9)
+                  -- ++(150:1.1) coordinate (c10)
+                  -- cycle;
+      \begin{scope}[shift={(0,0)}]
+        \n[n]{a7}{0,0};
+        \site{r7}{-30:7pt};
+        \site{l7}{-150:7pt};
+        \node at (-176:12pt) {\scriptsize $l$};
+        \node at (-4:12pt) {\scriptsize $r$};
+      \end{scope}
+      \begin{scope}[shift={(c8)}]
+        \n[n]{a8}{0,0};
+        \site{r8}{150:7pt};
+        \site{l8}{-150:7pt};
+        \node at (124:12pt) {\scriptsize $l$};
+        \node at (-124:12pt) {\scriptsize $r$};
+      \end{scope}
+      \begin{scope}[shift={(c9)}]
+        \n[n]{a9}{0,0};
+        \site{r9}{150:7pt};
+        \site{l9}{30:7pt};
+        \node at (4:12pt) {\scriptsize $l$};
+        \node at (176:12pt) {\scriptsize $r$};
+      \end{scope}
+      \begin{scope}[shift={(c10)}]
+        \n[n]{a10}{0,0};
+        \site{r10}{30:7pt};
+        \site{l10}{-30:7pt};
+        \node at (-56:12pt) {\scriptsize $l$};
+        \node at (56:12pt) {\scriptsize $r$};
+      \end{scope}
+    \end{scope}
+
+    \draw[emb] ($(a1)+(-55:12pt)$) to ($(a10)+(125:12pt)$);
+    \draw[emb] ($(a2)+(-40:12pt)$) to ($(a7)+(140:12pt)$);
+    \draw[emb] ($(a3)+(-30:12pt)$) to [out=-30,in=100] ($(a8)+(100:12pt)$);
+    \draw[emb] ($(a4)+(-60:12pt)$) to [out=-60,in=80 ] ($(a8)+(80:12pt)$);
+    \draw[emb] ($(a5)+(-70:12pt)$) to [out=-70,in=-30] ($(a9)+(-30:12pt)$);
+    \draw[emb] ($(a6)+(210:12pt)$) to [out=210,in=90 ] ($(a10)+(90:12pt)$);
+  \end{tikzpicture}
+\end{center}

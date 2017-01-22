@@ -439,6 +439,7 @@ However, $\rSGe_C$ has \emph{multi-sums}.
 \begin{lemma}\label{lemma:mg}
   For all pairs of contact maps over $C$,
   $g_1: G_1 \to C$ and $g_2: G_2 \to C$,
+  % there exists a finite set $I$ and a family of cospans ... with i \in I
   there exists a finite family of cospans
   $\theta^i_1: g_1 \to s_i \gets g_2 :\theta^i_2$,
   such that any cospan $\phi_1: g_1 \to h \gets g_2 :\phi_2\;$
@@ -462,6 +463,7 @@ However, $\rSGe_C$ has \emph{multi-sums}.
   Take subsets $A_i$ of the cartesian product
   of $\agents_{\anon{g_1}}$ and $\agents_{\anon{g_2}}$
   that have each agent of $g_1$ and $g_2$ at most once
+  ($(a,b) \in A_i \wedge (a,b') \in A_i \then b = b'$)
   and where each pair $(a,b) \in A_i$ has the same type,
   % that are type-compatible,
   \ie $g_{1,\agents}(a) = g_{2,\agents}(b)$.
@@ -537,6 +539,7 @@ However, $\rSGe_C$ has \emph{multi-sums}.
 
 The pairs $\theta^i_1,\theta^i_2$ enumerate
 all minimal ways in which one can glue $g_1$ and $g_2$.
+% and thus all the minimal contexts in which they can occur.
 Hence, we refer to them as minimal glueings.
 %
 The notion of multi-sum dates back to \citet{diers}.
@@ -547,6 +550,9 @@ The notion of multi-sum dates back to \citet{diers}.
 They are very close to relative pushouts \citep{leifer}
 and will be used in the same way,
 to minimise rewriting contexts.
+Indeed, each minimal glueing $i$
+in the family of cospans $\theta^i_1,\theta^i_2$
+accounts for one minimal rewriting context.
 
 To illustrate how this construction operates,
 consider the minimal glueings of the following
@@ -558,6 +564,148 @@ with their respective pullbacks.
 I have implemented an online tool that computes minimal glueings
 available at \url{https://rhz.github.com/thesis/mg.html}.
 Its source code can be found at \url{https://github.com/rhz/thesis/}.
+
+Using minimal glueings we can test whether
+a rule $r$ is $\shapes$-balanced,
+that is, whether $r$ consumes and produces
+the same number of instances of each energy pattern $p$
+when applied to any mixture $m$.
+In particular, for an $r$-event $\psi$
+to \emph{consume} an instance $\phi$ of $p$ in a mixture $m$,
+$\phi_\sites$ and $\psi_\sites$ must have images
+which intersect on at least one site which is modified by $r$
+(\eg by adding an edge if it was free)
+% or removing its edge).
+% This is the case iff the associated minimal glueing $(\phi',\psi')$
+This is the case iff
+the minimal glueing $\phi',\psi'$ of $r_L$ and $p$
+\begin{wrapfigure}[5]{r}{0.41\textwidth}
+  \vspace{-1.8em}
+  \begin{equation}
+    \label{eq:p-balanced}
+    \tikz[baseline=-1.1cm]{
+  % \begin{center}
+  %   \begin{tikzpicture}
+      \node (p) at (0,0) {$p$};
+      \node (m) at (1.8,0) {$s$};
+      \node (l) at (3.6,0) {$r_L$};
+      \node (h) at (1.8,-1.8) {$m$};
+      \draw[hom] (p) -- node[above] {$\phi'$} (m);
+      \draw[hom] (l) -- node[above] {$\psi'$} (m);
+      \draw[hom] (p) -- node[below left] {$\phi$} (h);
+      \draw[hom] (l) -- node[below right] {$\psi$} (h);
+      \draw[hom,dotted] (m) -- (h);}
+  %   \end{tikzpicture}
+  % \end{center}
+    \end{equation}
+\end{wrapfigure}
+that factors the cospan $\phi,\psi$ has the same property.
+Likewise, for an $r$-event to \emph{produce} an instance of $p$,
+the associated minimal glueing between $p$ and $r_R$
+must have a modified intersection.
+We call such minimal glueings \emph{relevant}.
+% ; they are the ones which underlie events
+% that can affect the instances of $p$.
+
+To illustrate the idea of relevant minimal glueings,
+let us consider a different example.
+In this example, the contact graph is very simple:
+just one agent type with two sites, $l$ and $r$,
+that can bind each other.
+% The maximally permissive set of generators rules
+% contains only one reversible rule.
+% One extension of this rule is
+Imagine we have the following reversible rule.
+\begin{center}
+  \begin{tikzpicture}[thick]
+    \node[grphnode,anchor=east] (lhs1) at (0,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{2.2,0};
+        \begin{scope}
+          \n[n]{x}{0,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n]{y}{0,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.2,0)}]
+          \n[n]{z}{0,0};
+          \site{lz}{z.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+    \path (lhs1.east) +(.3,0) edge[rule] +(1,0)
+      +(1.3,0) coordinate (r1);
+    \node[grphnode,anchor=west] (rhs1) at (r1) {
+      \tikz[ingrphdiag]{
+        \e{1.1,0}{2.3,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n]{x}{0,0};
+          \e{x}{.5,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.2,0)}]
+          \n[n]{y}{0,0};
+          \e{y}{-.5,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.3,0)}]
+          \n[n]{z}{0,0};
+          \site{lz}{z.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+  \end{tikzpicture}
+\end{center}
+Take the chain of 3 agents as our energy pattern.
+The minimal glueings of the left-hand side of the rule
+with the energy pattern are shown below.
+On the left of each diagram is the energy pattern.
+The relevant minimal glueings are marked
+with a light green background.
+\input{relevant-mg}
+
+% Given a rule $r$ and an energy pattern $p$,
+% whenever a minimal glueing $i$,
+% $\theta^i_1: p \to s_i \gets r_L :\theta^i_2$,
+% is so that $\theta^i_2$ is an iso,
+% then the energy pattern is fully included
+% into the left-hand side of the rule
+% and the rule is $\shapes$-balanced
+% when applied in any context that factors through
+% the minimal context $\theta^i_1,\theta^i_2$.
+% However, this will not be true for all minimal glueings
+% simply because some of them are irrelevant
+% with respect to the action of the rule.
+% In particular, a minimal glueing $i$ of $r_L$ and $p$
+% is \emph{relevant} only if ...
+
+Whenever $\psi': r_L \to s$ in \diagram{p-balanced} is an iso,
+then the energy pattern $p$ is fully included % contained
+in the left-hand side of the rule $r$.
+This implies the rule contains all the relevant context needed
+to make sure that an instance of $p$ is consumed
+by any $r$-event $\psi: r_L \to m$.
+% that an instance of $p$ is found in
+% the image of any embedding $\psi: r_L \to m$
+% and that it is consumed.
+We say that $r$ is $\shapes$-\emph{left-balanced} iff,
+for all $p \in \shapes$ and relevant minimal glueings
+$\theta^i_1: p \to s_i \gets r_L :\theta^i_2$,
+the right leg $\theta^i_2$ is an isomorphism.
+Symmetrically, one says that $r$ is $\shapes$-\emph{right-balanced}
+iff $\inv{r}$ is $\shapes$-left-balanced.
+Then $r$ is $\shapes$-\emph{balanced}
+iff it is $\shapes$-left- and $\shapes$-right-balanced.
 
 
 \section{Refinements}
@@ -821,6 +969,9 @@ is not in the image of $\psi_\agents$.
     \path (h) edge[rule] node[below] {$\theta$} (h');
   \end{tikzpicture}
 \end{center}
+
+% workaround to push the next lonely sentence to the next page
+\bigskip
 
 Rule application preserves epis
 and in fact also prefixes of epis:
