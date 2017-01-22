@@ -575,9 +575,7 @@ In particular, for an $r$-event $\psi$
 to \emph{consume} an instance $\phi$ of $p$ in a mixture $m$,
 $\phi_\sites$ and $\psi_\sites$ must have images
 which intersect on at least one site which is modified by $r$
-(\eg by adding an edge if it was free)
-% or removing its edge).
-% This is the case iff the associated minimal glueing $(\phi',\psi')$
+(\eg by adding an edge if it was free). % or removing its edge).
 This is the case iff
 the minimal glueing $\phi',\psi'$ of $r_L$ and $p$
 \begin{wrapfigure}[5]{r}{0.41\textwidth}
@@ -675,30 +673,12 @@ The relevant minimal glueings are marked
 with a light green background.
 \input{relevant-mg}
 
-% Given a rule $r$ and an energy pattern $p$,
-% whenever a minimal glueing $i$,
-% $\theta^i_1: p \to s_i \gets r_L :\theta^i_2$,
-% is so that $\theta^i_2$ is an iso,
-% then the energy pattern is fully included
-% into the left-hand side of the rule
-% and the rule is $\shapes$-balanced
-% when applied in any context that factors through
-% the minimal context $\theta^i_1,\theta^i_2$.
-% However, this will not be true for all minimal glueings
-% simply because some of them are irrelevant
-% with respect to the action of the rule.
-% In particular, a minimal glueing $i$ of $r_L$ and $p$
-% is \emph{relevant} only if ...
-
 Whenever $\psi': r_L \to s$ in \diagram{p-balanced} is an iso,
 then the energy pattern $p$ is fully included % contained
-in the left-hand side of the rule $r$.
+in the left-hand side of rule $r$.
 This implies the rule contains all the relevant context needed
 to make sure that an instance of $p$ is consumed
 by any $r$-event $\psi: r_L \to m$.
-% that an instance of $p$ is found in
-% the image of any embedding $\psi: r_L \to m$
-% and that it is consumed.
 We say that $r$ is $\shapes$-\emph{left-balanced} iff,
 for all $p \in \shapes$ and relevant minimal glueings
 $\theta^i_1: p \to s_i \gets r_L :\theta^i_2$,
@@ -707,6 +687,11 @@ Symmetrically, one says that $r$ is $\shapes$-\emph{right-balanced}
 iff $\inv{r}$ is $\shapes$-left-balanced.
 Then $r$ is $\shapes$-\emph{balanced}
 iff it is $\shapes$-left- and $\shapes$-right-balanced.
+
+% \begin{lemma}
+%   If $r$ is $\shapes$-left- and $\shapes$-right-balanced,
+%   then $r$ is $\shapes$-balanced.
+% \end{lemma}
 
 
 \section{Refinements}
@@ -1225,17 +1210,40 @@ An example of growth policy is the \emph{ground} policy
 which assigns all possible sites to all agents.
 In this case, $\gp(g)$ is simply the set, possibly infinite,
 of all epis of $g$ into mixtures, considered up to $\cong_g$.
-$\gp(r)$, the ground refinement of $r$,
-contains all refinements of $r$ along those epis,
-which therefore directly manipulate mixtures.
-It is easy to see that the ground refinement
-of our example is infinite,
-since each of the three rules
+The ground refinement $\gp(r)$ % of $r$
+contains all refinements of $r$ along those epis.
+The refined rules therefore manipulate mixtures directly.
+It is easy to see that the ground refinement of $r^+_{12}$
+in our example is infinite,
+since $r^+_{12}$ % each of the three rules
 can trigger the extension of a chain of any length.
+A similar argument is true for $r^-_{12}$.
+Note that ground extensions of a rule $r$
+are trivially $\shapes$-balanced but, in general,
+the ground refinement is impractically large or infinite as above.
+Instead, the growth policy that we introduce
+in the next section % \sct{energy-gp}
+will always be finite.
 
 
-\section{Thermodynamical growth policy} % Energy-based refinement}
+\section{Thermodynamic growth policy} % Energy-based refinement}
 \label{sec:energy-gp}
+
+% We say that a balanced extension $\phi$ is \emph{prime}
+% iff it is minimally so,
+% \ie any prefix of $\phi$ that is $\shapes$-balanced
+% is isomorphic to $\phi$ as an extension of $r_L$.
+% Prime extensions are epis since erasing an `untouched'
+% connected component in the codomain preserves balance.
+
+% If $\phi$ is a $\shapes$-balanced extension of $r$,
+% the refined rule $r_\phi$
+% has a \emph{balance vector} in $\ZZ^\shapes$,
+% written $\Delta\phi$, where, for each $p \in \shapes$,
+% $\Delta\phi(p)$ is the number of copies of $p$
+% produced by \emph{any} $r_\phi$-event,
+% which is also the difference between the number of embeddings
+% of $p$ in the right-hand and the left-hand side of $r_\phi$.
 
 
 \section{Linear kinetic model}
