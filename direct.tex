@@ -105,9 +105,10 @@ More generally, we define $\shapes$-balanced as follows.
   a rule $r$ is $\shapes$-balanced
   if, for all mixtures $m$ and embeddings $\psi: r_L \to m$,
   the number of ocurrences of $p \in \shapes$
-  produced and consumed by $r$ is a fixed number $\Delta_r p$,
-  \ie $\matches{p}{m} - \matches{p}{m} = \Delta_r p$
-  holds for all $p \in \shapes$.
+  produced and consumed by $r$ when applied to $\psi$
+  is a fixed number $\Delta_r p$,
+  \ie $\matches{p}{m} - [p;m^{(r,\psi)}] = \Delta_r p\;$
+  for all $p \in \shapes$.
   % We refer to the vector of ocurrence changes as $\Delta_r \shapes$.
 \end{definition}
 % TODO: perhaps add a remark about unambiguous stoichiometry
