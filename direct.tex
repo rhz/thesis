@@ -579,6 +579,7 @@ to \emph{consume} an instance $\phi$ of $p$ in a mixture $m$,
 $\phi_\sites$ and $\psi_\sites$ must have images
 which intersect on at least one site which is modified by $r$
 (\eg by adding an edge if it was free). % or removing its edge).
+% Otherwise the energy pattern is left intact by the action of the rule.
 This is the case iff
 the minimal glueing $\phi',\psi'$ of $r_L$ and $p$
 \begin{wrapfigure}[5]{r}{0.41\textwidth}
@@ -589,14 +590,14 @@ the minimal glueing $\phi',\psi'$ of $r_L$ and $p$
   % \begin{center}
   %   \begin{tikzpicture}
       \node (p) at (0,0) {$p$};
-      \node (m) at (1.8,0) {$s$};
+      \node (s) at (1.8,0) {$s$};
       \node (l) at (3.6,0) {$r_L$};
-      \node (h) at (1.8,-1.8) {$m$};
-      \draw[hom] (p) -- node[above] {$\phi'$} (m);
-      \draw[hom] (l) -- node[above] {$\psi'$} (m);
-      \draw[hom] (p) -- node[below left] {$\phi$} (h);
-      \draw[hom] (l) -- node[below right] {$\psi$} (h);
-      \draw[hom,dotted] (m) -- (h);}
+      \node (m) at (1.8,-1.8) {$m$};
+      \draw[hom] (p) -- node[above] {$\phi'$} (s);
+      \draw[hom] (l) -- node[above] {$\psi'$} (s);
+      \draw[hom] (p) -- node[below left] {$\phi$} (m);
+      \draw[hom] (l) -- node[below right] {$\psi$} (m);
+      \draw[hom,dotted] (s) -- (m);}
   %   \end{tikzpicture}
   % \end{center}
     \end{equation}
@@ -766,8 +767,11 @@ iff it is $\shapes$-left- and $\shapes$-right-balanced.
 A rule is refined into another rule by adding context.
 For example, we can add a common neighbour
 to the agents in $r^+_{12}$ to obtain a refinement.
-\begin{center}
-  \begin{tikzpicture}
+% \begin{center}
+%   \begin{tikzpicture}
+\begin{equation}
+  \label{eq:refined1}
+  \tikz[baseline=-.16cm]{
     \node[grphnode,anchor=east] (lhs) at (0,0) {
       \tikz[ingrphdiag]{
         \e{0,0}{-56.944:1.1};
@@ -826,12 +830,17 @@ to the agents in $r^+_{12}$ to obtain a refinement.
           \node at (34:12pt) {\scriptsize $l$};
         \end{scope}
       }};
-  \end{tikzpicture}
-\end{center}
+  }
+\end{equation}
+%   \end{tikzpicture}
+% \end{center}
 This refinement happens to be $\shapes$-balanced.
 Another refinement of $r^+_{12}$ could be
-\begin{center}
-  \begin{tikzpicture}
+% \begin{center}
+%   \begin{tikzpicture}
+\begin{equation}
+  \label{eq:refined2}
+  \tikz[baseline=-.16cm]{
     \node[grphnode,anchor=east] (lhs) at (0,0) {
       \tikz[ingrphdiag]{
         \begin{scope}[shift={(0,0)}]
@@ -870,8 +879,10 @@ Another refinement of $r^+_{12}$ could be
           \node at (26:.42) {\scriptsize $r$};
         \end{scope}
       }};
-  \end{tikzpicture}
-\end{center}
+  }
+\end{equation}
+%   \end{tikzpicture}
+% \end{center}
 Here we have added a free site to the blue node.
 This second refinement is also $\shapes$-balanced
 because the free $r$ site on the blue node guarantees that
@@ -1244,11 +1255,9 @@ an exhaustive collection of mutually exclusive sub-cases.
 % in both directions to push around the $z$ site.
 
 Given a rule $r$ and an extension $\phi: r_L \to g$, % of $r_L$,
-$r_\phi$ denotes the refined rule associated to $\phi$,
-% we write $r_\phi$ for the refined rule associated to $\phi$;
+we write $r_\phi$ for the refined rule associated to $\phi$,
+% $r_\phi$ denotes the refined rule associated to $\phi$,
 that is, $r_\phi$ is the pair $(g,g^{(r,\phi)})$.
-% with $\comatch{g}$ the codomain of the extension $\comatch{\phi}$
-% corresponding to $\phi$.
 %
 Given $\gp$ a growth policy for $r_L$,
 we write $\gp(r)$ for the family of rules
@@ -1268,9 +1277,9 @@ in our example is infinite,
 since $r^+_{12}$ % each of the three rules
 can trigger the extension of a chain of any length.
 A similar argument is true for $r^-_{12}$.
-Note that ground extensions of a rule $r$
+Note that ground refinements of a rule $r$
 are trivially $\shapes$-balanced but, in general,
-the ground refinement is impractically large or infinite as above.
+the set of refined rules is impractically large or infinite as above.
 Instead, the growth policy that we introduce
 in the next section % \sct{energy-gp}
 will always be finite.
@@ -1278,6 +1287,117 @@ will always be finite.
 
 \section{Thermodynamic growth policy} % Energy-based refinement}
 \label{sec:energy-gp}
+
+An extension $\phi$ of a rule $r$ is $\shapes$-balanced
+if it generates a refined rule $r_\phi$ that is $\shapes$-balanced.
+To find such extensions % $\shapes$-balanced extensions of a rule $r$,
+it seems natural to use minimal glueings:
+take as extensions the right leg $\theta^i_2$
+of each relevant minimal glueing
+$\theta^i_1: p \to s_i \gets r_L :\theta^i_2$
+of $p \in \shapes$ and $r_L$ (or $r_R$).
+For instance, the only relevant minimal glueing of
+the right-hand side of $r^+_{12}$ and the triangle is
+\begin{center}
+  \begin{tikzpicture}[thick]
+    \begin{scope}
+      %%% Rhs: 1-2 %%%
+      \node[grphnode,anchor=south] (rr) at (150:2.5) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{1.1,0};
+          \begin{scope}
+            \n[n1]{n1}{0,0};
+            \site{r1}{n1.east};
+            \node at (26:.42) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(1.1,0)}]
+            \n[n2]{n2}{0,0};
+            \site{l2}{n2.west};
+            \node at (206:.42) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% Triangle %%%
+      \node[grphnode,anchor=south] (p) at (30:2.5) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0:1.1};
+          \e{0,0}{-60:1.1};
+          \e{0:1.1}{-60:1.1};
+          \begin{scope}[shift={(0,0)}]
+            \n[n1]{x}{0,0};
+            \site{r1}{0:7pt};
+            \site{l1}{-60:7pt};
+            \node at (-86:12pt) {\scriptsize $l$};
+            \node at (26:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(0:1.1)}]
+            \n[n2]{y}{0,0};
+            \site{r2}{180:7pt};
+            \site{l2}{-120:7pt};
+            \node at (154:12pt) {\scriptsize $l$};
+            \node at (-94:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(-60:1.1)}]
+            \n[n3]{z}{0,0};
+            \site{r3}{120:7pt};
+            \site{l3}{60:7pt};
+            \node at (146:12pt) {\scriptsize $r$};
+            \node at (34:12pt) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      %%% Triangle %%%
+      \node[grphnode,anchor=north] (mg) at (0,0) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0:1.1};
+          \e{0,0}{-60:1.1};
+          \e{0:1.1}{-60:1.1};
+          \begin{scope}[shift={(0,0)}]
+            \n[n1]{x}{0,0};
+            \site{r1}{0:7pt};
+            \site{l1}{-60:7pt};
+            \node at (-86:12pt) {\scriptsize $l$};
+            \node at (26:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(0:1.1)}]
+            \n[n2]{y}{0,0};
+            \site{r2}{180:7pt};
+            \site{l2}{-120:7pt};
+            \node at (154:12pt) {\scriptsize $l$};
+            \node at (-94:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(-60:1.1)}]
+            \n[n3]{z}{0,0};
+            \site{r3}{120:7pt};
+            \site{l3}{60:7pt};
+            \node at (146:12pt) {\scriptsize $r$};
+            \node at (34:12pt) {\scriptsize $l$};
+          \end{scope}
+        }};
+
+      \draw[-bigto,opacity=.7]
+      ($(rr.south)!.1!(mg.north)$)
+      -- node[pos=.4,below left,opacity=1] {$\comatch{\phi}$}
+      ($(rr.south)!.9!(mg.north)$);
+      % \arrsn[opacity=.7]{rr}{mg};
+      \arrsn[opacity=.7]{p}{mg};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+If we use $\phi$ ---
+the embedding coresponding to $\comatch{\phi}$
+on the left-hand side ---
+as an extension of $r^+_{12}$
+we obtain rule~\ref{eq:refined1}.
+Now, having found the only extension of $r^+_{12}$
+that produces a triangle,
+we are left with the problem of finding
+the extensions that cover the cases when $r^+_{12}$
+can be applied without producing a triangle.
+Intuitively, one must handle the cases
+when the $l$ site of the orange node
+or the $r$ site of the blue node are free
+(as in rule~\ref{eq:refined2}).
 
 % We say that a balanced extension $\phi$ is \emph{prime}
 % iff it is minimally so,
