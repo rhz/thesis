@@ -691,7 +691,6 @@ iff $\inv{r}$ is $\shapes$-left-balanced.
 Then $r$ is $\shapes$-\emph{balanced}
 iff it is $\shapes$-left- and $\shapes$-right-balanced.
 
-% \renewcommand{\mg}{\mathbf{G}}
 \begin{lemma}
   Rule $r$ is $\shapes$-balanced if and only if
   $r$ is $\shapes$-left- and $\shapes$-right-balanced.
@@ -709,12 +708,7 @@ iff it is $\shapes$-left- and $\shapes$-right-balanced.
   with respect to a pattern $p \in \shapes$,
   \ie $|[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}} \neq
   |[p;n^{(r,\phi)}]| - \abs{\matches{p}{n}}$.
-  % We have $\abs{\matches{p}{m}} = \abs{\set{p \to m \gets r_L}}
-  % = \abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}$,
-  % where $\mg(p, r_L)$ is the set of minimal glueings of $p$ and $r_L$,
-  % and $\abs{\matches{p}{n}} = \abs{\set{p \to n \gets r_L}}
-  % = \abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}$.
-  % Denote by $\mg(p, r_L)$ the set of minimal glueings of $p$ and $r_L$.
+  %
   We have
   \begin{equation*}
     \abs{\matches{p}{m}} = |\{p \to m \getsby{\psi} r_L\}|
@@ -729,36 +723,17 @@ iff it is $\shapes$-left- and $\shapes$-right-balanced.
       \draw[hom] (l) -- node[below right] {$\psi$} (m);
       \draw[hom,dotted] (s) -- (m);}}}
   \end{equation*}
-  % \begin{gather*}
-  %   \abs{\matches{p}{m}} = \abs{\set{p \to m \gets r_L}}
-  %   = \abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}
-  %   = \bar{\mg}(p,r_L,m) \\
-  %   \abs{\matches{p}{n}} = \abs{\set{p \to n \gets r_L}}
-  %   = \abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}
-  %   = \bar{\mg}(p,r_L,n)
-  % \end{gather*}
   where $p \to s \gets r_L$ is the minimal glueing
   that factors the cospan $p \to m \getsby{\psi} r_L$.
   A similar equality can be obtained for $r_R$,
   $m^{(r,\psi)}$ and $\comatch{\psi}$.
+  %
   The \emph{irrelevant} minimal glueings on each side of the rule
   are in bijection: the rule does not destroy nor create them.
   Hence, when taking the difference
   $|[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}}$
   they cancel each other out and we are left with
   a difference of \emph{relevant} minimal glueings on each side.
-  %
-  % Irrelevant minimal glueings on the left- and right-hand side
-  % cancel each other out,
-  % as ...
-  % Whenever $\phi_\sites$ and $\psi_\sites$ have an empty
-  %
-  % The number of cospans $p \to m \gets r_L$
-  % % that factor through \emph{irrelevant} minimal glueings
-  % % is the same as those cospans $p \to m^{(r,\psi)} \gets r_R$
-  % with an empty intersection is the same as the number of cospans
-  % $p \to m^{(r,\psi)} \gets r_R$ with an empty intersection,
-  % since $r$ can only create or destroy edges in the image of $\psi$.
   %
   Since $s \iso r_L$ for each relevant minimal glueing on the left
   then
@@ -775,16 +750,6 @@ iff it is $\shapes$-left- and $\shapes$-right-balanced.
       \draw[hom,dotted] (s) -- (m);}}}
     = \abs{\matches{p}{r_L}}
   \end{equation*}
-  % $\abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}
-  % = \abs{\matches{r_L}{m}}$ and
-  % $\abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}
-  % = \abs{\matches{r_L}{n}}$.
-  % \begin{gather*}
-  %   \abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}
-  %   = \abs{\matches{p}{r_L}} \abs{\matches{r_L}{m}} \\
-  %   \abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}
-  %   = \abs{\matches{p}{r_L}} \abs{\matches{r_L}{n}}
-  % \end{gather*}
   Again, a similar equality can be obtained for $r_R$,
   $m^{(r,\psi)}$ and $\comatch{\psi}$.
   Thus we have proved that
