@@ -97,7 +97,7 @@ Whenever a rule produces the same energy change
 regardless of where it is applied
 we say that the rule has an \emph{unambiguous energy balance}
 or is $\shapes$-balanced.
-More generally, we define $\shapes$-balanced as follows.
+More generally, we define $\shapes$-balance as follows.
 
 \begin{definition}
   Given a contact graph $C$
@@ -106,9 +106,12 @@ More generally, we define $\shapes$-balanced as follows.
   if, for all mixtures $m$ and embeddings $\psi: r_L \to m$,
   the number of ocurrences of $p \in \shapes$
   produced and consumed by $r$ when applied to $\psi$
-  is a fixed number $\Delta_r p$,
-  \ie $\matches{p}{m} - [p;m^{(r,\psi)}] = \Delta_r p\;$
-  for all $p \in \shapes$.
+  is a fixed number
+  $\Delta_r p = |[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}}$.
+  % is a fixed number $\Delta_r p$,
+  % \ie $|[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}} = \Delta_r p\;$
+  % for all $p \in \shapes$.
+  We refer to $\Delta_r p$ as the balance of $r$ with respect to $p$.
   % We refer to the vector of ocurrence changes as $\Delta_r \shapes$.
 \end{definition}
 % TODO: perhaps add a remark about unambiguous stoichiometry
@@ -688,10 +691,108 @@ iff $\inv{r}$ is $\shapes$-left-balanced.
 Then $r$ is $\shapes$-\emph{balanced}
 iff it is $\shapes$-left- and $\shapes$-right-balanced.
 
-% \begin{lemma}
-%   If $r$ is $\shapes$-left- and $\shapes$-right-balanced,
-%   then $r$ is $\shapes$-balanced.
-% \end{lemma}
+% \renewcommand{\mg}{\mathbf{G}}
+\begin{lemma}
+  Rule $r$ is $\shapes$-balanced if and only if
+  $r$ is $\shapes$-left- and $\shapes$-right-balanced.
+  Moreover, for any mixture $m$ and embedding $\psi: r_L \to m$,
+  \[ \Delta_r p = |[p;m^{(r,\psi)}]| % \abs{\matches{p}{\comatch{m}}}
+                - \abs{\matches{p}{m}}
+                = \abs{\matches{p}{r_R}}
+                - \abs{\matches{p}{r_L}} \]
+\end{lemma}
+\begin{proof}
+  Suppose there are two mixtures $m$, $n$
+  and embeddings $\psi: r_L \to m$, $\phi: r_L \to n$
+  such that, when $r$ is applied to $\psi$ and $\phi$,
+  it has a different balance
+  with respect to a pattern $p \in \shapes$,
+  \ie $|[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}} \neq
+  |[p;n^{(r,\phi)}]| - \abs{\matches{p}{n}}$.
+  % We have $\abs{\matches{p}{m}} = \abs{\set{p \to m \gets r_L}}
+  % = \abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}$,
+  % where $\mg(p, r_L)$ is the set of minimal glueings of $p$ and $r_L$,
+  % and $\abs{\matches{p}{n}} = \abs{\set{p \to n \gets r_L}}
+  % = \abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}$.
+  % Denote by $\mg(p, r_L)$ the set of minimal glueings of $p$ and $r_L$.
+  We have
+  \begin{equation*}
+    \abs{\matches{p}{m}} = |\{p \to m \getsby{\psi} r_L\}|
+    = \abs{\set{\tikz[baseline=-.6cm,x=1.2cm,y=1.2cm]{
+      \node (p) at (0,0) {$p$};
+      \node (s) at (1,0) {$s$};
+      \node (l) at (2,0) {$r_L$};
+      \node (m) at (1,-1) {$m$};
+      \draw[hom] (p) -- (s);
+      \draw[hom] (p) -- (m);
+      \draw[hom] (l) -- (s);
+      \draw[hom] (l) -- node[below right] {$\psi$} (m);
+      \draw[hom,dotted] (s) -- (m);}}}
+  \end{equation*}
+  % \begin{gather*}
+  %   \abs{\matches{p}{m}} = \abs{\set{p \to m \gets r_L}}
+  %   = \abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}
+  %   = \bar{\mg}(p,r_L,m) \\
+  %   \abs{\matches{p}{n}} = \abs{\set{p \to n \gets r_L}}
+  %   = \abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}
+  %   = \bar{\mg}(p,r_L,n)
+  % \end{gather*}
+  where $p \to s \gets r_L$ is the minimal glueing
+  that factors the cospan $p \to m \getsby{\psi} r_L$.
+  A similar equality can be obtained for $r_R$,
+  $m^{(r,\psi)}$ and $\comatch{\psi}$.
+  The \emph{irrelevant} minimal glueings on each side of the rule
+  are in bijection: the rule does not destroy nor create them.
+  Hence, when taking the difference
+  $|[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}}$
+  they cancel each other out and we are left with
+  a difference of \emph{relevant} minimal glueings on each side.
+  %
+  % Irrelevant minimal glueings on the left- and right-hand side
+  % cancel each other out,
+  % as ...
+  % Whenever $\phi_\sites$ and $\psi_\sites$ have an empty
+  %
+  % The number of cospans $p \to m \gets r_L$
+  % % that factor through \emph{irrelevant} minimal glueings
+  % % is the same as those cospans $p \to m^{(r,\psi)} \gets r_R$
+  % with an empty intersection is the same as the number of cospans
+  % $p \to m^{(r,\psi)} \gets r_R$ with an empty intersection,
+  % since $r$ can only create or destroy edges in the image of $\psi$.
+  %
+  Since $s \iso r_L$ for each relevant minimal glueing on the left
+  then
+  \begin{equation*}
+    \abs{\set{\tikz[baseline=-.6cm,x=1.2cm,y=1.2cm]{
+      \node (p) at (0,0) {$p$};
+      \node (s) at (1,0) {$s$};
+      \node (l) at (2,0) {$r_L$};
+      \node (m) at (1,-1) {$m$};
+      \draw[hom] (p) -- (s);
+      \draw[hom] (p) -- (m);
+      \path (l) -- node[onarrow] {$\iso$} (s);
+      \draw[hom] (l) -- node[below right] {$\psi$} (m);
+      \draw[hom,dotted] (s) -- (m);}}}
+    = \abs{\matches{p}{r_L}}
+  \end{equation*}
+  % $\abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}
+  % = \abs{\matches{r_L}{m}}$ and
+  % $\abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}
+  % = \abs{\matches{r_L}{n}}$.
+  % \begin{gather*}
+  %   \abs{\setof{s_i \to m}{p \to s_i \gets r_L \in \mg(p, r_L)}}
+  %   = \abs{\matches{p}{r_L}} \abs{\matches{r_L}{m}} \\
+  %   \abs{\setof{s_i \to n}{p \to s_i \gets r_L \in \mg(p, r_L)}}
+  %   = \abs{\matches{p}{r_L}} \abs{\matches{r_L}{n}}
+  % \end{gather*}
+  Again, a similar equality can be obtained for $r_R$,
+  $m^{(r,\psi)}$ and $\comatch{\psi}$.
+  Thus we have proved that
+  $|[p;m^{(r,\psi)}]| - \abs{\matches{p}{m}} =
+  \abs{\matches{p}{r_R}} - \abs{\matches{p}{r_L}}$
+  for any $m$ and $\psi$,
+  contradicting our original assumption.
+\end{proof}
 
 
 \section{Refinements}
@@ -957,7 +1058,7 @@ is not in the image of $\psi_\agents$.
 \end{center}
 
 % workaround to push the next lonely sentence to the next page
-\bigskip
+% \bigskip
 
 Rule application preserves epis
 and in fact also prefixes of epis:
