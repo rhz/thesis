@@ -1304,9 +1304,13 @@ $\theta^i_1: p \to s_i \gets r_L :\theta^i_2$
 of $p \in \shapes$ and $r_L$ (or $r_R$).
 For instance, the only relevant minimal glueing of
 the right-hand side of $r^+_{12}$ and the triangle is
-\begin{center}
-  \resizebox{.36\linewidth}{!}{%
-  \begin{tikzpicture}[thick]
+% \begin{center}
+%   \resizebox{.36\linewidth}{!}{%
+%   \begin{tikzpicture}[thick]
+\begin{equation}
+  \label{eq:triangle-mg}
+  \resizebox{.37\linewidth}{!}{%
+  \tikz[baseline=-.16cm]{
     \begin{scope}
       %%% Rhs: 1-2 %%%
       \node[grphnode,anchor=south] (rr) at (150:2.5) {
@@ -1389,8 +1393,10 @@ the right-hand side of $r^+_{12}$ and the triangle is
       % \arrsn[opacity=.7]{rr}{mg};
       \arrsn[opacity=.7]{p}{mg};
     \end{scope}
-  \end{tikzpicture}}
-\end{center}
+  }}
+\end{equation}
+%   \end{tikzpicture}}
+% \end{center}
 If we use $\phi$ ---
 the embedding corresponding to $\comatch{\phi}$
 on the left-hand side ---
@@ -1417,11 +1423,11 @@ In rule~\ref{eq:refined2}
 we add a free $r$ site to the blue node.
 The following rule adds
 a free $l$ site to the orange node.
-\begin{center}
-  \begin{tikzpicture}
-% \begin{equation*}
-%   \label{eq:refined3}
-%   \tikz[baseline=-.16cm]{
+% \begin{center}
+%   \begin{tikzpicture}
+\begin{equation}
+  \label{eq:refined3}
+  \tikz[baseline=-.16cm]{
     \node[grphnode,anchor=east] (lhs) at (0,0) {
       \tikz[ingrphdiag]{
         \begin{scope}[shift={(0,0)}]
@@ -1459,10 +1465,10 @@ a free $l$ site to the orange node.
           \node at (206:.42) {\scriptsize $l$};
         \end{scope}
       }};
-%   }
-% \end{equation}
-  \end{tikzpicture}
-\end{center}
+  }
+\end{equation}
+%   \end{tikzpicture}
+% \end{center}
 Both extensions are minimally $\shapes$-balanced
 because any prefix of them that is $\shapes$-balanced
 is isomorphic to them as an extension of $r_L$.
@@ -1730,7 +1736,50 @@ Additionally, cases like the following have to be handled.
 
 It is thus apparent that
 an energy-based rule refinement has to proceed
-cautiously to be exhaustive and non-overlapping.
+cautiously to be exhaustive and mutually exclusive. % non-overlapping.
+This is where our growth policy technique
+comes in handy to define such refinements.
+It divides the problem in a much simpler group of problems:
+Each extension $\phi$ must declare the set of sites
+that it requires to be mature and thus $\shapes$-balanced.
+Minimal glueings play a guiding role here.
+They tell us whether an extension has successfully
+avoided or absorbed completely an energy pattern.
+
+In our example, we extend our rule $r^+_{12}$
+step by step to see this idea in action.
+First take no extension at all or,
+more precisely, take the identity arrow $\id$ as an extension.
+On the left-hand side there is only one minimal glueing,
+the disjoint union, which, as it is always the case,
+is irrelevant.
+On the right-hand side instead we have two minimal glueings:
+the disjoint union and the triangle itself,
+as in \diagram{triangle-mg}.
+The latter is indeed relevant and informs us
+of which sites are missing in the extension,
+namely the $l$ site on the orange node
+and the $r$ site on the blue node.
+So we ask for both and set $\gp_{\id}(u) = \set{l,r}$
+for all $u \in \agents_{\anon{r_L}}$.
+% Due to faithfulness,
+% every mature extension of $r^+_{12}$ must include both sites.
+Now let us add one of them as a free site
+and ask again which sites each agent requires.
+This extension, call it $\phi_{l1}$, has codomain
+the left-hand side of rule~\ref{eq:refined3}.
+The codomain of the corresponding extension on the right-hand side,
+$\comatch{\phi_{l1}}$,
+does not glue relevantly with the triangle anymore.
+However, $\id$ is a prefix of $\phi_{l1}$
+and hence, due to faithfulness,
+$\gp_{\phi_{l1}}$ should ask for the same sites
+that $\gp_{\id}$ does,
+\ie $\gp_{\phi_{l1}}(u) = \gp_{\id}(u)$
+for all agents $u$ in the domain of $\gp_{\id}$.
+Here again caution must be exercised.
+The solution is to remember which sites have been asked for
+in the past and to keep asking for them in future extensions.
 
 
 
