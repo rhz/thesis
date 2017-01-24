@@ -1766,23 +1766,94 @@ for all $u \in \agents_{\anon{r_L}}$.
 % every mature extension of $r^+_{12}$ must include both sites.
 Now let us add one of them as a free site
 and ask again which sites each agent requires.
-This extension, call it $\phi_{l1}$, has codomain
+This extension, call it $\phi_1$, has codomain
 the left-hand side of rule~\ref{eq:refined3}.
-The codomain of the corresponding extension on the right-hand side,
-$\comatch{\phi_{l1}}$,
+The codomain of the corresponding extension $\comatch{\phi_1}$
+on the right-hand side
 does not glue relevantly with the triangle anymore.
-However, $\id$ is a prefix of $\phi_{l1}$
+However, $\id$ is a prefix of $\phi_1$
 and hence, due to faithfulness,
-$\gp_{\phi_{l1}}$ should ask for the same sites
+$\gp_{\phi_1}$ should ask for the same sites
 that $\gp_{\id}$ does,
-\ie $\gp_{\phi_{l1}}(u) = \gp_{\id}(u)$
-for all agents $u$ in the domain of $\gp_{\id}$.
+\ie $\gp_{\phi_1}(u) = \gp_{\id}(u)$
+for all agents $u$ in the image of $\id$. % in the domain of $\gp_{\id}$.
 Here again caution must be exercised.
 The solution is to remember which sites have been asked for
 in the past and to keep asking for them in future extensions.
 
+Given contact graph $C$ and $r$ in $\generators$
+we define our growth policy $\gp$ for $r_L$ as follows.
+% We define our growth policy $\gp$ for $r_L$ as follows.
+Suppose $\phi: r_L \to g$ is an extension of $r_L$.
+We set $\gp_\phi$ to request
+a site $z$ in $\sitemap_C^{-1}(g_\agents(u))$
+at agent $u$ in $\agents_{\anon{g}}$ iff either
+% (i) there is an agent $u_0$ with a site $z_0$ in $r_L$
+% such that $u=\phi(u_0)$ and $s = r_L(z_0)$; or
+(i) $u = \phi_\agents(u_0)$ and $z = \phi_\sites(z_0)$
+for some $u_0$ in $\agents_{\anon{r_L}}$ and
+$z_0$ in $\sites_{\anon{r_L}}$; or
+(ii) $\phi$ factorises as $\phi_2 \, \phi_1$,
+where $\phi_1: r_L \to g_1$,
+and there is a relevant minimal glueing
+$\gamma: p \to s \gets g_1 :\theta$,
+with $p$ in $\shapes$,
+and some $u_1$ in $\agents_{\anon{g_1}}$
+and a site $z_1$ in $\sitemap_{\anon{s}}^{-1}(\theta_\agents(u_1))$
+such that $u = \phi_{2,\agents}(u_1)$ and $z = s_\sites(z_1)$.
+In words, clause (i) ensures
+that all sites in $r_L$ are asked for\footnote{
+  Otherwise every extension would be overgrown.}
+while clause (ii) adds sites $z$ in $\sites_C$
+corresponding to sites $z_1$ in $\sites_{\anon{s}}$
+which appear by glueing with $p$
+at some point between $r_L$ and $g$.
+\begin{equation}
+  \label{eq:energy-gp}
+  \tikz[baseline=-2.5,thick]{
+    \node (p) at (0,0) {$p$};
+    \node (s) at (2,-1.2) {$s$};
+    \node (l) at (4,1.8) {$r_L$};
+    \node (g1) at (4,0) {$g_1$};
+    \node[anchor=east] at (g1) {$u_1 \!\in{}\,$};
+    \node (g) at (6,-1.2) {$g$};
+    \node[anchor=west] at (g) {${}\ni u$};
+    \draw[hom] (l) -- node[pos=.45,left] {$\phi_1$} (g1);
+    \draw[hom] (p) -- node[below left] {$\gamma$} (s);
+    \draw[hom] (g1) -- node[below right] {$\theta$} (s);
+    \draw[hom] (g1) -- node[below left] {$\phi_2$} (g);
+    \draw (l) edge[hom,bend left=30] node[above right] {$\phi$} (g);
+  }
+\end{equation}
+We refer to the extension $\phi_2: g_1 \to g$
+as a \emph{rewind} of $\phi$
+and say that the request of $z$ at $u$ originates from $u_1$.
+By rewinding extensions we can remember
+which sites have been asked for in the past.
+% The first clause simply ensures
+% that all sites in $r_L$ are asked for.\footnote{
+%   Otherwise every extension would be overgrown.}
+% The second clause adds in sites which appear by
+% glueing with $p$ at some point between $r_L$ and $g$.
+% and implements the absorb-or-avoid constraint explained beforehand.
+
+Symmetrically, we define a growth policy $\comatch{\gp}$ for $r_R$
+by applying the same definition to the reverse generator $\inv{r}$.
+% Since extensions of $r_L$ and $r_R$ are isomorphic,
+% we can, with a slight abuse of notation,
+% define $\gp^\shapes := \gp \union \comatch{\gp}$.
+Finally, we define our growth policy $\gp^\shapes$
+as the union of both growth policies,
+that is, $\gp^\shapes_\phi(u) = \gp_\phi(u)
+\,\cup\, \comatch{\gp_{\comatch{\phi}}}(u)$.
 
 
+
+
+
+
+\section{Rates}
+\label{sec:rates}
 
 
 \section{Linear kinetic model}
