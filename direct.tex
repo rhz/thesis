@@ -1800,14 +1800,21 @@ $\gamma: p \to s \gets g_1 :\theta$,
 with $p$ in $\shapes$,
 and some $u_1$ in $\agents_{\anon{g_1}}$
 and a site $z_1$ in $\sitemap_{\anon{s}}^{-1}(\theta_\agents(u_1))$
-such that $u = \phi_{2,\agents}(u_1)$ and $z = s_\sites(z_1)$.
+such that $u = \phi_{2,\agents}(u_1)$ and $z = s_\sites(z_1)$; or
+(iii) $z = g_\sites(z_2)$ for some $z_2$ in $\sites_{\anon{g}}$
+such that $z_2 \edges_{\anon{g}} z_3$
+and $g_\sites(z_3)$ in $\gp_\phi(u)$.
 In words, clause (i) ensures
-that all sites in $r_L$ are asked for\footnote{
-  Otherwise every extension would be overgrown.}
+that all sites in $r_L$ are asked for % \footnote{
+%   Otherwise every extension would be overgrown.}
 while clause (ii) adds sites $z$ in $\sites_C$
 corresponding to sites $z_1$ in $\sites_{\anon{s}}$
 which appear by glueing with $p$
 at some point between $r_L$ and $g$.
+Clause (iii), on the other hand,
+asks for sites that are bound to sites
+that are requested by the growth policy
+so that extensions that avoid minimal glueings are not overgrown.
 \begin{equation}
   \label{eq:energy-gp}
   \tikz[baseline=-2.5,thick]{
