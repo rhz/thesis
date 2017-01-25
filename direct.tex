@@ -3,7 +3,7 @@ and their forward and backward rate constants from an energy function.
 In the spirit of rule-based modelling languages like Kappa
 where rules and observables are defined in terms of patterns,\footnote{
   Recall that a pattern is a contact map used to find subgraphs in states.}
-we use a set of \emph{energy patterns} $\shapes$
+we use a set of connected \emph{energy patterns} $\shapes$
 for our energy function.
 We assign an \emph{energy cost} $\cost(g)$ to each of them
 and build the energy function as a linear combination
@@ -250,6 +250,7 @@ $r^+_{12}$ is not $\shapes$-balanced.
     \path (lhs2.south) +(0,-.2) edge[rule] +(0,-.6);
     \node[grphnode,anchor=east] (lhs4) at (9,-2.4) {
       \tikz[ingrphdiag]{
+        \path[use as bounding box] (-.3,.38) rectangle (1.5,-1.22);
         \e{0,0}{-56.944:1.1};
         \e{0:1.2}{-56.944:1.1};
         \begin{scope}[shift={(0,0)}]
@@ -282,6 +283,7 @@ $r^+_{12}$ is not $\shapes$-balanced.
     \path (rhs2.south) +(0,-.2) edge[rule] +(0,-.6);
     \node[grphnode,anchor=west] (rhs4) at (r4) {
       \tikz[ingrphdiag]{
+        \path[use as bounding box] (-.3,.38) rectangle (1.4,-1.22);
         \e{0,0}{0:1.1};
         \e{0,0}{-60:1.1};
         \e{0:1.1}{-60:1.1};
@@ -774,6 +776,7 @@ to the agents in $r^+_{12}$ to obtain a refinement.
   \tikz[baseline=-.16cm]{
     \node[grphnode,anchor=east] (lhs) at (0,0) {
       \tikz[ingrphdiag]{
+        \path[use as bounding box] (-.3,.38) rectangle (1.5,-1.22);
         \e{0,0}{-56.944:1.1};
         \e{0:1.2}{-56.944:1.1};
         \begin{scope}[shift={(0,0)}]
@@ -805,6 +808,7 @@ to the agents in $r^+_{12}$ to obtain a refinement.
       +(1.3,0) coordinate (r);
     \node[grphnode,anchor=west] (rhs) at (r) {
       \tikz[ingrphdiag]{
+        \path[use as bounding box] (-.3,.38) rectangle (1.4,-1.22);
         \e{0,0}{0:1.1};
         \e{0,0}{-60:1.1};
         \e{0:1.1}{-60:1.1};
@@ -1331,6 +1335,7 @@ the right-hand side of $r^+_{12}$ and the triangle is
       %%% Triangle %%%
       \node[grphnode,anchor=south] (p) at (30:2.5) {
         \tikz[ingrphdiag]{
+          \path[use as bounding box] (-.3,.36) rectangle (1.4,-1.24);
           \e{0,0}{0:1.1};
           \e{0,0}{-60:1.1};
           \e{0:1.1}{-60:1.1};
@@ -1360,6 +1365,7 @@ the right-hand side of $r^+_{12}$ and the triangle is
       %%% Triangle %%%
       \node[grphnode,anchor=north] (mg) at (0,0) {
         \tikz[ingrphdiag]{
+          \path[use as bounding box] (-.3,.36) rectangle (1.4,-1.24);
           \e{0,0}{0:1.1};
           \e{0,0}{-60:1.1};
           \e{0:1.1}{-60:1.1};
@@ -1777,7 +1783,7 @@ $\gp_{\phi_1}$ should ask for the same sites
 that $\gp_{\id}$ does,
 \ie $\gp_{\phi_1}(u) = \gp_{\id}(u)$
 for all agents $u$ in the image of $\id$. % in the domain of $\gp_{\id}$.
-Here again caution must be exercised.
+So here again caution must be exercised.
 The solution is to remember which sites have been asked for
 in the past and to keep asking for them in future extensions.
 
@@ -1845,7 +1851,7 @@ which sites have been asked for in the past.
 % and implements the absorb-or-avoid constraint explained beforehand.
 
 Symmetrically, we define a growth policy $\comatch{\gp}$ for $r_R$
-by applying the same definition to the reverse generator $\inv{r}$.
+by applying the same definition to the inverse rule $\inv{r}$.
 % Since extensions of $r_L$ and $r_R$ are isomorphic,
 % we can, with a slight abuse of notation,
 % define $\gp^\shapes := \gp \union \comatch{\gp}$.
@@ -1854,9 +1860,341 @@ as the union of both growth policies,
 that is, $\gp^\shapes_\phi(u) = \gp_\phi(u)
 \,\cup\, \comatch{\gp_{\comatch{\phi}}}(u)$.
 
+% Coming back to our example,
+According to this growth policy,
+the extension $\comatch{\phi_1}$
+of the right-hand side of $r^+_{12}$
+in our example
+is immature (despite being $\shapes$-balanced)
+since the following rewind
+asks for a site that is missing in its image.
+\input{gp-triangle-1}
+So we must add an $r$ site to the blue node.
+There are two possibilities when the site is added:
+it can be free or it can be bound.
+In particular, the contact graph $C$ tells us
+that an $r$ site on a blue node can only be bound
+to an $l$ site on a green node.
+We obtain then two new extensions,
+with codomains:
+\begin{center}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (g1) at (0,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{1.2,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \e{x}{-.5,0};
+          \site{lx}{x.west};
+          \site{rx}{x.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.2,0)}]
+          \n[n2]{y}{0,0};
+          \e{y}{.5,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+      }};
+    \node at (.7,0) {and};
+    \node[grphnode,anchor=west] (g2) at (1.4,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{2.2,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \e{x}{-.5,0};
+          \site{lx}{x.west};
+          \site{rx}{x.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.2,0)}]
+          \n[n3]{z}{0,0};
+          \site{lz}{z.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+  \end{tikzpicture}
+\end{center}
+The first extension cannot possibly ask for any more sites.
+However, the second extension, call it $\comatch{\phi_2}$,
+may ask for the $r$ site on the green node.
+If this is the case there must be a rewind of $\comatch{\phi_2}$
+which contains a pre-image of the green node
+and glues relevantly with the triangle.
+\input{gp-triangle-2}
+Therefore $\comatch{\phi_2}$ is immature as well.
+We must reveal the $r$ site on the green node
+and so we obtain
+\begin{center}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (g1) at (0,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{2.2,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \e{x}{-.5,0};
+          \site{lx}{x.west};
+          \site{rx}{x.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.2,0)}]
+          \n[n3]{z}{0,0};
+          \e{z}{.5,0};
+          \site{lz}{z.west};
+          \site{rz}{z.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+      }};
+    \node at (.2,0) {,};
+    \node[grphnode,anchor=west] (g2) at (0.4,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{3.3,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \e{x}{-.5,0};
+          \site{lx}{x.west};
+          \site{rx}{x.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.2,0)}]
+          \n[n3]{z}{0,0};
+          \site{lz}{z.west};
+          \site{rz}{z.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(3.3,0)}]
+          \n[n1]{w}{0,0};
+          \site{lw}{w.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+    \begin{scope}[shift={(g2.east)}]
+      \node at (.7,0) {and};
+      \node[grphnode,anchor=west] (g3) at (1.4,0) {
+        \tikz[ingrphdiag]{
+          \path[use as bounding box] (-.3,.36) rectangle (1.4,-1.24);
+          \e{0,0}{0:1.1};
+          \e{0,0}{-60:1.1};
+          \e{0:1.1}{-60:1.1};
+          \begin{scope}[shift={(0,0)}]
+            \n[n1]{x}{0,0};
+            \site{r1}{0:7pt};
+            \site{l1}{-60:7pt};
+            \node at (-86:12pt) {\scriptsize $l$};
+            \node at (26:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(0:1.1)}]
+            \n[n2]{y}{0,0};
+            \site{r2}{180:7pt};
+            \site{l2}{-120:7pt};
+            \node at (154:12pt) {\scriptsize $l$};
+            \node at (-94:12pt) {\scriptsize $r$};
+          \end{scope}
+          \begin{scope}[shift={(-60:1.1)}]
+            \n[n3]{z}{0,0};
+            \site{r3}{120:7pt};
+            \site{l3}{60:7pt};
+            \node at (146:12pt) {\scriptsize $r$};
+            \node at (34:12pt) {\scriptsize $l$};
+          \end{scope}
+        }};
+    \end{scope}
+  \end{tikzpicture}
+\end{center}
+Finally, all extensions are mature.
+Note that the second extension has an $l$ site
+on the rightmost orange node
+which would not be asked by the growth policy
+if it were not for clause (iii).
+In the absence of clause (iii) we would have moved
+from an immature extension to an overgrown extension
+in just one step,
+leaving us in a strange situation
+% and defeating the purpose of the growth policy.
+% and making it possible for the growth policy
+% to have no mature extensions at all.
+by allowing the growth policy to define an empty refinement.
+% $\gp^\shapes(r) = \varnothing$ for rule $r$.
+Next we prove that the growth policy
+that we have introduced in this section
+is in general well-defined and well-behaved.
+% and has a number of important properties.
 
+\begin{theorem}
+  \label{thm:energy-gp}
+  The above $\gp^\shapes$ is indeed a growth policy for $r_L$
+  and the induced refined family of rules $\gp^\shapes(r)$ is
+  exhaustive,
+  non-empty,
+  $\shapes$-balanced,
+  and finite.
+\end{theorem}
+\begin{proof}
+  We take the same notations as in \diagram{energy-gp}.
 
+  \emph{Growth policy}:
+  Clearly, $\gp^\shapes_{\phi_1}(u_1) \subseteq \gp^\shapes_\phi(u)$
+  as every request for a site in $g_1$
+  will propagate to $g$ by definition.
+  To prove the other direction,
+  we need to verify that the requests generated by rewinds
+  do not depend on the choice of factorisation.
+  So, without loss of generality,
+  consider glueings on extensions of $r_L$
+  and let an alternative factorisation of $\phi$ through $g_2$
+  be given which gives rise to a site request in $u$
+  originating from some $u_2$ in $g_2$,
+  as in the following diagram.
+  \begin{center}
+    \begin{tikzpicture}
+      \node (l) at (3,2.2) {$r_L$};
+      \node (g0) at (3,1) {$g_0 \ni \tuple{u_1,u_2}$};
+      \node (g1) at (0,0) {$g_1 \ni u_1$};
+      \node (g2) at (6,0) {$g_2 \ni u_2$};
+      \node (g) at (3,-1) {$g \ni u$};
+      \draw (l) edge[hom,bend right=20] node[above left] {$\phi_1$} (g1);
+      \draw (l) edge[hom,bend left=20] (g2);
+      \draw[hom] (g0) -- (g1);
+      \draw[hom] (g0) -- (g2);
+      \draw[hom] (g1) -- node[below left] {$\phi_2$} (g);
+      \draw[hom] (g2) -- (g);
+      \draw[hom,dotted] (l) -- (g0);
+    \end{tikzpicture}
+  \end{center}
+  Consider $g_0$ the pull-back of the two rewinds
+  (\ie the lower cospan).
+  By construction it contains a pre-image
+  for $u_1$ and $u_2$, say $(u_1,u_2)$.
+  % It is also a prefix of an extension by construction.
+  The relevant minimal glueing of $p$ and $g_2$
+  that makes the site request restricts
+  to another minimal glueing of $p$ and $g_0$.
+  This new minimal glueing is still relevant
+  as it contains the same overlap with the original $r_L$.
+  As such, the same site request is made
+  by the pre-image agent $(u_1,u_2)$ in $g_0$
+  which then propagates to $u_1$ in $g_1$ as required.
+  % NB: the argument does not rely on $p$ being glueable to $g_1$ -
+  % which need not be true; but glueable to a rewind thereof.
 
+  % \emph{Surjectivity}:
+  \emph{Exhaustive}:
+  Take any embedding $\psi$ of $r_L$ into a mixture $m$.
+  We can restrict the co-domain of $\psi$ to be
+  the connected closure $n$ of the image of $\psi$ in $m$,
+  resulting in an epi $\psi_n: r_L \to n$.
+  Let us further restrict $n$ by removing
+  (i) all sites not requested by the growth policy and
+  (ii) all agents that have no sites requested by the growth policy.
+  % Call the result $g$.
+  The result, call it $g$,
+  has the same number of connected components as $r_L$
+  since $\gp^\states$ only requests sites
+  which appear by glueing
+  and are thus (perhaps indirectly) connected to the sites
+  % for which there is a path from the sites
+  that are modified by the rule.
+  We thus obtain an epi $\phi: r_L \to g$
+  which is mature with respect to $\gp^\shapes$ since,
+  by construction, its image contains all sites
+  requested by $\gp^\shapes$ and no other foreign site.
+  It is easy to see that $\phi$ factorises $\psi$.
+
+  \emph{Non-empty}:
+  Clause (i) guarantees that we request at least the sites in $r$
+  which implies that $\id$ is not overgrown.
+  % which implies that $\id_{r_L}$ is not overgrown.
+  Due to clause (iii) there is always an extension
+  whose image contains exactly all sites requested by $\gp^\states$
+  and lies between an immature and an overgrown extension
+  in the specialisation order $\leq$.
+  This extension is an epi because,
+  as pointed out for exhaustivity,
+  $\gp^\states$ only requests sites
+  connected to those modified by the rule.
+
+  \emph{$\shapes$-balanced}:
+  If $\phi \in \gp^\shapes(r)$ is not $\shapes$-balanced
+  then there must be some relevant minimal glueing
+  inducing a further site request.
+  Hence, $\phi$ cannot be mature.
+
+  \emph{Finite}:
+  A request for a site $a$ at some node in an extension
+  $\phi: r_L\to g$, or $\comatch{\phi}: r_R \to g$,
+  originates from a relevant minimal glueing
+  of some $p$ in $\shapes$ with a prefix $\phi_1$ of $\phi$.
+  Because this glueing is relevant,
+  it must be that $a$ is at a distance from the image of $r_L$
+  in the codomain of $\phi_1$ which is at most $\delta(p)$,
+  the diameter of $p$ (else $p$ would not intersect the image of $r_L$).
+  The same bound holds in the codomain of $\phi$,
+  as distances can only contract by further extension.
+  Therefore any site requested in $g$
+  has a distance to the image $\phi(r_L)$
+  which is bounded by $\max_{p \in \shapes}\delta(p)$.
+  If $\phi$ is not overgrown,
+  this sets a bound on the diameter of $g$.
+  Hence there are finitely many mature extensions.
+  % A site request always comes from a relevant minimal glueing
+  % of some $p \in \shapes$ and an extension $\phi$ of $r$;
+  % while there can be an infinite number of $\phi$s,
+  % only a finite number of them can give rise to
+  % \emph{relevant} glueings and each of them can give rise to
+  % only a finite number of site requests.
+  %
+  % This control only improves upon further extension
+  % (meaning the distance of the added site $a$ to $r_L$
+  %  can only decrease along an epi ---
+  %  when one adds cycles creating shorter paths,
+  %  but certainly it will not increase as old paths
+  %  are preserved by extensions)
+  %
+  % $\delta$ the diameter of a max glueing is
+  % $\leq 2 \max_{p \in \shapes}\delta(g)$,
+  % hence there is a finite number of direct
+  % max-min relevant glueings on any $r$.
+\end{proof}
+
+Therefore, given $\generators$ and $\shapes$,
+we obtain a finite $\shapes$-balanced rule set $\refinedrules$,
+which refines $\generators$ exhaustively,
+by taking the disjoint sum of the refined rules
+$\refinedrules = \dsum_{r \in \generators} \,\gp^\shapes(r)$.
+% (disjoint sum).
+To every refinement $r_\phi$ corresponds
+an inverse refinement $\inv{r}_{\comatch{\phi}}$.
+Hence, $\refinedrules = \inv{\refinedrules}$
+is closed under inversion like $\generators$.
 
 
 \section{Rates}

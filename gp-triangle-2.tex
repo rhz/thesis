@@ -1,0 +1,170 @@
+\begin{center}
+  \resizebox{.8\linewidth}{!}{%
+  \begin{tikzpicture}
+
+    \node[grphnode,outer sep=5pt] (p) at (0,0) {
+      % Triangle
+      \tikz[ingrphdiag,outer sep=0pt]{
+        \path[use as bounding box] (-.3,.36) rectangle (1.4,-1.24);
+        \e{0,0}{0:1.1};
+        \e{0,0}{-60:1.1};
+        \e{0:1.1}{-60:1.1};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \site{r1}{0:7pt};
+          \site{l1}{-60:7pt};
+          \node at (-86:12pt) {\scriptsize $l$};
+          \node at (26:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(0:1.1)}]
+          \n[n2]{y}{0,0};
+          \site{r2}{180:7pt};
+          \site{l2}{-120:7pt};
+          \node at (154:12pt) {\scriptsize $l$};
+          \node at (-94:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(-60:1.1)}]
+          \n[n3]{z}{0,0};
+          \site{r3}{120:7pt};
+          \site{l3}{60:7pt};
+          \node at (146:12pt) {\scriptsize $r$};
+          \node at (34:12pt) {\scriptsize $l$};
+        \end{scope}
+      }};
+
+    \node[grphnode,outer sep=5pt,anchor=north west] (s)
+    at ($(p.south east)+(-30:1)$) {
+      % Triangle
+      \tikz[ingrphdiag,outer sep=0pt]{
+        \path[use as bounding box] (-.3,.36) rectangle (1.4,-1.24);
+        \e{0,0}{0:1.1};
+        \e{0,0}{-60:1.1};
+        \e{0:1.1}{-60:1.1};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \site{r1}{0:7pt};
+          \site{l1}{-60:7pt};
+          \node at (-86:12pt) {\scriptsize $l$};
+          \node at (26:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(0:1.1)}]
+          \n[n2]{y}{0,0};
+          \site{r2}{180:7pt};
+          \site{l2}{-120:7pt};
+          \node at (154:12pt) {\scriptsize $l$};
+          \node at (-94:12pt) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(-60:1.1)}]
+          \n[n3]{z}{0,0};
+          \site{r3}{120:7pt};
+          \site{l3}{60:7pt};
+          \node at (146:12pt) {\scriptsize $r$};
+          \node at (34:12pt) {\scriptsize $l$};
+        \end{scope}
+      }};
+
+    \node[grphnode,outer sep=5pt,anchor=south west] (g1)
+    at ($(s.north east)+(30:1)$) {
+      % ?12?
+      \tikz[ingrphdiag,outer sep=0pt]{
+        \e{0,0}{2.2,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.2,0)}]
+          \n[n3]{z}{0,0};
+          \site{lz}{z.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+        % \e{0,0}{1.1,0};
+        % \begin{scope}
+        %   \n[n1]{x}{0,0};
+        %   \site{rx}{x.east};
+        %   \node at (26:.42) {\scriptsize $r$};
+        % \end{scope}
+        % \begin{scope}[shift={(1.1,0)}]
+        %   \n[n2]{y}{0,0};
+        %   \site{ly}{y.west};
+        %   \node at (206:.42) {\scriptsize $l$};
+        % \end{scope}
+      }};
+
+    \node[grphnode,outer sep=5pt,anchor=south] (l)
+    at ($(g1.north)+(90:1)$) {
+      % ?12?
+      \tikz[ingrphdiag,outer sep=0pt]{
+        \e{0,0}{1.1,0};
+        \begin{scope}
+          \n[n1]{x}{0,0};
+          \site{rx}{x.east};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+      }};
+
+    \node[grphnode,outer sep=5pt,anchor=north west] (g)
+    at ($(g1.south east)+(-30:1)$) {
+      % 12?
+      \tikz[ingrphdiag,outer sep=0pt]{
+        \e{0,0}{2.2,0};
+        \begin{scope}[shift={(0,0)}]
+          \n[n1]{x}{0,0};
+          \e{x}{-.5,0};
+          \site{lx}{x.west};
+          \site{rx}{x.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \n[n2]{y}{0,0};
+          \site{ly}{y.west};
+          \site{ry}{y.east};
+          \node at (206:.42) {\scriptsize $l$};
+          \node at (26:.42) {\scriptsize $r$};
+        \end{scope}
+        \begin{scope}[shift={(2.2,0)}]
+          \n[n3]{z}{0,0};
+          \site{lz}{z.west};
+          \node at (206:.42) {\scriptsize $l$};
+        \end{scope}
+        % \e{-.5,0}{1.1,0};
+        % \begin{scope}
+        %   \n[n1]{x}{0,0};
+        %   \site{lx}{x.west};
+        %   \site{rx}{x.east};
+        %   \node at (206:.42) {\scriptsize $l$};
+        %   \node at (26:.42) {\scriptsize $r$};
+        % \end{scope}
+        % \begin{scope}[shift={(1.1,0)}]
+        %   \n[n2]{y}{0,0};
+        %   \site{ly}{y.west};
+        %   \node at (206:.42) {\scriptsize $l$};
+        % \end{scope}
+      }};
+
+    \draw[hom] (l) -- (g1);
+    \draw[hom] (p.south east) -- (s.north west);
+    \draw[hom] (g1.south west) -- (s.north east);
+    \draw[hom] (g1.south east) -- (g.north west);
+    \draw (l) edge[hom,bend left=27] node[above right] {$\comatch{\phi_2}$} (g);
+
+  \end{tikzpicture}}
+\end{center}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:

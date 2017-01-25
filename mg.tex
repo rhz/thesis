@@ -367,6 +367,7 @@
       %%% Triangle %%%
       \node[grphnode,anchor=north] (po4) at (-90:4.2426) {
         \tikz[ingrphdiag]{
+          \path[use as bounding box] (-.3,.38) rectangle (1.4,-1.22);
           \e{0,0}{0:1.1};
           \e{0,0}{-60:1.1};
           \e{0:1.1}{-60:1.1};
