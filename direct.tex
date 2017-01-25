@@ -2205,33 +2205,45 @@ is closed under inversion like $\generators$.
 \section{Rates}
 \label{sec:rates}
 
-To equip $\refinedrules$ with rates,
-we provide a rate map $k: \refinedrules \to \RR_{>0}$
-that uses the real-valued vector of \emph{energy costs} $\cost$
+To equip $\refinedrules$ with rates
+we define a rate map $k: \refinedrules \to \RR_{>0}$.
+We use the real-valued vector of \emph{energy costs} $\cost$
 introduced at the beginning of this chapter
-(page~\pageref{chp:direct}).
-To obtained detailed balance,
-the rate map must conform to the following relation
-for each $r_\phi$ in $\refinedrules$:
+(page~\pageref{chp:direct})
+together with the balance vector $\Delta\phi$
+of a refined rule $r_\phi$ in $\refinedrules$
+with respect to $\shapes$
+(page~\pageref{p:balance-vector})
+to constrain the ratio
+between the forward and the backward rate:
+% in accordance with detailed balance:
+% To obtained detailed balance,
+% the rate map must conform to the following relation
+% for each $r_\phi$ in $\refinedrules$:
 \begin{equation}
   \label{eq:rates}
   \ln\, {k(\inv{r}_{\comatch{\phi}})} - \ln\, {k(r_\phi)} =
   \cost \cdot \Delta\phi
 \end{equation}
-where $\Delta\phi$ is the balance vector
-of the refined rule $r_\phi$
-with respect to $\shapes$
-(page~\pageref{p:balance-vector}).
+% where $\Delta\phi$ is the balance vector
+% of the refined rule $r_\phi$
+% with respect to $\shapes$
+% (page~\pageref{p:balance-vector}).
 
-We write $\shapes(m)$
+We show now that the set of refined rules $\refinedrules$
+with any such rate map
+% for which this equality holds
+has detailed balance.
+To simplify notation,
+we write $\shapes(m)$
 for the $\shapes$-indexed vector
 which maps $p$ to $\matches{p}{m}$.
 Using vector notation,
 the energy $E(m)$ of a state $m$
 (as defined in \eqn{graph-energy})
-can simply be written as $\cost \cdot \shapes(m)$.
-Also, we write $\LTS_\generators(m)$ for the finite
-strongly connected component of $m$ in $\LTS_\generators$,
+can then simply be written as $\cost \cdot \shapes(m)$.
+Moreover, we write $\LTS_\generators(m)$ for the finite
+strongly connected component of $m$ in $\LTS_\generators$
 and recall the definition of a \pmf
 $\pi_m$ on $\LTS_\generators(m)$ from \eqn{energy},
 which after substituting $E(m)$ reads
@@ -2242,7 +2254,7 @@ which after substituting $E(m)$ reads
     \sum_{y \in \LTS_\generators(m)} \exp{-\cost \cdot \shapes(y)}}
 \end{equation}
 %
-We can now prove our main theorem.
+We can now prove the main theorem of this chapter.
 
 \begin{theorem}
   \label{thm:detailed-balance}
