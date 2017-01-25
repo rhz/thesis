@@ -11,7 +11,7 @@
 % \usepackage[natbibapa]{apacite}
 \usepackage[english=british,autopunct=false]{csquotes}
 % maxcitenames=2,uniquelist=false
-\usepackage[natbib=true,style=authoryear,maxbibnames=6]{biblatex}
+\usepackage[natbib=true,style=authoryear-comp,maxbibnames=6]{biblatex}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{wrapfig}
@@ -118,6 +118,7 @@
 % Math
 \renewcommand{\tuple}[1]{\left(#1\right)}
 \DeclareMathOperator*{\expn}{exp}
+\renewcommand*{\exp}[1]{e^{\,#1}} % \mathrm{e}^{#1}}
 \renewcommand{\qedsymbol}{\ensuremath{\blacksquare}}
 \newcommand{\partialto}{\rightharpoonup}
 \newcommand{\id}{\vec{1}} % identity function

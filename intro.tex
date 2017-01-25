@@ -235,6 +235,7 @@ will converge to the \pmf $\ip$
 regardless of the initial state $\state(0)$.
 
 \begin{lemma}
+  \label{lemma:ergodic}
   Suppose the \qmatrix $\qm$ is irreducible
   and has an invariant \pmf $\ip$.
   Then $\qm$ is ergodic and converges to $\ip$.
@@ -263,7 +264,7 @@ that the system finds itself in state $i \in \states$ as follows
   to avoid writing this term explicitly.}
 \begin{equation}
   \label{eq:energy}
-  \ip_i = \frac{e^{-E(i)}}{\sum_{j \in \states} e^{-E(j)}}
+  \ip_i = \frac{\exp{-E(i)}}{\sum_{j \in \states} \exp{-E(j)}}
 \end{equation}
 This is known as the \emph{Boltzmann distribution}.
 Note that
@@ -275,7 +276,7 @@ only up to an additive constant;\footnote{
 (ii) by convention the sign of the energy is inverted
 so lower energies represent more favourable states; and
 (iii) in the case of detailed balance,
-we obtain $e^{E(j)-E(i)} = q_{ji}/q_{ij}$
+we obtain $\exp{E(j)-E(i)} = q_{ji}/q_{ij}$
 by combining \eqn{energy} and \eqn{detailed-balance}.
 
 % The next question is
@@ -345,7 +346,7 @@ at random according to the probability distribution $a_{i-}$.
 We evaluate the energy function at $i$ and $j$
 to compute $\Delta E = E(j)-E(i)$ and proceed with the transition
 with probability $1$ if $\Delta E < 0$ and
-probability $e^{-\Delta E}$ if $\Delta E > 0$.
+probability $\exp{-\Delta E}$ if $\Delta E > 0$.
 Otherwise we stay at state $i$.
 In both cases time (a natural number) is increased by 1.
 We repeat for state $j$ if the transition was successful
@@ -360,18 +361,19 @@ The probability $p_{ij}$ of jumping from $i$ to $j$ is
 a combination of the a priori probability $a_{ij}$ and
 the probability of accepting that transition,
 which depends on $\Delta E$.
-\[ p_{ij} = a_{ij}\; \min(1, e^{-\Delta E}) \]
+\[ p_{ij} = a_{ij}\; \min(1, \exp{-\Delta E}) \]
 By taking the ratio of $p_{ij}$ and $p_{ji}$ we obtain
 \[ \frac{p_{ij}}{p_{ji}} =
-   \frac{a_{ij}\; \min(1, e^{E(i)-E(j)})}{
-         a_{ji}\; \min(1, e^{E(j)-E(i)})} =
-   \frac{\min(1, e^{E(i)-E(j)})}{
-         \min(1, e^{E(j)-E(i)})} \]
+   \frac{a_{ij}\; \min(1, \exp{E(i)-E(j)})}{
+         a_{ji}\; \min(1, \exp{E(j)-E(i)})} =
+   \frac{\min(1, \exp{E(i)-E(j)})}{
+         \min(1, \exp{E(j)-E(i)})} \]
 since $a_{ij} = a_{ji}$ by symmetry of $A$.
 % of the a priori transition probability matrix.
 Suppose $E(i)-E(j) > 0 > E(j)-E(i)$, then
-\[ \frac{p_{ij}}{p_{ji}} = e^{E(i)-E(j)}
-     = \frac{e^{-E(j)}}{e^{-E(i)}} = \frac{\ip_{j}}{\ip_{i}} \]
+\[ \frac{p_{ij}}{p_{ji}} = \exp{E(i)-E(j)}
+     = \frac{\exp{-E(j)}}{\exp{-E(i)}}
+     = \frac{\ip_{j}}{\ip_{i}} \]
 It is easy to see that when
 $E(j)-E(i) > 0 > E(i)-E(j)$ we obtain the same equation.
 Hence the discrete-time Markov chain has detailed balance

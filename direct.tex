@@ -8,7 +8,10 @@ for our energy function.
 We assign an \emph{energy cost} $\cost(g)$ to each of them
 and build the energy function as a linear combination
 of their number of ocurrences. % of each energy pattern.
-\[ E(m) = \sum_{g \in \shapes} \cost(g) \abs{\matches{g}{m}} \]
+\begin{equation}
+  \label{eq:graph-energy}
+  E(m) = \sum_{g \in \shapes} \cost(g) \abs{\matches{g}{m}}
+\end{equation}
 This is reminiscent of group contribution methods
 used to estimate the standard Gibbs free energy of formation
 of biomolecules \citep{group-contrib}.
@@ -75,7 +78,7 @@ for some assignment of kinetic rates.
 % to the forward and backward rule.
 Suppose we assign kinetic rates $k^+$ and $k^-$
 to $r^+_{12}$ and $r^-_{12}$.
-Recall from \sct{bg} that $e^{E(n)-E(m)} = q_{nm}/q_{mn}$
+Recall from \sct{bg} that $\exp{E(n)-E(m)} = q_{nm}/q_{mn}$
 for systems with detailed balance.
 From \eqn{kappa-ctmc}
 \[ q_{mn} = \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
@@ -87,7 +90,7 @@ By rule reversibility (\lem{reversibility})
 $r^-_{12}$ brings us from $n$ back to $m$
 and the number of matches of $r^-_{12}$ in $n$
 is equal to the number of matches of $r^+_{12}$ in $m$.
-Hence, $e^{E(n)-E(m)} = k^+/k^-$.
+Hence, $\exp{E(n)-E(m)} = k^+/k^-$.
 In words, the change in energy produced by the rule application
 fixes the ratio between the kinetic rates.
 As a consequence,
@@ -694,6 +697,7 @@ iff $\inv{r}$ is $\shapes$-left-balanced.
 Then $r$ is $\shapes$-\emph{balanced}
 iff it is $\shapes$-left- and $\shapes$-right-balanced.
 
+% TODO: where should this lemma be cited?
 \begin{lemma}
   Rule $r$ is $\shapes$-balanced if and only if
   $r$ is $\shapes$-left- and $\shapes$-right-balanced.
@@ -1042,7 +1046,7 @@ is not in the image of $\psi_\agents$.
 Rule application preserves epis
 and in fact also prefixes of epis:
 \begin{lemma}
-  \label{lem:epi-prefix}
+  \label{lemma:epi-prefix}
   Let $r = \tuple{r_L,r_R}$ be a rule
   and $\psi: r_L \to g$ be an embedding
   with $r_L,r_R,g$ contact maps in $\rSGe_C$.
@@ -1257,6 +1261,8 @@ an exhaustive collection of mutually exclusive sub-cases.
 % NB: the argument uses the faithful condition
 % in both directions to push around the $z$ site.
 
+\refstepcounter{markpoint}
+\label{p:balance-vector}
 Given a rule $r$ and an extension $\phi: r_L \to g$, % of $r_L$,
 we write $r_\phi$ for the refined rule associated to $\phi$,
 % $r_\phi$ denotes the refined rule associated to $\phi$,
@@ -1267,7 +1273,6 @@ we write $\gp(r)$ for the family of rules
 obtained by refining $r$ according to $\gp$,
 that is, $\gp(r)$ is the family of rules $r_\phi$
 for $\phi$ ranging in $\gp(r_L)$.
-% TODO: do I use this notation?
 If $\phi$ is a $\shapes$-balanced extension of $r$,
 the refined rule $r_\phi$ has a \emph{balance vector}
 in $\ZZ^\shapes$, written $\Delta\phi$,
@@ -2200,6 +2205,158 @@ is closed under inversion like $\generators$.
 \section{Rates}
 \label{sec:rates}
 
+To equip $\refinedrules$ with rates,
+we provide a rate map $k: \refinedrules \to \RR_{>0}$
+that uses the real-valued vector of \emph{energy costs} $\cost$
+introduced at the beginning of this chapter
+(page~\pageref{chp:direct}).
+To obtained detailed balance,
+the rate map must conform to the following relation
+for each $r_\phi$ in $\refinedrules$:
+\begin{equation}
+  \label{eq:rates}
+  \ln\, {k(\inv{r}_{\comatch{\phi}})} - \ln\, {k(r_\phi)} =
+  \cost \cdot \Delta\phi
+\end{equation}
+where $\Delta\phi$ is the balance vector
+of the refined rule $r_\phi$
+with respect to $\shapes$
+(page~\pageref{p:balance-vector}).
+
+We write $\shapes(m)$
+for the $\shapes$-indexed vector
+which maps $p$ to $\matches{p}{m}$.
+Using vector notation,
+the energy $E(m)$ of a state $m$
+(as defined in \eqn{graph-energy})
+can simply be written as $\cost \cdot \shapes(m)$.
+Also, we write $\LTS_\generators(m)$ for the finite
+strongly connected component of $m$ in $\LTS_\generators$,
+and recall the definition of a \pmf
+$\pi_m$ on $\LTS_\generators(m)$ from \eqn{energy},
+which after substituting $E(m)$ reads
+\begin{equation}
+  \label{eq:boltzmann}
+  \pi_m(x) = \dfrac{
+    \exp{-\cost \cdot \shapes(x)}}{
+    \sum_{y \in \LTS_\generators(m)} \exp{-\cost \cdot \shapes(y)}}
+\end{equation}
+%
+We can now prove our main theorem.
+
+\begin{theorem}
+  \label{thm:detailed-balance}
+  Let $\generators$, $\shapes$, $\refinedrules$,
+  $k$, and $\pi_m$ be defined as above;
+  then (i) $\LTS_{\refinedrules}$ and $\LTS_\generators$ are isomorphic
+  % TODO: is it important to say symmetric?
+  % as symmetric labelled transition systems;
+  as labelled transition systems;
+  and (ii) for any mixture $m$,
+  % TODO: prove without irreducibility... perhaps say that
+  % \LTS^k_{\refinedrules}(m) is irreducible
+  % the irreducible time-homogeneous continuous-time Markov chain
+  the time-homogeneous continuous-time Markov chain
+  $\LTS^k_{\refinedrules}$ has detailed balance for, and converges to,
+  $\pi_m$ on $\LTS_{\refinedrules}(m)$.
+\end{theorem}
+\begin{proof}
+  Both $\LTS_\generators$ and $\LTS_{\refinedrules}$
+  offer transitions from a mixture $m$:
+  the former are labelled by pairs $(r,\psi)$
+  with $r$ in $\generators$
+  and $\psi$ in $\matches{r_L}{m}$
+  while the latter by pairs $(r_\phi,\gamma)$
+  with $r_\phi$ the refinement of $r$
+  along a mature extension $\phi: r_L \to g$
+  % \ie which belongs to $\gp^\shapes(r_L)$,
+  and $\gamma$ in $\matches{g}{m}$.
+  Steps in the latter can be mapped to steps in the former
+  by transforming labels as follows:
+  $(r_\phi, \gamma) \mapsto (r, \gamma \, \phi)$.
+  By \thm{energy-gp}, each event $(r,\psi)$ is factored by
+  exactly one event $(r_\phi,\gamma)$ and thus
+  % As $\refinedrules$ refines $\generators$ exhaustively
+  % (\thm{energy-gp}),
+  this correspondence is a bijection,
+  which establishes the first claim.
+
+  % (Pedantically, there is a full and faithful functor
+  %  between the two corresponding free categories
+  %  which is the identity on objects ---%
+  %  incidentally, this bijection is readily seen
+  %  to respect the symmetries on labels.)
+
+  Since we have multiple rules in $\LTS_{\refinedrules}$,
+  each of which can be applied in several ways,
+  there can be more than one transition from $m$ to the same $n$ ---
+  each uniquely described by a $(r_\phi,\gamma)$ label.
+  Each such $(r_\phi,\gamma)$ has an inverse
+  $(\inv{r}_{\comatch{\phi}},\comatch{\gamma})$
+  % where:
+  % $\inv{r}$ is the rule inverse to $r$;
+  % $\comatch{\phi}$ corresponds to $\phi$ in the isomorphism
+  % between the categories of extensions of $r_{\phi,L}$ and $r_{\phi,R}$,
+  % with $\phi_\agents = \comatch{\phi}_\agents$;
+  % % \phi_\sites = \comatch{\phi}_\sites for that matter as well...
+  % and $\comatch{\gamma}$ is the embedding corresponding to $\gamma$,
+  % also with $\gamma_\agents = \comatch{\gamma}_\agents$.
+  % One can easily verify that $\comatch{\phi}$ is an epi,
+  % and that $\comatch{\phi}$ is also mature.
+  % Hence $(\inv{r}_{\comatch{\phi}},\comatch{\gamma})$
+  % determines a valid transition in $\LTS_{\refinedrules}$
+  % which is inverse to $(r_\phi,\gamma)$,
+  and we have a bijection between them and thus between
+  transitions from $m$ to $n$ and those from $n$ to $m$
+  due to \lems{reversibility}{epi-prefix}.
+
+  Consider a pair $t,\inv{t}$ of such corresponding events
+  due to $r_\phi$ and $\inv{r}_{\comatch{\phi}}$.
+  Because $t$ is a transition from $m$ to $n$
+  and $\phi$ is $\shapes$-balanced, % (\thm{energy-gp}),
+  we have $\shapes(n) = \shapes(m) + \Delta\phi$
+  and hence
+  $\cost \cdot \Delta\phi = \cost \cdot (\shapes(n)-\shapes(m))$.
+  So, by \eqn{rates}, the rates of $t,\inv{t}$ are such that:
+  \begin{equation*}
+    k(\inv{t})\, \exp{-\cost \cdot \shapes(n)} =
+    k(t)\, \exp{-\cost \cdot \shapes(m)}
+  \end{equation*}
+  and by summing this equation over all pairs,
+  we obtain detailed balance
+  for the probability local to the component
+  $\LTS_{\refinedrules}(m) = \LTS_{\refinedrules}(n)$,
+  defined above as $\pi_m = \pi_n$, since:
+  \begin{equation*}
+    q_{nm}\, \exp{-\cost \cdot \shapes(n)} =
+    q_{mn}\, \exp{-\cost \cdot \shapes(m)}
+  \end{equation*}
+  The convergence statement then follows from \lem{ergodic}
+  applied to the finite irreducible continuous-time Markov chain
+  $\LTS^k_{\refinedrules}(m)$
+  that is obtained by cropping all states
+  not in $\LTS_{\refinedrules}(m)$.
+\end{proof}
+
+Note that the subset of the state space
+which is reachable from $m$ in $\LTS_{\generators}$,
+namely $\LTS_{\generators}(m)$, is finite.
+Hence, the \emph{partition function}
+$Z(m) := \sum_{y \in \LTS_{\generators}(m)} \exp{-E(y)}$
+which figures in the denominator of $\pi_m$ is also finite.
+In the presence of rules which increase the number of agents,
+the components $\LTS_{\generators}(m)$ can be infinite
+and $Z(m)$ may diverge.
+For mass action stochastic Petri nets (\sct{bg}),
+convergence is guaranteed if detailed balance holds,
+but it is not true in general for Kappa \citep{et2,et1}.
+
+Another point worth making is that the result holds symbolically % ---
+regardless of the energy costs $\cost$.
+Therefore $\cost$ can be seen as a set of parameters,
+an ideal support for machine learning techniques
+if one were contemplating fitting a model to data.
+
 
 \section{Linear kinetic model}
 \label{sec:kinetic-model}
@@ -2225,8 +2382,27 @@ is closed under inversion like $\generators$.
 % in the transition graph? when two cycles share an edge?
 
 
+\section{Example: Triangles all the way down}
+\label{sec:triangles}
+
+% why all the way down?
+
+% mention that the rules have been manually compressed
+% to take advantage of KaSim's extended syntax (eg binding types)
+
+% run simulation again with 'ab', 'bc' and 'ca' = 1
+
+
 \section{Example: Flagellum's motor}
 \label{sec:alloring}
+
+
+\section{Non-linear energy functions}
+\label{sec:non-linear-energy}
+
+
+\section{Conclusions}
+\label{sec:direct-conclusions}
 
 
 
