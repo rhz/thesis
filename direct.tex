@@ -2230,7 +2230,18 @@ between the forward and the backward rate:
 % with respect to $\shapes$
 % (page~\pageref{p:balance-vector}).
 
-We show now that the set of refined rules $\refinedrules$
+% \eqn{rates} tells us that
+The pair of rules $r,\inv{r}$ is biassed in the forward direction
+if $k_r(\phi) > k_{\inv{r}}(\comatch{\phi})$
+% and thus when $\cost \cdot \Delta\phi < 0$.
+and \eqn{rates} tells us that this happens
+when $\cost \cdot \Delta\phi < 0$,
+\ie whenever the energy decreases as we go in that direction.
+% so the convention here is that $\cost\cdot\Delta\phi$
+% is the after-energy minus the before-energy.
+This is the usual convention for energy functions.
+
+We show that the set of refined rules $\refinedrules$
 with any such rate map
 % for which this equality holds
 has detailed balance.
