@@ -1118,7 +1118,7 @@ A method to easily construct such decompositions
 was proposed by \citet{refinement}
 which works by detailing
 which agents and sites should be added to $g$.
-This ``extension plan'' is called growth policy.
+This «extension plan» is called growth policy.
 A \emph{growth policy} $\gp$ for contact map $g$ over $C$
 is a family of functions $\gp_\phi$,
 indexed by all extensions $\phi: g \to h$,
@@ -2273,12 +2273,8 @@ We can now prove the main theorem of this chapter.
   $k$, and $\pi_m$ be defined as above;
   then (i) $\LTS_{\refinedrules}$ and $\LTS_\generators$ are isomorphic
   % TODO: is it important to say symmetric?
-  % as symmetric labelled transition systems;
-  as labelled transition systems;
+  as symmetric labelled transition systems;
   and (ii) for any mixture $m$,
-  % TODO: prove without irreducibility... perhaps say that
-  % \LTS^k_{\refinedrules}(m) is irreducible
-  % the irreducible time-homogeneous continuous-time Markov chain
   the time-homogeneous continuous-time Markov chain
   $\LTS^k_{\refinedrules}$ has detailed balance for, and converges to,
   $\pi_m$ on $\LTS_{\refinedrules}(m)$.
@@ -2384,6 +2380,224 @@ if one were contemplating fitting a model to data.
 \section{Linear kinetic model}
 \label{sec:kinetic-model}
 
+The theorem in the previous section holds
+for any rate map that agrees with \eqn{rates}.
+In this section,
+we show how to obtain a concrete rate $k(r_\phi)$
+for each refined rule $r_\phi$ in $\refinedrules$.
+% In particular,
+% We choose rates from a tractable subset of all possible choices
+To simplify the task, % of picking rates,
+% we delineate a tractable subset of all possible choices
+we pick rates from a tractable subset of all possible choices
+by performing a log-affine expansion on
+% that is parameterised by
+% the balance vector $\Delta\phi$ of the refined rule.
+the so-called «thermodynamic drive»
+$\Delta E = \cost \cdot \Delta\phi$.
+% by delineating a tractable subset of all possible choices
+% whose size grows quadratically with $\abs{\shapes}$.
+% This is a useful log-linear heuristics
+% which has been used to model biological systems \citep{cannon}
+% and is common in machine learning.
+%
+The expansion uses,
+for each generator rule $r$ in $\generators$,
+a constant $c_r \in \RR$
+and a real-valued matrix $A_r$
+of dimension $\abs{\shapes} \times \abs{\shapes}$.
+Then we assign rates according to the following equality
+\begin{equation}
+  \label{eq:lkm}
+  \ln\, k(r_\phi) = c_r - A_r\,\cost \cdot \Delta\phi
+\end{equation}
+subject to the following constraints
+\begin{gather*}
+  c_r = c_{\inv{r}} \\
+  A_r + A_{\inv{r}} = I
+\end{gather*}
+with $I$ the $\abs{\shapes} \times \abs{\shapes}$ identity matrix.
+%
+We verify that $k$ satisfies \eqn{rates}
+by substracting
+$\ln\, k(\inv{r}_{\comatch{\phi}})$ and $\ln\, k(r_\phi)$,
+giving us
+\[ \ln\, k(\inv{r}_{\comatch{\phi}}) - \ln\, k(r_\phi)
+   = (c_{\inv{r}} - A_{\inv{r}}\,\cost \cdot \Delta\comatch{\phi})
+   - (c_r - A_r\,\cost \cdot \Delta\phi) \]
+We have $\Delta\comatch{\phi} = -\Delta\phi$
+by reversibility of rules
+and so
+\begin{align*}
+  \ln\, k(\inv{r}_{\comatch{\phi}}) - \ln\, k(r_\phi)
+  &{}= c_{\inv{r}} - c_r
+     + A_r\,\cost \cdot \Delta\phi +
+       A_{\inv{r}}\,\cost \cdot \Delta\phi \\
+  &{}= (A_r + A_{\inv{r}})\,\cost \cdot \Delta\phi \\
+  &{}= I\,\cost \cdot \Delta\phi \;=\; \cost \cdot \Delta\phi
+\end{align*}
+% \begin{equation*}
+%   c_{\inv{r}} - A_{\inv{r}}(\cost) \cdot \Delta\comatch{\phi} =
+%   c_r - A_r(\cost) \cdot \Delta\phi + \cost \cdot \Delta\phi
+% \end{equation*}
+% or, equivalently, using $\Delta\comatch{\phi} = -\Delta\phi$:
+% \begin{equation*}
+%   c_{\inv{r}} - c_r = -A_{\inv{r}}(\cost) \cdot \Delta\phi -
+%   A_r(\cost) \cdot \Delta\phi + \cost \cdot \Delta\phi =
+%   (I - A_{\inv{r}} - A_r)(\cost) \cdot \Delta\phi.
+% \end{equation*}
+
+% NOTE: do we get additional constraints on kinetic rates from
+% cycles in the transition graph? when two cycles share an edge?
+
+The kinetic model of \eqn{lkm} requires
+% of the order of $\abs{\shapes}^2 \times \abs{\generators}$ parameters
+$\abs{\shapes}^2 \times \abs{\generators} + \abs{\generators}$
+parameters: % because we have
+one $A_{r,pq}$ for each generator rule $r \in \generators$
+and pair $p, q \in \shapes^2$,
+plus one $c_r$ for each $r \in \generators$.
+In practice one needs even fewer parameters
+as only those energy patterns that are relevant
+to a given generator rule $r$,
+\ie those that have a non-zero balance
+for at least one rule in $\gp^\shapes(r)$,
+need to be considered when building $A_r$.
+Typically, for larger models,
+this will be a far smaller number than $\abs{\shapes}$.
+This relative parsimony is compounded by the fact that
+the number of \emph{independent} parameters will be often lower
+because the $\Delta\phi$ family often has low rank,
+meaning that, for a set of extensions $\phi$,
+the balance vectors $\Delta\phi$ can be determined as
+a linear combination of a smaller basis set.
+% This kinetic model taps into another source of parsimony,
+% namely the dependencies between the $\Delta\phi$s of a refinement.
+% The $\Delta\phi$ family has typically low rank,
+% and as \eqn{lkm} assigns rates to an extension $\phi$
+% solely based on its $\Delta\phi$,
+% fewer {independent} parameters will be needed.
+% Concretely, all other rates can be expressed once we have a basis,
+% \eg if $\Delta\phi = \sum_i \alpha_i \Delta\phi_i$ then:
+% \begin{equation*}
+%   \ln k_{r_\phi} - c_r
+%   = -\sum_i \alpha_i A_r(\cost) \cdot \Delta\phi_i
+%   =  \sum_i \alpha_i (\ln k_{r_{\phi_i}} - c_r).
+% \end{equation*}
+% This imposes extra uniformities on the rate maps.
+% In the case of ANC we can fully solve the rank problem and even
+% find a canonical set of rates from which to obtain the remainder.
+By way of comparison,
+if we were to assign kinetic rates to each refined rule,
+we would need $\sum_{r \in \generators} |\gp^\shapes(r)|$ parameters.
+% It is to be compared with the total number of choices which is
+% far greater as it is of the order of the number of refinements,
+% that is to say $\sum_{r \in \generators} |\gp^\shapes(r)|$.
+
+We find two special cases for
+the kinetic model presented here
+that seem appealing as a first choice for parameterisation.
+First, by setting $c_r = c_{\inv{r}} = 0$,
+$A_r = I$ and $A_{\inv{r}} = 0$,
+we get $k(r_\phi) = \exp{-\cost \cdot \Delta\phi}$
+and $k(\inv{r}_{\comatch{\phi}}) = 1$.
+Whenever $\inv{r}$ is the thermodynamically favoured direction
+(and we can always choose it so),
+% As $\cost \cdot \Delta\phi$ is the difference of energy,
+% between the target and source in any application $r_\phi$,
+this choice amounts to being exponentially reluctant
+to climb up the energy gradient.
+% This is a continuous-time version of the % celebrated
+In this way,
+this choice can be thought of as
+continuous-time version of the
+Metropolis algorithm introduced in \sct{bg}.
+
+The second special case,
+on the other hand,
+is completely symmetric
+and can be obtained by fixing $A_r = A_{\inv{r}} = I/2$
+and $C_r = \exp{c_r}$:
+% as follows.
+\begin{equation}
+  \label{eq:sym-lkm}
+  \begin{array}{ccc}
+    k(r_\phi) &=& C_r\,\exp{-\cost \cdot \Delta\phi/2} \\
+    k(\inv{r}_{\comatch{\phi}}) &=& C_r\,\exp{\cost \cdot \Delta\phi/2}
+  \end{array}
+\end{equation}
+% with $C_r = \exp{c_r}$.
+
+% Finally, it is interesting to draw a comparison between
+% the ascription given in \eqn{lkm} and the Arrhenius rate law.
+% This law posits a dependency of the rate constant $k$ of a reaction
+% of the form $\ln\, k = c - E_a/kT$,
+% where $c$ is a constant (defining the basic time scale of the reaction),
+% $E_a$ is the so-called \emph{activation energy} of the reaction
+% and $T$ is the temperature.
+% In our case, we are not concerned with
+% the effect of $T$ on the (logarithm of the) rate
+% but with the effect of consuming and producing
+% various energy patterns in $\shapes$ at the locus of
+% the instance of the generator rule $r$.
+% In this view of things, \eqn{lkm} posits that
+% % the `activation energy' of $\phi$ depends linearly on
+% the activation energy of $\phi$ depends linearly
+% on the cost of the various patterns and the balance of $\phi$.
+
+% The similarity of \eqn{sym-lkm} to the Arrhenius equation
+% can shed light on an interesting interpretation of
+% our kinetic model.
+Note the similarity of \eqn{sym-lkm} to the Arrhenius equation.
+\begin{equation*}
+  % \label{eq:arrhenius}
+  k = A \, \exp{-E_a}
+\end{equation*}
+where $E_a$ is the \emph{activation energy} of the reaction
+(expressed in units of $1/\kB T$ as in \eqn{energy})
+and $A$ is a pre-exponential factor that defines the rate
+at which the molecules involved in the reaction
+collide in the correct orientation for the reaction to occur.
+\eqn{sym-lkm} is a special case of the Arrhenius equation
+when we equate $A = C_r$ and $E_a = \cost \cdot \Delta\phi/2$.
+The first equality is therefore interpreted as an assumption
+% The first equality means we are assuming
+% This is equivalent to assuming
+% This amounts to assuming
+that the rate of molecules colliding
+in the right orientation depends only on
+the molecular motifs present in the left-hand side of
+the generator rule $r$
+(\ie not on the context revealed by the refined rule).
+% Albeit a good starting point for an approximation
+Albeit an approximation,
+it might prove useful whenever the generator rules
+specify enough context to determine, for instance,
+% the accessibility surface of the reaction centre.
+the accessibility of the reaction centre.
+Another possible approach would be to compute $A$
+based on properties of the refinement,
+\eg how big the surrounding molecular complex is.
+
+The second equality, $E_a = \cost \cdot \Delta\phi/2$,
+tells us that the energetic barrier between
+the reactants and the products is determined
+only based on the energy patterns
+that are destroyed and created by the refined rule % $r_\phi$
+and their energy cost.
+% TODO: say/remark that the dependence is linear
+Since the activation energy is allowed to depend
+% (to an extent)
+on the context revealed by the refined rule,
+this assumption imposes a softer constrain
+than the previous one.
+
+% TODO: mention connection to transition state/activated complex theory?
+% http://staff.um.edu.mt/jgri1/teaching/che2372/notes/10/theory.html
+% in particular, it's interesting that the pre-exponential factor A
+% is related to the entropy of activation while the activation energy
+% is related to the enthalpy of activation.
+
 % is the linear kinetic model related to "Parameters for
 % the description of transition states", John Leffler, Science, 1953
 % https://sci-hub.ac/10.2307/1680906
@@ -2395,14 +2609,10 @@ if one were contemplating fitting a model to data.
 % "it should then be possible to predict
 %  the free energy of the transition state by a linear combination of
 %  the predictions made for the reagents and for the products"
-%
 % if we then relate the free energy of the transition state to
 % the rate constants using Arrhenius?
 % this has been done in transition state theory
 % https://en.wikipedia.org/wiki/Eyring_equation
-%
-% do we get additional constraints on kinetic rates from cycles
-% in the transition graph? when two cycles share an edge?
 
 
 \section{Example: Triangles all the way down}
