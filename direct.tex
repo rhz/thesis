@@ -99,7 +99,7 @@ that will be presented in \sct{alloring}.
 In our previous example (\sct{kappa}),
 we might want to favour the formation of
 triangles over chains and other cycles.
-For this we give a negative energy cost to the trinagle $t$,
+For this we give a negative energy cost to the triangle $t$,
 \ie $\cost(t) < 0$.
 If $t$ is the only energy pattern,
 then the energy of a state $m$ is
@@ -128,8 +128,13 @@ From \eqn{kappa-ctmc}
 \[ q_{mn} = \sum_{\substack{r \in \generators\\r = \tuple{r_L,r_R}}}
    k(r) \; \abs{\setof{\psi \in \matches{r_L}{m}}{m^{(r,\psi)} = n}}
 \]
-It is clear that at most one of the two rules
-can bring us from state $m$ to $n$, say it is $r^+_{12}$.
+where $m^{(r,\psi)}$ is the outcome of rewriting $m$
+% using rule $r$ and embedding $\psi$.
+with event $(r,\psi)$.
+% It is clear that
+At most one of the two rules
+can bring us from state $m$ to $n$,
+say it is $r^+_{12}$.
 By rule reversibility (\lem{reversibility})
 $r^-_{12}$ brings us from $n$ back to $m$
 and the number of matches of $r^-_{12}$ in $n$
@@ -745,7 +750,9 @@ iff it is $\shapes$-left- and $\shapes$-right-balanced.
 \begin{lemma}
   Rule $r$ is $\shapes$-balanced if and only if
   $r$ is $\shapes$-left- and $\shapes$-right-balanced.
-  Moreover, for any mixture $m$ and embedding $\psi: r_L \to m$,
+  Moreover, if $r$ is $\shapes$-balanced then,
+  for any mixture $m$, embedding $\psi: r_L \to m$,
+  and energy pattern $p \in \shapes$,
   \[ \Delta_r p = |[p;m^{(r,\psi)}]| % \abs{\matches{p}{\comatch{m}}}
                 - \abs{\matches{p}{m}}
                 = \abs{\matches{p}{r_R}}
@@ -1261,7 +1268,7 @@ an exhaustive collection of mutually exclusive sub-cases.
   as mature extensions.
   Because every connected component of $m$
   has an image in $h_1$ and $h_2$,
-  then evey connected component of $m$
+  then every connected component of $m$
   has a pre-image in both $h_1$ and $h_2$.
   Hence $\theta_1$ and $\theta_2$ are epis.
   % Also $\theta_1$ and $\theta_2$ are epis,
@@ -1475,8 +1482,8 @@ has a free site in addition to the two free sites
 that are bound by the rule,
 the formation of a triangle is excluded.
 In rule~\ref{eq:refined2}
-we add a free $r$ site to the blue node.
-The following rule adds
+we added a free $r$ site to the blue node.
+The following extesion of $r^+_{12}$ adds
 a free $l$ site to the orange node.
 % \begin{center}
 %   \begin{tikzpicture}
@@ -1795,8 +1802,8 @@ cautiously to be exhaustive and mutually exclusive. % non-overlapping.
 This is where our growth policy technique
 comes in handy to define such refinements.
 It divides the problem in a much simpler group of problems:
-Each extension $\phi$ must declare the set of sites
-that it requires to be mature and thus $\shapes$-balanced.
+each extension $\phi$ must declare the set of sites
+that it requires to be mature and $\shapes$-balanced.
 Minimal glueings play a guiding role here.
 They tell us whether an extension has successfully
 avoided or absorbed completely an energy pattern.
@@ -1845,10 +1852,13 @@ a site $z$ in $\sitemap_C^{-1}(g_\agents(u))$
 at agent $u$ in $\agents_{\anon{g}}$ iff either
 % (i) there is an agent $u_0$ with a site $z_0$ in $r_L$
 % such that $u=\phi(u_0)$ and $s = r_L(z_0)$; or
-(i) $u = \phi_\agents(u_0)$ and $z = \phi_\sites(z_0)$
+\begin{enumerate}[label={(\roman*)}]
+\item % (\emph{monotonicity})
+$u = \phi_\agents(u_0)$ and $z = \phi_\sites(z_0)$
 for some $u_0$ in $\agents_{\anon{r_L}}$ and
 $z_0$ in $\sites_{\anon{r_L}}$; or
-(ii) $\phi$ factorises as $\phi_2 \, \phi_1$,
+\item % (\emph{past-minimal-glueings-completeness})
+$\phi$ factorises as $\phi_2 \, \phi_1$,
 where $\phi_1: r_L \to g_1$,
 and there is a relevant minimal glueing
 $\gamma: p \to s \gets g_1 :\theta$,
@@ -1856,20 +1866,6 @@ with $p$ in $\shapes$,
 and some $u_1$ in $\agents_{\anon{g_1}}$
 and a site $z_1$ in $\sitemap_{\anon{s}}^{-1}(\theta_\agents(u_1))$
 such that $u = \phi_{2,\agents}(u_1)$ and $z = s_\sites(z_1)$; or
-(iii) $z = g_\sites(z_2)$ for some $z_2$ in $\sites_{\anon{g}}$
-such that $z_2 \edges_{\anon{g}} z_3$
-and $g_\sites(z_3)$ in $\gp_\phi(u)$.
-In words, clause (i) ensures
-that all sites in $r_L$ are asked for % \footnote{
-%   Otherwise every extension would be overgrown.}
-while clause (ii) adds sites $z$ in $\sites_C$
-corresponding to sites $z_1$ in $\sites_{\anon{s}}$
-which appear by glueing with $p$
-at some point between $r_L$ and $g$.
-Clause (iii), on the other hand,
-asks for sites that are bound to sites
-that are requested by the growth policy
-so that extensions that avoid minimal glueings are not overgrown.
 \begin{equation}
   \label{eq:energy-gp}
   \tikz[baseline=-2.5,thick]{
@@ -1887,6 +1883,23 @@ so that extensions that avoid minimal glueings are not overgrown.
     \draw (l) edge[hom,bend left=30] node[above right] {$\phi$} (g);
   }
 \end{equation}
+\item % (\emph{connected-completeness})
+$z = g_\sites(z_2)$ for some $z_2$ in $\sites_{\anon{g}}$
+such that $z_2 \edges_{\anon{g}} z_3$
+and $g_\sites(z_3)$ in $\gp_\phi(u)$.
+\end{enumerate}
+In words, clause (i) ensures
+that all sites in $r_L$ are asked for % \footnote{
+%   Otherwise every extension would be overgrown.}
+while clause (ii) adds sites $z$ in $\sites_C$
+corresponding to sites $z_1$ in $\sites_{\anon{s}}$
+which appear by glueing with $p$
+at some point between $r_L$ and $g$.
+Clause (iii), on the other hand,
+asks for sites that are bound to sites
+that are requested by the growth policy
+so that extensions that avoid minimal glueings are not overgrown.
+%
 We refer to the extension $\phi_2: g_1 \to g$
 as a \emph{rewind} of $\phi$
 and say that the request of $z$ at $u$ originates from $u_1$.
@@ -2185,7 +2198,8 @@ is in general well-defined and well-behaved.
   Due to clause (iii) there is always an extension
   whose image contains exactly all sites requested by $\gp^\states$
   and lies between an immature and an overgrown extension
-  in the specialisation order $\leq$.
+  according to $\leq$.
+  % in the specialisation order $\leq$.
   This extension is an epi because,
   as pointed out for exhaustivity,
   $\gp^\states$ only requests sites
