@@ -1012,6 +1012,9 @@ since they only differ in their edge structure.
 In this way, an extension of a rule
 is determined uniquely by an embedding.
 
+% TODO: pagebreaks are ugly
+\pagebreak
+
 Epis\footnote{
   Epi, mono and iso are short for
   epimorphism, monomorphism and isomorphism.}
@@ -1181,14 +1184,18 @@ it is mapped to in the contact graph.
 %
 An agent in $\anon{h}$ may cover some, or all,
 of these sites or even completely extraneous sites:
-if the former, \ie if for all $u$ in $\agents_{\anon{h}}$,
-$h_\sites(\sitemap_{\anon{h}}^{-1}(u)) \subset \gp_\phi(u)$,
+\begin{enumerate}[label={(\roman*)}]
+\item % if the former, \ie
+if for all $u$ in $\agents_{\anon{h}}$,
+$h_\sites(\sitemap_{\anon{h}}^{-1}(u)) \subseteq \gp_\phi(u)$,
 we say that $\phi$ is \emph{immature};
-if for all $u$s the inclusion is an equality
+\item if for all $u$ the inclusion is an equality
 and $\phi$ is an epi,
 % $h_\sites(\sitemap_{\anon{h}}^{-1}(u)) = \gp_\phi(u)$,
-we say that $\phi$ is \emph{mature};
-otherwise $\phi$ is said to be \emph{overgrown}.
+% we say that
+$\phi$ is \emph{mature};
+\item otherwise $\phi$ is said to be \emph{overgrown}.
+\end{enumerate}
 The functions $\gp_\phi$ must satisfy,
 for all extensions $\phi$ and $\phi' \geq \phi$,
 the \emph{faithfulness} property,
@@ -1214,10 +1221,11 @@ factorisations through $\gp(g)$ are unique when they exist,
 but \emph{not} that they necessarily do exist.
 In section \sct{energy-gp},
 we will construct a specific growth policy % of interest
-for which this property of exhaustivity of the decomposition
+% for which this property of exhaustivity of the decomposition
+for which the exhaustivity of the decomposition
 can be proved by hand.
 As such, it fulfils our desired criteria of providing
-an exhaustive collection of mutually exclusive sub-cases.
+an exhaustive collection of mutually exclusive subcases.
 
 \begin{theorem}
   \label{thm:unique-decomposition}
@@ -2430,8 +2438,8 @@ but it is not true in general for Kappa \citep{et2,et1}.
 
 Another point worth making is that the result holds symbolically % ---
 regardless of the energy costs $\cost$.
-Therefore $\cost$ can be seen as a set of parameters,
-an ideal support for machine learning techniques
+Therefore $\cost$ can be seen as a set of parameters.
+This is an ideal support for machine learning techniques
 if one were contemplating fitting a model to data.
 
 
@@ -3179,6 +3187,9 @@ The resulting plots are displayed in \fig{triangles}.
     whereas in the plot below they are set to $1$.}
   \label{fig:triangles}
 \end{figure}
+
+% TODO: pagebreaks are ugly
+\pagebreak
 
 First, we notice that the moderate energy penalty
 we impose on dimers in the second plot does not change much
