@@ -1,0 +1,43 @@
+%%%
+%
+% kappalst.sty
+%
+% Common LaTeX macros for type-setting Kappa (KaSim) code.
+%
+% To use the macros defined in this file,
+% add the following line to the preamble of a LaTeX document:
+%
+%   \usepackage{kappalst}
+%
+%
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{kappalst}[2017/02/16 LaTeX package for Kappa (KaSim) code]
+
+\RequirePackage{listings}
+
+\lstdefinelanguage{kappa}{
+	alsoletter={\%,:,-,<,>,@},
+	morekeywords=[1]{\%agent\:, \%token\:, \%var\:, \%obs\:},
+	morekeywords=[2]{\%init\:},
+	morekeywords=[3]{\%mod\:, \%def\:, \$ADD, \$DEL, \$SNAPSHOT, \$STOP, \$FLUX, \$TRACK, \$UPDATE, \$PLOTENTRY, \$PRINT, \$PRINTF},
+	morekeywords=[4]{->, <->, @},
+	morestring=[d]{'},
+	morecomment=[l]\#
+}
+
+\lstset{
+  upquote=true,
+	basicstyle=\ttfamily\footnotesize,
+	numbers=left,
+	numberstyle=\tiny,
+	breaklines,
+	keywordstyle=[1]\color{LightSlateBlue},
+	keywordstyle=[2]\color{Brown},
+	keywordstyle=[3]\color{DarkOrange},
+	keywordstyle=[4]\color{Red},
+	stringstyle=\color{ForestGreen},
+	commentstyle=\color{LightSlateGrey}
+}
+
+\renewcommand{\lstlistlistingname}{Codes}
+\renewcommand{\lstlistingname}{Code}
