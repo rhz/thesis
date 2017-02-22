@@ -1,0 +1,82 @@
+# "uuid" : "748717549"
+%def: "seed" "168380645"
+%def: "plotPeriod" "0.1" "t.u."
+%def: "outputFileName" "t-7.5.tsv"
+
+%agent: A(l!r.C, r!l.B)
+%agent: B(l!r.A, r!l.C)
+%agent: C(l!r.B, r!l.A)
+
+%var:/*0*/ 't' -7.5
+%var:/*1*/ 'ab' 1
+%var:/*2*/ 'bc' 1
+%var:/*3*/ 'ca' 1
+%var:/*4*/ 'T' |A(l!1, r!2), C(l!3, r!1), B(l!2, r!3)|
+%var:/*5*/ 'AB' |A(r!1), B(l!1)|
+%var:/*6*/ 'BC' |C(l!1), B(r!1)|
+%var:/*7*/ 'CA' |A(l!1), C(r!1)|
+%var:/*8*/ 'mA' |A(l, r)|
+%var:/*9*/ 'mB' |B(l, r)|
+%var:/*10*/ 'mC' |C(l, r)|
+%var:/*11*/ 'cAB' |A(l, r!1), B(l!1, r)|
+%var:/*12*/ 'cBC' |C(l!1, r), B(l, r!1)|
+%var:/*13*/ 'cCA' |A(l!1, r), C(l, r!1)|
+%var:/*14*/ 'ABC' |A(l, r!1), C(l!2, r), B(l!1, r!2)|
+%var:/*15*/ 'BCA' |A(l!1, r), C(l!2, r!1), B(l, r!2)|
+%var:/*16*/ 'CAB' |A(l!1, r!2), C(l, r!1), B(l!2, r)|
+%var:/*17*/ 'ABCA' |A(l, r!1), C(l!2, r!3), B(l!1, r!2), A(l!3, r)|
+%var:/*18*/ 'BCAB' |A(l!1, r!2), C(l!3, r!1), B(l, r!3), B(l!2, r)|
+%var:/*19*/ 'CABC' |A(l!1, r!2), C(l, r!1), B(l!2, r!3), C(l!3, r)|
+%plot: [T]
+%plot: T
+%plot: AB
+%plot: BC
+%plot: CA
+%plot: mA
+%plot: mB
+%plot: mC
+%plot: cAB
+%plot: cBC
+%plot: cCA
+%plot: ABC
+%plot: BCA
+%plot: CAB
+%plot: ABCA
+%plot: BCAB
+%plot: CABC
+
+A(l, r/!1), B(l/!1, r) @ ([exp] ((-1 / 2) * ab))
+A(l!r.C, r/!1), B(l/!1, r) @ ([exp] ((-1 / 2) * ab))
+A(l, r/!1), B(l/!1, r!l.C) @ ([exp] ((-1 / 2) * ab))
+A(l!1, r/!2), B(l/!2, r!3), C(l!3, r!1) @ ([exp] ((-1 / 2) * (ab + t)))
+C(r!1), A(l!1, r/!2), B(l/!2, r!3), C(l!3) @ ([exp] ((-1 / 2) * ab))
+A(l, r!1/), B(l!1/, r) @ ([exp] (- ((-1 / 2) * ab)))
+A(l!r.C, r!1/), B(l!1/, r) @ ([exp] (- ((-1 / 2) * ab)))
+A(l, r!1/), B(l!1/, r!l.C) @ ([exp] (- ((-1 / 2) * ab)))
+A(l!1, r!2/), B(l!2/, r!3), C(l!3, r!1) @ ([exp] (- ((-1 / 2) * (ab + t))))
+C(r!1), A(l!1, r!2/), B(l!2/, r!3), C(l!3) @ ([exp] (- ((-1 / 2) * ab)))
+B(l, r/!1), C(l/!1, r) @ ([exp] ((-1 / 2) * bc))
+B(l!r.A, r/!1), C(l/!1, r) @ ([exp] ((-1 / 2) * bc))
+B(l, r/!1), C(l/!1, r!l.A) @ ([exp] ((-1 / 2) * bc))
+B(l!1, r/!2), C(l/!2, r!3), A(l!3, r!1) @ ([exp] ((-1 / 2) * (bc + t)))
+A(r!1), B(l!1, r/!2), C(l/!2, r!3), A(l!3) @ ([exp] ((-1 / 2) * bc))
+B(l, r!1/), C(l!1/, r) @ ([exp] (- ((-1 / 2) * bc)))
+B(l!r.A, r!1/), C(l!1/, r) @ ([exp] (- ((-1 / 2) * bc)))
+B(l, r!1/), C(l!1/, r!l.A) @ ([exp] (- ((-1 / 2) * bc)))
+B(l!1, r!2/), C(l!2/, r!3), A(l!3, r!1) @ ([exp] (- ((-1 / 2) * (bc + t))))
+A(r!1), B(l!1, r!2/), C(l!2/, r!3), A(l!3) @ ([exp] (- ((-1 / 2) * bc)))
+C(l, r/!1), A(l/!1, r) @ ([exp] ((-1 / 2) * ca))
+C(l!r.B, r/!1), A(l/!1, r) @ ([exp] ((-1 / 2) * ca))
+C(l, r/!1), A(l/!1, r!l.B) @ ([exp] ((-1 / 2) * ca))
+C(l!1, r/!2), A(l/!2, r!3), B(l!3, r!1) @ ([exp] ((-1 / 2) * (ca + t)))
+B(r!1), C(l!1, r/!2), A(l/!2, r!3), B(l!3) @ ([exp] ((-1 / 2) * ca))
+C(l, r!1/), A(l!1/, r) @ ([exp] (- ((-1 / 2) * ca)))
+C(l!r.B, r!1/), A(l!1/, r) @ ([exp] (- ((-1 / 2) * ca)))
+C(l, r!1/), A(l!1/, r!l.B) @ ([exp] (- ((-1 / 2) * ca)))
+C(l!1, r!2/), A(l!2/, r!3), B(l!3, r!1) @ ([exp] (- ((-1 / 2) * (ca + t))))
+B(r!1), C(l!1, r!2/), A(l!2/, r!3), B(l!3) @ ([exp] (- ((-1 / 2) * ca)))
+
+
+%init: 1000 A(l, r), B(l, r), C(l, r)
+
+%mod: [E] = 80842 do $STOP

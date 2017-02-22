@@ -1,0 +1,95 @@
+%agent: A(l,r)
+%agent: B(l,r)
+%agent: C(l,r)
+
+# energies
+%var: 't' -2.5
+%var: 'ab' 1
+%var: 'bc' 1
+%var: 'ca' 1
+
+# observables
+%obs: 'T'  |A(l!1, r!2), B(l!2, r!3), C(l!3, r!1)|
+%obs: 'AB' |A(r!1), B(l!1)|
+%obs: 'BC' |B(r!1), C(l!1)|
+%obs: 'CA' |C(r!1), A(l!1)|
+
+# rules
+# A(r), B(l) -> A(r!1), B(l!1) refines into:
+A(l,r), B(l,r) -> A(l,r!1), B(l!1,r) @ [exp] (-1/2 * 'ab')
+A(l!r.C,r), B(l,r) -> A(l!r.C,r!1), B(l!1,r) @ [exp] (-1/2 * 'ab')
+A(l,r), B(l,r!l.C) -> A(l,r!1), B(l!1,r!l.C) @ [exp] (-1/2 * 'ab')
+A(l!1,r  ), B(l  ,r!3), C(l!3,r!1) -> \
+A(l!1,r!2), B(l!2,r!3), C(l!3,r!1) @ [exp] (-1/2 * ('ab' + 't'))
+C(r!1), A(l!1,r  ), B(l  ,r!3), C(l!3) -> \
+C(r!1), A(l!1,r!2), B(l!2,r!3), C(l!3) @ [exp] (-1/2 * 'ab')
+
+# A(r!1), B(l!1) -> A(r), B(l) refines into:
+A(l,r!1), B(l!1,r) -> A(l,r), B(l,r) @ [exp] -(-1/2 * 'ab')
+A(l!r.C,r!1), B(l!1,r) -> A(l!r.C,r), B(l,r) @ [exp] -(-1/2 * 'ab')
+A(l,r!1), B(l!1,r!l.C) -> A(l,r), B(l,r!l.C) @ [exp] -(-1/2 * 'ab')
+A(l!1,r!2), B(l!2,r!3), C(l!3,r!1) -> \
+A(l!1,r  ), B(l  ,r!3), C(l!3,r!1) @ [exp] -(-1/2 * ('ab' + 't'))
+C(r!1), A(l!1,r!2), B(l!2,r!3), C(l!3) -> \
+C(r!1), A(l!1,r  ), B(l  ,r!3), C(l!3) @ [exp] -(-1/2 * 'ab')
+
+# B(r), C(l) -> B(r!1), C(l!1) refines into:
+B(l,r), C(l,r) -> B(l,r!1), C(l!1,r) @ [exp] (-1/2 * 'bc')
+B(l!r.A,r), C(l,r) -> B(l!r.A,r!1), C(l!1,r) @ [exp] (-1/2 * 'bc')
+B(l,r), C(l,r!l.A) -> B(l,r!1), C(l!1,r!l.A) @ [exp] (-1/2 * 'bc')
+B(l!1,r  ), C(l  ,r!3), A(l!3,r!1) -> \
+B(l!1,r!2), C(l!2,r!3), A(l!3,r!1) @ [exp] (-1/2 * ('bc' + 't'))
+A(r!1), B(l!1,r  ), C(l  ,r!3), A(l!3) -> \
+A(r!1), B(l!1,r!2), C(l!2,r!3), A(l!3) @ [exp] (-1/2 * 'bc')
+
+# B(r!1), C(l!1) -> B(r), C(l) refines into:
+B(l,r!1), C(l!1,r) -> B(l,r), C(l,r) @ [exp] -(-1/2 * 'bc')
+B(l!r.A,r!1), C(l!1,r) -> B(l!r.A,r), C(l,r) @ [exp] -(-1/2 * 'bc')
+B(l,r!1), C(l!1,r!l.A) -> B(l,r), C(l,r!l.A) @ [exp] -(-1/2 * 'bc')
+B(l!1,r!2), C(l!2,r!3), A(l!3,r!1) -> \
+B(l!1,r  ), C(l  ,r!3), A(l!3,r!1) @ [exp] -(-1/2 * ('bc' + 't'))
+A(r!1), B(l!1,r!2), C(l!2,r!3), A(l!3) -> \
+A(r!1), B(l!1,r  ), C(l  ,r!3), A(l!3) @ [exp] -(-1/2 * 'bc')
+
+# C(r), A(l) -> C(r!1), A(l!1) refines into:
+C(l,r), A(l,r) -> C(l,r!1), A(l!1,r) @ [exp] (-1/2 * 'ca')
+C(l!r.B,r), A(l,r) -> C(l!r.B,r!1), A(l!1,r) @ [exp] (-1/2 * 'ca')
+C(l,r), A(l,r!l.B) -> C(l,r!1), A(l!1,r!l.B) @ [exp] (-1/2 * 'ca')
+C(l!1,r  ), A(l  ,r!3), B(l!3,r!1) -> \
+C(l!1,r!2), A(l!2,r!3), B(l!3,r!1) @ [exp] (-1/2 * ('ca' + 't'))
+B(r!1), C(l!1,r  ), A(l  ,r!3), B(l!3) -> \
+B(r!1), C(l!1,r!2), A(l!2,r!3), B(l!3) @ [exp] (-1/2 * 'ca')
+
+# C(r!1), A(l!1) -> C(r), A(l) refines into:
+C(l,r!1), A(l!1,r) -> C(l,r), A(l,r) @ [exp] -(-1/2 * 'ca')
+C(l!r.B,r!1), A(l!1,r) -> C(l!r.B,r), A(l,r) @ [exp] -(-1/2 * 'ca')
+C(l,r!1), A(l!1,r!l.B) -> C(l,r), A(l,r!l.B) @ [exp] -(-1/2 * 'ca')
+C(l!1,r!2), A(l!2,r!3), B(l!3,r!1) -> \
+C(l!1,r  ), A(l  ,r!3), B(l!3,r!1) @ [exp] -(-1/2 * ('ca' + 't'))
+B(r!1), C(l!1,r!2), A(l!2,r!3), B(l!3) -> \
+B(r!1), C(l!1,r  ), A(l  ,r!3), B(l!3) @ [exp] -(-1/2 * 'ca')
+
+# init
+%init: 1000 (A(), B(), C())
+
+## more observables
+# monomers
+%obs: 'mA' |A(l, r)|
+%obs: 'mB' |B(l, r)|
+%obs: 'mC' |C(l, r)|
+
+# 2-chains
+%obs: 'cAB' |A(l, r!1), B(l!1, r)|
+%obs: 'cBC' |B(l, r!1), C(l!1, r)|
+%obs: 'cCA' |C(l, r!1), A(l!1, r)|
+
+# 3-chains
+%obs: 'ABC' |A(l, r!1), B(l!1, r!2), C(l!2, r)|
+%obs: 'BCA' |B(l, r!1), C(l!1, r!2), A(l!2, r)|
+%obs: 'CAB' |C(l, r!1), A(l!1, r!2), B(l!2, r)|
+
+# 4-chains
+%obs: 'ABCA' |A(l, r!1), B(l!1, r!2), C(l!2, r!3), A(l!3, r)|
+%obs: 'BCAB' |B(l, r!1), C(l!1, r!2), A(l!2, r!3), B(l!3, r)|
+%obs: 'CABC' |C(l, r!1), A(l!1, r!2), B(l!2, r!3), C(l!3, r)|
+
