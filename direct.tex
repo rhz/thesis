@@ -2268,7 +2268,7 @@ Hence, $\refinedrules = \inv{\refinedrules}$
 is closed under inversion like $\generators$.
 
 
-\section{Rates}
+\section{Rates and detailed balance}
 \label{sec:rates}
 
 To equip $\refinedrules$ with rates
@@ -3218,8 +3218,503 @@ until at $\cost(t) = -10$, order wins,
 and the effect is not noticeable anymore.
 
 
-\section{Example: Flagellum's motor}
+\section{Example: Flagellum's engine}
 \label{sec:alloring}
+
+In this section we present another model.
+This model is inspired in a classical
+object of study in molecular biology:
+the bacterial flagellar engine.
+% In this section we present a model
+% of a bacterial flagellar engine.
+%
+The flagellar engine can rotate clockwise or anti-clockwise
+at high angular velocities.
+% This decides whether the bacterium tumbles or swims forward.
+When it rotates clockwise the filaments of the flagellum
+move chaotically in all directions,
+making the bacterium tumble % in a fixed position
+and thus randomly change the axis % direction
+of its body and engine.
+% to which its body and the engine points.
+When it rotates anti-clockwise
+the filaments of the flagellum align
+and move synchronously,
+propulsing the bacterium in the direction
+the engine is pointing to.
+In the latter regime the bacterium thus swims forward.
+% which reaches an astonishing 100,000 rpm.
+% In the first regime, flagella get tangled together
+% resulting in the bacterium tumbling;
+% in the second one, the bacterium swims forward.
+% This random walk is driven by molecular devices,
+% embedded in the bacteria's outer membrane,
+% that sense various aspects of the chemical environment
+% \citep{sourjik}.
+When the bacterium detects that the levels of food are decreasing
+or the amount of poisonous substances is increasing,
+it tumbles to change the direction in which its swimming.
+In this way it implements a basic chemotactic system.
+
+A simple model of the switch between the two modes
+has been proposed by \citet{teuta}.
+% One can build a simple model of the switch
+% between the two modes \citep{teuta}.
+In this model
+the engine is seen as a ring of $n$ identical components,
+called protomers or $P$ for short,
+with two possible conformations, $0$ and $1$.
+% Here we take $n=34$ for simulating and drawing
+Here we take $n=34$ in the simulation and diagrams
+but the analysis does not depend on the specific value of $n$.
+% Each of these components is in turn
+% a complex made of different subcomponents.
+% (In reality, each of the $n=34$ component protomers is itself
+%  a tiny complex made of different subcomponents,
+%  but the model ignores this).
+A ring homogeneously in state~$0$ ($1$) rotates (anti-)clockwise
+and induces tumbling (straight motion).
+Importantly, neighbouring $P$s on the ring prefer to have
+matching conformations. % (as in the Ising model).
+States of the ring with many mismatches thus incur high penalties.
+A small diffusible protein named CheY,
+which we call $Y$ for short,
+binds $P$ when it is activated.
+When it $Y$ is binding $P$, $P$ favours state~$1$.
+Conversely, in the absence of a $Y$ molecule binding $P$,
+$P$ favours state~$0$.
+% In the absence of any $Y$ molecule binding a $P$,
+% its favoured conformation is $0$;
+% conversely, in the presence of a $Y$, $P$ favours $1$.
+% ($Y$ stands for a small diffusible protein named CheY).
+CheY, in turn, is activated by the system of chemoreceptors
+in the presence of food and abscence of poisions.
+The configuration of the chemoreceptor cluster and its activity
+have also been modelled thermodynamically \citep{sourjik}.
+% To bind, $Y$ has to be activated by an external signal.
+% Hence the switch can be triggered by a sudden activation of $Y$
+% which then binds the ring and induces a change of regime.
+% The sharper the transition between the two regimes the better.
+
+\newagent{\nP}{P}{l//west/,r//east/,y//north/}
+\newagent{\nY}{Y}{p//south/}
+\tikzstyle{on}=[fill=green!60]
+\tikzstyle{off}=[fill=black!30]
+
+\begin{figure}
+  \begin{center}
+    \begin{tikzpicture}[agent/.append style={transform shape}]
+      \def\radius{4}
+      % TODO: How can I define etoolbox's internal lists directly?
+      \def\on{}
+      \foreach \i in {4,5,6,7,20}{\listxadd{\on}{\i}}
+      \def\ys{}
+      \foreach \i in {4,6,15,20}{\listxadd{\ys}{\i}}
+      \draw[very thick] (0,0) circle (\radius);
+      \foreach \angle [count=\i] in {0,18,...,342} {%
+        \begin{scope}[shift={(\angle+90:\radius)},rotate=\angle]
+          \def\state{off}
+          \xifinlist{\i}{\on}{\gdef\state{on}}{}
+          \xifinlist{\i}{\ys}{%
+            \e{0,0}{0,1.2};
+            \nY{y\i}{0,1.2}{p};
+          }{\e{0,0}{0,.6};}
+          \nP[\state]{p\i}{0,0}{l,r,y};
+        \end{scope}
+      };
+      % \node at (0.2,0) {\includegraphics[width=5.5cm]{flagella2.jpg}};
+    \end{tikzpicture}
+  \end{center}
+  \caption{Ring of protomers with some $Y$s bound.
+    Since only a few $Y$s are bound to the ring,
+    the majority of protomers is likely to be in state~$0$
+    (visually represented as grey nodes)
+    and a minority in state~$1$ (green).}
+  \label{fig:ring}
+\end{figure}
+
+As each of the $P$s can be in four states,
+a ring of size $34$ has on the order of
+$10^{20}$ non-isomorphic configurations.
+This precludes any reaction-based (\eg Petri nets) approach
+to the dynamics where each state of the whole ring
+is considered as one chemical species.
+% At this stage, we could apply the rule-based approach,
+% % which allows one to specify events based only on
+% % a partial and local representation of the state.
+% or, better, we can obtain the rules \emph{indirectly}
+% by applying the methodology of \sct{energy-gp}.
+% This is what we now do informally.
+We use thus a rule-based approach
+that allows us to specify events based only
+on a minimal necessary context around each protomer
+and in particular we derive the set of rules
+by applying the methodology of \sct{energy-gp}.
+
+% First,
+We define the contact graph of the model as
+\begin{center}
+  \begin{tikzpicture}[grphdiag]
+    \draw (0,-.3) circle (.5);
+    \e{0,0}{0,1.2};
+    \draw[on ,draw opacity=0] (135:10pt) arc (135:315:10pt);
+    \draw[off,draw opacity=0] (135:10pt) arc (135:-45:10pt);
+    \nP[fill opacity=0]{p}{0,0}{l,r,y};
+    \node at (0,0) {P};
+    \site{p-d}{p.south};
+    % \site[off]{p-c}{p.south};
+    % \draw[on,draw opacity=0] (p-c) +(0,1.5pt) arc (90:270:1.5pt);
+    \node at (158:.5) {\scriptsize $a$};
+    \node at (26:.5) {\scriptsize $b$};
+    \node at (114:.5) {\scriptsize $c$};
+    \node at (-65:.5) {\scriptsize $d$};
+    \nY{y}{0,1.2}{p};
+    % \draw (p-l) edge[bend right=135,distance=1.5cm] (p-r);
+  \end{tikzpicture}
+\end{center}
+where $P$ has 4 sites $a,b,c,d$.
+The first two form the backbone of the ring
+while $c$ can bind $Y$s. % an agent of type $Y$.
+Site $d$ encodes the conformation state of $P$:
+we say $P$ is in state~$0$ when site $d$ is bound to an $A$ agent
+and is in state~$1$ when bound to a $B$ agent
+($A$ and $B$ agents are not displayed in the contact graph above).
+% We use grey for $0$ and green for $1$
+% and usually forget about this site
+% and colour the agent directly.
+We will never mention this site (nor $A$ and $B$ agents) explicitly
+but instead will colour the agent of type $P$ accordingly.%
+% NOTE: the real encoding is more complex.
+% P-A-B is a P in state 0 and P-B-A is a P in state 1.
+\footnote{
+  The na\"ive encoding where
+  i) $A$ and $B$ have a free site that can bind site $d$ of $P$,
+  ii) whenever $P$ changes from state $0$ to state $1$
+  we detach an $A$ from $P$ and attach a $B$ to it,
+  and thus iii) we have a pool of free $A$s and $B$s in the mixture,
+  will have a problem with kinetics due to mass action:
+  when we attach a $B$ to $P$ we make it less likely
+  for the next $P$ to bind a $B$
+  since there are less $B$s free in the mixture.
+  To solve this issue every $P$ is either bound
+  to an $A$ that is in turn bound to a $B$
+  or a $B$ that is bound to an $A$.
+  Whenever we want to change state
+  we only need to exchange the order of the $A$ and $B$.}
+Also, we will draw sites $a,b,c$
+always on the left, right and top of $P$, respectively,
+and thus forgo annotating the name of the site.
+
+% Second, we capture
+The informal statements about the favoured states of $P$
+in the different configurations discussed above are captured
+in the definition of the energy patterns and associated energy costs.
+Note that the various patterns overlap.
+
+\input{alloring-patterns}
+
+We abuse notation by referring to both the pattern
+and its energy cost as~$\cost_{ij}$.
+The following constraints are imposed
+on the energy costs:
+% In order to complete our energy landscape,
+% we need to pick energy costs which reward or penalise
+% local configurations as discussed above:
+% In order to complete our energy landscape
+% in accord with the discussion above,
+% we pick energy costs which reward
+% local configurations that are favoured
+% like the $0$ state when no $Y$ is bound
+% or the $1$ state when $Y$ is bound.
+% In particular, we impose the following constraints:
+\begin{align}
+  \label{eq:ePP}
+  \cost_{00},\cost_{11} & {}< \cost_{10},\cost_{01} \\
+  \label{eq:eP}
+  \cost_{0} & {}< \cost_{1} \\
+  \label{eq:ePY}
+  \cost^Y_{0} & {}> \cost^Y_{1}
+\end{align}
+These inequalities enact the considerations in the discussion above.
+The role of \eqn{ePP} is to align
+the states of neighbours on the ring
+% --- an Ising penalty term for mismatching neighbours
+% which will ``spread conformation'';
+--- essentially an Ising term which spreads conformation.
+\eqn{eP} makes $0$ the favoured state,
+while \eqn{ePY} inverts the situation % makes $1$ the favoured state
+in the presence of $Y$.
+% which says that when bound to $Y$, $P$ prefers state $1$.
+% \footnote{
+%   So far one needs 8 parameters
+%   (really 7 as energy is defined up to an additive constant);
+%   symmetries of the problem can bring this number down,
+%   \eg $\cost_{00} = \cost_{11}$,
+%   meaning no alignment is favoured,
+%   or $\cost^Y_{0} - \cost^Y_{1} = 2(\cost_{1} -\cost_{0})$
+%   to exactly exchange the $0/1$ conformational distribution
+%   when binding.}
+
+Following \sct{rates}
+we associate to each ring configuration $x$
+the occurrence vector $\shapes(x)$
+and total energy $\cost \cdot \shapes(x)$.
+For example,
+a ring of size $n$ uniformly in state $0$ with no bound $Y$s
+has total energy $n(\cost_{00}+\cost_{0})$.
+
+% The next step is to create the dynamics.
+% The naive rule $b$ for binding $P$ and $Y$:
+The next step is to define the set of generator rules $\generators$.
+The first pair of rules that we include in this set
+are $r^+_Y$ the binding of $P$ and $Y$ and its inverse $r^-_Y$.
+\begin{center}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{0,0.6};
+        \e{0,1.4}{0,0.8};
+        \nP{p}{0,0}{y};
+        \nY{y}{0,1.4}{p};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    % \begin{scope}[shift={(.5,0)}]
+    %   \draw[rule] (0,.09) -- node[above] {$k_b^+$} ++(1,0);
+    %   \draw[rule] (1,-.09) -- node[below] {$k_b^-$} ++(-1,0);
+    % \end{scope}
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{0,1.2};
+        \nP{rp}{0,0}{y};
+        \nY{ry}{0,1.2}{p};
+      }};
+  \end{tikzpicture}
+\end{center}
+The nature of the method outlined in \sct{energy-gp}
+allows us to refine each rule individually,
+so we proceed to refine $r^+_Y,r^-_Y$ immediately.
+The pair of rules has an ambiguous $\Delta E$
+because applying the forward rule to a $P$ in state~$0$
+will create a $\cost^Y_0$
+but when $P$ is in state~$1$ it will create a $\cost^Y_1$.
+% as it will be either $\cost^Y_0$ or $\cost^Y_1$
+% depending on its instances;
+Hence, we cannot assign % have no hope of assigning
+rates to this rule that satisfy detailed balance ---
+unless $\cost^Y_0 = \cost^Y_1$, which contradicts \eqn{ePY}.
+To get $\shapes$-balanced rules one needs to refine them into
+\begin{center}
+  \begin{tikzpicture}
+    % \path[use as bounding box] (-1.4,1) rectangle (3.2,-3);
+    \begin{scope}
+      \node[grphnode,anchor=east] (lhs1) at (0,0) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0,0.6};
+          \e{0,1.4}{0,0.8};
+          \nP[off]{p}{0,0}{y};
+          \nY{y}{0,1.4}{p};
+        }};
+      % \node[anchor=east,xshift=-2] at (lhs1.west) {$b_1 :=$};
+      % \begin{scope}[shift={(.5,0)}]
+      %   \draw[rule] (0,.09) -- node[above] {$k_{b_1}^+$} ++(1,0);
+      %   \draw[rule] (1,-.09) -- node[below] {$k_{b_1}^-$} ++(-1,0);
+      % \end{scope}
+      \path (lhs1.east) +(.3,.09) edge[rule] +(1,.09)
+        +(1.3,0) coordinate (r1);
+      \path (lhs1.east) +(1,-.09) edge[rule] +(.3,-.09);
+      \node[grphnode,anchor=west] (rhs1) at (r1) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0,1.2};
+          \nP[off]{rp}{0,0}{y};
+          \nY{ry}{0,1.2}{p};
+        }};
+    \end{scope}
+
+    \begin{scope}[shift={(6,0)}]
+      \node[grphnode,anchor=east] (lhs2) at (0,0) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0,0.6};
+          \e{0,1.4}{0,0.8};
+          \nP[on]{p}{0,0}{y};
+          \nY{y}{0,1.4}{p};
+        }};
+      % \node[anchor=east,xshift=-2] at (lhs2.west) {$b_2 :=$};
+      % \begin{scope}[shift={(.5,0)}]
+      %   \draw[rule] (0,.09) -- node[above] {$k_{b_2}^+$} ++(1,0);
+      %   \draw[rule] (1,-.09) -- node[below] {$k_{b_2}^-$} ++(-1,0);
+      % \end{scope}
+      \path (lhs2.east) +(.3,.09) edge[rule] +(1,.09)
+        +(1.3,0) coordinate (r2);
+      \path (lhs2.east) +(1,-.09) edge[rule] +(.3,-.09);
+      \node[grphnode,anchor=west] (rhs2) at (r2) {
+        \tikz[ingrphdiag]{
+          \e{0,0}{0,1.2};
+          \nP[on]{rp}{0,0}{y};
+          \nY{ry}{0,1.2}{p};
+        }};
+    \end{scope}
+    \path (rhs1) -- node {and} (lhs2);
+  \end{tikzpicture}
+\end{center}
+We call the refined rules $r^+_{Y0},r^-_{Y0}$ and $r^+_{Y1},r^-_{Y1}$.
+Each rule $r^+_{Yi}$ ($i \in \set{0,1}$) specifies
+enough of the context in which it applies
+to have a definite energy balance $\cost^Y_i$.
+The second pair of rules in $\generators$ is
+\begin{center}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[off]{p0}{-1,0}{};
+      }};
+    % \begin{scope}[shift={(.5,0)}]
+    %   \draw[rule] (0,.09) -- node[above] {$k_f^+$} ++(1,0);
+    %   \draw[rule] (1,-.09) -- node[below] {$k_f^-$} ++(-1,0);
+    % \end{scope}
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[on]{p0}{1,0}{};
+      }};
+  \end{tikzpicture}
+\end{center}
+% and its refinement, with their corresponding energy balance,
+This pair of rules generates many more refinements
+as a change in the state of $P$ will create and destroy
+matches $\cost_{00},\cost_{11}$ and mismatches $\cost_{10},\cost_{01}$
+between $P$ and its neighbours in the ring.
+% with the neighbours of $P$ in the ring.
+% due to the Ising term.
+We must then reveal this context
+% , specifically the neighbourhood of $P$,
+and account for all combinations of neighbours' states.
+Since the rules do not change the state of the neighbours
+% do not change their state by the action of the rule
+we do not need to reveal the state of their neighbours,
+which saves us from an infinite recursion of revelations.%
+\footnote{
+  Indeed \thm{energy-gp} guarantees that
+  such infinite recursions never occur.}
+We must also know whether the $P$
+that is subject to the action of the rule
+is bound to a $Y$
+as in its presence % of a $Y$
+patterns $\cost^Y_1$ and $\cost^Y_0$
+would be consumed or produced.
+% Considering all these elements gives us the following refinements
+% for this second pair of rules
+The refinements of this second pair of rules are thus
+
+\input{alloring-f-refinements}
+
+% \footnote{
+In general, if we write $i$ for the state of the left neighbour
+and $j$ for that of the right neighbour,
+we have that the energy balance for the first 4 refinements is
+$\cost_{i1}+\cost_{1j}-\cost_{i0}-\cost_{0j}+\cost_1-\cost_0$
+and for the last 4 is
+$\cost_{i1}+\cost_{1j}-\cost_{i0}-\cost_{0j}+\cost_1-\cost_0+
+\cost^Y_1-\cost^Y_0$. %}
+As we have 10 pairs of refined rules in total ($2+8$)
+% (2 for the first pair of rules and 8 for the second)
+and only 8 energy patterns,
+there must be linear dependencies between the various balances.
+Indeed, % in this case, it is easy to see that
+the family of vector balances has rank six
+given by basis vectors $\cost^Y_1$, $\cost^Y_0$,
+$\cost_{00}$, $\cost_{11}$,
+$\cost_{01}+\cost_{10}$ and $\cost_1-\cost_0$.
+% Thermodynamic consistency induces relationships between rates;
+% a well-established fact in the case of reaction networks
+% (\eg see \citet{et2}).
+This example portrays how thermodynamic consistency
+(\ie detailed balance)
+induces relationships between the rates of the 10 refined rules.
+
+% With the rules in place,
+% the final step is to choose rates which satisfy detailed balance.
+The final step is to choose concrete rates for our refined rules.
+% This guarantees that the obtained rule set converges to the equilibrium
+% specified by the choice of the energy cost vector.
+% Convergence will happen whatever $\cost$ is, \ie\ symbolically.
+We do so by using the symmetric linear kinetic model of \eqn{sym-lkm}.
+% If, in addition, $\cost$ follows (\ref{eq:ePP}--\ref{eq:ePY})
+% and one uses the symmetric linear kinetic model,
+% Given that $\cost$ follows Eq.~\ref{eq:ePP}--\ref{eq:ePY},
+% one can see in \fig{PY} that the ring
+% (i) undergoes sharp transitions
+% when $Y$ is stepped up and down again;
+% and (ii) has at all times very few mismatches.
+% NOTE: it is not true in general that the simulation
+% will show a sharp transition when \cost follows those equations.
+% When \cost_{00} = \cost_{11} = -2 and \cost_{01} = \cost_{10} = 2
+% the transition is more gradual because the penalty
+% of changing P's state to 1 in a ring full of 0s is bigger than
+% the reward given by \cost^Y_1 (of course it depends as well on
+% the time scales and the sampling frequency how sharp it looks)
+In \fig{PY} one can see the result of a simulation
+for the given parameter values
+when $Y$ is stepped up and down again.
+The model behaves as the one-dimensional cyclic Ising model
+where the role of the magnetic field is played by $Y$.
+% (This model and its phase transition relate to
+%  a well-understood one-dimensional cyclic Ising model,
+%  where the role of the magnetic field is played by
+%  the active $Y$s~\citep{pathria}.
+%  In this context, our rule set plays the role of
+%  the so-called Glauber dynamics.)
+% There is more to say in relation to entropy and the transition to order,
+% but this is not central to the purpose of the paper,
+% and we will refrain to go further in this direction.
+
+It is important to note that the refined rules shown above
+assume that the $P$s lie on a ring and the ring is fixed,
+\ie it does not break.
+The method of \sct{energy-gp},
+which makes no such assumptions,
+would generate many more rules
+as we would have to take into account the cases where,
+for instance, the $P$ that is changing its state
+is an end of the chain of protomers.
+% In this model we assumed the ring fixed
+% and that there is no need for breaking/forming $PP$ bonds.
+% This is a convenient simplification without which
+% we would have to write awfully many more rules,
+% which brings the natural question of whether
+% we can generate those rules automatically.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{flagellum-engine/y34/fe-sa}
+  \caption{
+    The simulation steps up the amount of $Y$ (green curve)
+    at $t=100$ and down again at $t=200$.
+    This sends the vast majority of the ring
+    into state~$1$ (orange curve)
+    and then back to state~$0$ (blue curve).
+    The number of mismatches (purple curve) stays low
+    even during transitions.
+    The parameters for the simulation are
+    $\cost_0 = \cost_{00} = \cost_{11} = -1$,
+    $\cost_1 = \cost_{01} = \cost_{10} = 1$,
+    $\cost^Y_0 = 2$ and $\cost^Y_1 = -2$.}
+  \label{fig:PY}
+\end{figure}
+
+% Our illustrative model is by no means a particular case;
+% there are many other biological examples
+% (\eg\ Wingreen's chemotaxis,
+%  or chemotactic receptor clustering~\citep{sourjik},
+%  transcriptional regulation~\citep{saiz2006}),
+% and other non-biological ones following the same concepts.
+% Note also that the example above plays out with simple energy patterns
+% which only incorporate edge and agent terms.
+% This corresponds to the restricted notion of energy
+% developed in \citet{anc}.
 
 
 \section{Non-linear energy functions}

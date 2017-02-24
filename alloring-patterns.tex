@@ -1,0 +1,79 @@
+\vspace{8pt}
+\noindent
+\hspace{-5pt}
+\begin{tikzpicture}
+
+  \def\dist{1.4}
+
+  %% Energy patterns %%
+  \node[grphnode] (e0) at (0,1.4) {
+    \tikz[ingrphdiag]{
+      \nP[off]{p0}{0,0}{};
+    }};
+  \node[anchor=east] at (e0.west) {$\cost_0 :=$};
+  \node[grphnode] (e1) at (0,0) {
+    \tikz[ingrphdiag]{
+      \nP[on]{p1}{0,0}{};
+    }};
+  \node[anchor=east] at (e1.west) {$\cost_1 :=$};
+
+  \path (e0.east) ++(\dist,0) coordinate (c00);
+  \path (e1.east) ++(\dist,0) coordinate (c11);
+  \node[grphnode,anchor=west] (e00) at (c00) {
+    \tikz[ingrphdiag]{
+      \nP[off]{p00f}{0,0}{r};
+      \nP[off]{p00s}{1.2,0}{l};
+      \e{p00f-r}{p00s-l};
+      % \node at (26:.49) {\scriptsize $b$};
+      % \node[shift={(1.2,0)}] at (-158:.475) {\scriptsize $a$};
+    }};
+  \node[anchor=east] at (e00.west) {$\cost_{00} :=$};
+  \node[grphnode,anchor=west] (e11) at (c11) {
+    \tikz[ingrphdiag]{
+      \nP[on]{p11f}{0,0}{r};
+      \nP[on]{p11s}{1.2,0}{l};
+      \e{p11f-r}{p11s-l};
+    }};
+  \node[anchor=east] at (e11.west) {$\cost_{11} :=$};
+
+  \path (e00.east) ++(\dist,0) coordinate (c10);
+  \path (e11.east) ++(\dist,0) coordinate (c01);
+  \node[grphnode,anchor=west] (e10) at (c10) {
+    \tikz[ingrphdiag]{
+      \nP[on]{p10f}{(0,0}{r};
+      \nP[off]{p10s}{1.2,0}{l};
+      \e{p10f-r}{p10s-l};
+    }};
+  \node[anchor=east] at (e10.west) {$\cost_{10} :=$};
+  \node[grphnode,anchor=west] (e01) at (c01) {
+    \tikz[ingrphdiag]{
+      \nP[off]{p01f}{0,0}{r};
+      \nP[on]{p01s}{1.2,0}{l};
+      \e{p01f-r}{p01s-l};
+    }};
+  \node[anchor=east] at (e01.west) {$\cost_{01} :=$};
+
+  \path (e01.east) ++(\dist,.7) coordinate (c0y);
+  \node[grphnode,anchor=west] (e0y) at (c0y) {
+    \tikz[ingrphdiag]{
+      \nP[off]{p0y}{0,0}{y};
+      \nY{y0}{0,1.2}{p};
+      \e{p0y-y}{y0-p};
+    }};
+  \node[anchor=east] at (e0y.west) {$\cost_0^Y :=$};
+
+  \path (e0y.east) ++(\dist,0) coordinate (c1y);
+  \node[grphnode,anchor=west] (e1y) at (c1y) {
+    \tikz[ingrphdiag]{
+      \nP[on]{p1y}{0,0}{y};
+      \nY{y1}{0,1.2}{p};
+      \e{p1y-y}{y1-p};
+    }};
+  \node[anchor=east] at (e1y.west) {$\cost_1^Y :=$};
+
+\end{tikzpicture}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:

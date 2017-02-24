@@ -1,0 +1,277 @@
+% on off
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \stub{f2l-p2}{y};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \stub{f2r-p2}{y};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ \cost_{11} - \cost_{00}
+       \end{array}$};
+      % $\Delta E = \cost_{11} - \cost_{00}$};
+  \end{tikzpicture}
+\end{flushleft}
+% off on
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \stub{f2l-p2}{y};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \stub{f2r-p2}{y};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ \cost_{11} - \cost_{00}
+       \end{array}$};
+      % $\Delta E = \cost_{11} - \cost_{00}$};
+  \end{tikzpicture}
+\end{flushleft}
+% off off
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \stub{f2l-p2}{y};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \stub{f2r-p2}{y};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ \cost_{01} + \cost_{10} - 2 \cost_{00}
+       \end{array}$};
+      % $\Delta E = \cost_{01} + \cost_{10} - 2 \cost_{00}$};
+  \end{tikzpicture}
+\end{flushleft}
+% on on
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \stub{f2l-p2}{y};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \stub{f2r-p2}{y};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ 2 \cost_{11} - \cost_{10} - \cost_{01}
+       \end{array}$};
+      % $\Delta E = 2 \cost_{11} - \cost_{10} - \cost_{01}$};
+  \end{tikzpicture}
+\end{flushleft}
+% Y on off
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \nY{f2l-y}{1.2,1.2}{p};
+        \link{f2l-p2-y}{f2l-y-p};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \nY{f2r-y}{1.2,1.2}{p};
+        \link{f2r-p2-y}{f2r-y-p};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ \cost_{11} - \cost_{00} \\
+                  &{}+ \cost_1^Y - \cost_0^Y
+       \end{array}$};
+  \end{tikzpicture}
+\end{flushleft}
+% Y off on
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \nY{f2l-y}{1.2,1.2}{p};
+        \link{f2l-p2-y}{f2l-y-p};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \nY{f2r-y}{1.2,1.2}{p};
+        \link{f2r-p2-y}{f2r-y-p};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ \cost_{11} - \cost_{00} \\
+                  &{}+ \cost_1^Y - \cost_0^Y
+       \end{array}$};
+  \end{tikzpicture}
+\end{flushleft}
+% Y off off
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \nY{f2l-y}{1.2,1.2}{p};
+        \link{f2l-p2-y}{f2l-y-p};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[off]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[off]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \nY{f2r-y}{1.2,1.2}{p};
+        \link{f2r-p2-y}{f2r-y-p};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ \cost_{01} + \cost_{10} - 2 \cost_{00} \\
+                  &{}+ \cost_1^Y - \cost_0^Y
+       \end{array}$};
+  \end{tikzpicture}
+\end{flushleft}
+% Y on on
+\begin{flushleft}
+  \hspace{.5cm}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2l-p1}{0,0}{r};
+        \nP[off]{f2l-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2l-p3}{2.4,0}{l};
+        \link{f2l-p1-r}{f2l-p2-l};
+        \link{f2l-p2-r}{f2l-p3-l};
+        \nY{f2l-y}{1.2,1.2}{p};
+        \link{f2l-p2-y}{f2l-y-p};
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nP[on]{f2r-p1}{0,0}{r};
+        \nP[on]{f2r-p2}{1.2,0}{l,r,y};
+        \nP[on]{f2r-p3}{2.4,0}{l};
+        \link{f2r-p1-r}{f2r-p2-l};
+        \link{f2r-p2-r}{f2r-p3-l};
+        \nY{f2r-y}{1.2,1.2}{p};
+        \link{f2r-p2-y}{f2r-y-p};
+      }};
+    \path (rhs.east) ++(1,0) node[anchor=west] {
+      $\begin{array}{@{}l@{}l@{}}
+         \Delta E &{}= \cost_1 - \cost_0 \\
+                  &{}+ 2 \cost_{11} - \cost_{10} - \cost_{01} \\
+                  &{}+ \cost_1^Y - \cost_0^Y
+       \end{array}$};
+  \end{tikzpicture}
+\end{flushleft}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
