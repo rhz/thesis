@@ -3580,8 +3580,8 @@ $\cost_{01}+\cost_{10}$ and $\cost_1-\cost_0$.
 % Thermodynamic consistency induces relationships between rates;
 % a well-established fact in the case of reaction networks
 % (\eg see \citet{et2}).
-This example portrays how thermodynamic consistency
-(\ie detailed balance)
+This example portrays how % detailed balance
+thermodynamic consistency (\ie detailed balance)
 induces relationships between the rates of the refined rules.
 
 \begin{figure}[t]
@@ -3601,6 +3601,27 @@ induces relationships between the rates of the refined rules.
     $\cost^Y_0 = 2$ and $\cost^Y_1 = -2$.}
   \label{fig:PY}
 \end{figure}
+
+% In this model we assumed the ring fixed
+% and that there is no need for breaking/forming $PP$ bonds.
+It is important to note that the refined rules shown above
+are those that assume the $P$s lie on a ring and the ring is fixed,
+\ie it does not break.
+This is true in our model
+as long as no rule able to form or break bonds between the $P$s
+is included in the generator rules
+and we make sure the initial mixture contains no open $P$-chains.
+The method of \sct{energy-gp},
+which makes no such assumptions,
+generates many more rules
+as it takes into account the cases where,
+for instance, the $P$ that changes state
+is an end of the chain of protomers.
+
+% Note that the example above plays out with simple energy patterns
+% which only incorporate edge and agent terms.
+% This corresponds to the restricted notion of energy
+% developed in \citet{anc}.
 
 The final step is to choose concrete rates for our refined rules.
 % This guarantees that the obtained rule set converges to the equilibrium
@@ -3622,7 +3643,7 @@ We do so by using the symmetric linear kinetic model of \eqn{sym-lkm}.
 % the reward given by \cost^Y_1 (of course it depends as well on
 % the time scales and the sampling frequency how sharp it looks)
 In \fig{PY} one can see the result of a simulation
-for the given parameter values
+% for the given parameter values
 when $Y$ is stepped up and down again.
 The model behaves as the one-dimensional cyclic Ising model
 where the role of the magnetic field is played by $Y$.
@@ -3631,16 +3652,16 @@ where the role of the magnetic field is played by $Y$.
 %  where the role of the magnetic field is played by $Y$.
 %  In this context, our rule set plays the role of
 %  the so-called Glauber dynamics.)
-%
-We can visualise the obtained simulations
-by extracting snapshots before, during and after
-the injection of $Y$s, as in \fig{snapshot}.
+\fig{snapshot} shows the state of the simulation
+% by extracting snapshots
+before, during and after the injection of $Y$s.
 % Again we see few mismatches in both regimes because of
 % the Ising interaction expressed by the $\cost_{ij}$ energy costs.
-% We use \href{https://github.com/Kappa-Dev/KaSim}{KaSim}
-% (the standard Kappa engine) for the simulation.
+The simulations were run using
+\href{https://github.com/Kappa-Dev/KaSim}{KaSim}
+with the following model file.
 
-\begin{figure}[t!]
+\begin{figure}[t]
   \centering
   \resizebox{\linewidth}{!}{%
   \begin{tikzpicture}
@@ -3657,8 +3678,7 @@ the injection of $Y$s, as in \fig{snapshot}.
     \begin{scope}[shift={(5.5cm,0)}]
       \def\on{}
       \foreach \i in {2,...,9}{\listxadd{\on}{\i}}
-      \foreach \i in {11,...,17}{\listxadd{\on}{\i}}
-      \foreach \i in {20,...,32}{\listxadd{\on}{\i}}
+      \foreach \i in {11,...,33}{\listxadd{\on}{\i}}
       \def\ys{}
       \foreach \i in {1,2,3}{\listxadd{\ys}{\i}}
       \foreach \i in {5,...,17}{\listxadd{\ys}{\i}}
@@ -3689,12 +3709,8 @@ the injection of $Y$s, as in \fig{snapshot}.
       };
     \end{scope}
   \end{tikzpicture}}
-  % \includegraphics[width=350pt]{pdf/ring}
   \caption{Snapshots of the ring configuration
     taken at times $50$, $150$, and $250$.
-    % Solid (green) circles indicate conformation $1$,
-    % hollow ones conformation $0$;
-    % a dot in the centre indicates a bound $Y$. % (hence active) $Y$.
     At $50$ and $250$ no $Y$ is bound
     (because they have not been yet injected into the system
      or already removed)
@@ -3705,27 +3721,212 @@ the injection of $Y$s, as in \fig{snapshot}.
   \label{fig:snapshot}
 \end{figure}
 
-% In this model we assumed the ring fixed
-% and that there is no need for breaking/forming $PP$ bonds.
-It is important to note that the refined rules shown above
-are those that
-assume the $P$s lie on a ring and the ring is fixed,
-\ie it does not break.
-The method of \sct{energy-gp},
-which makes no such assumptions,
-generates many more rules
-as it takes into account the cases where,
-for instance, the $P$ that changes state
-is an end of the chain of protomers.
+\begin{lstlisting}[language=kappa]
+# agent signatures
+%agent: P(a,b,c,d~0~1)
+%agent: Y(p)
 
-% Note that the example above plays out with simple energy patterns
-% which only incorporate edge and agent terms.
-% This corresponds to the restricted notion of energy
-% developed in \citet{anc}.
+# energy costs
+%var: '0'  -1
+%var: '1'   1
+%var: 'Y1' -2
+%var: 'Y0'  2
+%var: '00' -1
+%var: '11' -1
+%var: '01'  1
+%var: '10'  1
 
-% TODO: upload the model to github
-% The full model is available on-line at ...
-% TODO: actually, paste the model here
+# 2 reversible binding rules
+'bind 0'   P(d~0,c), Y(p) -> P(d~0,c!1), Y(p!1) \
+           @ [exp] (-1/2 * 'Y0')
+'unbind 0' P(d~0,c!1), Y(p!1) -> P(d~0,c), Y(p) \
+           @ [exp] ( 1/2 * 'Y0')
+
+'bind 1'   P(d~1,c), Y(p) -> P(d~1,c!1), Y(p!1) \
+           @ [exp] (-1/2 * 'Y1')
+'unbind 1' P(d~1,c!1), Y(p!1) -> P(d~1,c), Y(p) \
+           @ [exp] ( 1/2 * 'Y1')
+
+# 8 reversible flipping rules
+'flip 000' P(d~0,b!1), P(a!1,d~0,b!2,c), P(a!2,d~0) -> \
+           P(d~0,b!1), P(a!1,d~1,b!2,c), P(a!2,d~0) \
+           @ [exp] (-1/2 * ('1' - '0' + '01' + '10' - 2 * '00'))
+'flip 010' P(d~0,b!1), P(a!1,d~1,b!2,c), P(a!2,d~0) -> \
+           P(d~0,b!1), P(a!1,d~0,b!2,c), P(a!2,d~0) \
+           @ [exp] ( 1/2 * ('1' - '0' + '01' + '10' - 2 * '00'))
+
+'flip 100' P(d~1,b!1), P(a!1,d~0,b!2,c), P(a!2,d~0) -> \
+           P(d~1,b!1), P(a!1,d~1,b!2,c), P(a!2,d~0) \
+           @ [exp] (-1/2 * ('1' - '0' + '11' - '00'))
+'flip 110' P(d~1,b!1), P(a!1,d~1,b!2,c), P(a!2,d~0) -> \
+           P(d~1,b!1), P(a!1,d~0,b!2,c), P(a!2,d~0) \
+           @ [exp] ( 1/2 * ('1' - '0' + '11' - '00'))
+
+'flip 001' P(d~0,b!1), P(a!1,d~0,b!2,c), P(a!2,d~1) -> \
+           P(d~0,b!1), P(a!1,d~1,b!2,c), P(a!2,d~1) \
+           @ [exp] (-1/2 * ('1' - '0' + '11' - '00'))
+'flip 011' P(d~0,b!1), P(a!1,d~1,b!2,c), P(a!2,d~1) -> \
+           P(d~0,b!1), P(a!1,d~0,b!2,c), P(a!2,d~1) \
+           @ [exp] ( 1/2 * ('1' - '0' + '11' - '00'))
+
+'flip 101' P(d~1,b!1), P(a!1,d~0,b!2,c), P(a!2,d~1) -> \
+           P(d~1,b!1), P(a!1,d~1,b!2,c), P(a!2,d~1) \
+           @ [exp] (-1/2 * ('1' - '0' + 2 * '11' - '10' - '01'))
+'flip 111' P(d~1,b!1), P(a!1,d~1,b!2,c), P(a!2,d~1) -> \
+           P(d~1,b!1), P(a!1,d~0,b!2,c), P(a!2,d~1) \
+           @ [exp] ( 1/2 * ('1' - '0' + 2 * '11' - '10' - '01'))
+
+'flip 000 Y' P(d~0,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~0) -> \
+             P(d~0,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~0) \
+             @ [exp] (-1/2 * ('1' - '0' + '01' + '10' - 2 * '00' \
+             + 'Y1' - 'Y0'))
+'flip 010 Y' P(d~0,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~0) -> \
+             P(d~0,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~0) \
+             @ [exp] ( 1/2 * ('1' - '0' + '01' + '10' - 2 * '00' \
+             + 'Y1' - 'Y0'))
+
+'flip 100 Y' P(d~1,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~0) -> \
+             P(d~1,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~0) \
+             @ [exp] (-1/2 * ('1' - '0' + '11' - '00' \
+             + 'Y1' - 'Y0'))
+'flip 110 Y' P(d~1,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~0) -> \
+             P(d~1,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~0) \
+             @ [exp] ( 1/2 * ('1' - '0' + '11' - '00' \
+             + 'Y1' - 'Y0'))
+
+'flip 001 Y' P(d~0,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~1) -> \
+             P(d~0,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~1) \
+             @ [exp] (-1/2 * ('1' - '0' + '11' - '00' \
+             + 'Y1' - 'Y0'))
+'flip 011 Y' P(d~0,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~1) -> \
+             P(d~0,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~1) \
+             @ [exp] ( 1/2 * ('1' - '0' + '11' - '00' \
+             + 'Y1' - 'Y0'))
+
+'flip 101 Y' P(d~1,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~1) -> \
+             P(d~1,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~1) \
+             @ [exp] (-1/2 * ('1' - '0' + 2 * '11' - '10' - '01' \
+             + 'Y1' - 'Y0'))
+'flip 111 Y' P(d~1,b!1), P(a!1,d~1,b!2,c!_), P(a!2,d~1) -> \
+             P(d~1,b!1), P(a!1,d~0,b!2,c!_), P(a!2,d~1) \
+             @ [exp] ( 1/2 * ('1' - '0' + 2 * '11' - '10' - '01' \
+             + 'Y1' - 'Y0'))
+
+# P ring
+%init: 1 (P(a!0 , b!1 ), P(a!1 , b!2 ), P(a!2 , b!3 ), \
+          P(a!3 , b!4 ), P(a!4 , b!5 ), P(a!5 , b!6 ), \
+          P(a!6 , b!7 ), P(a!7 , b!8 ), P(a!8 , b!9 ), \
+          P(a!9 , b!10), P(a!10, b!11), P(a!11, b!12), \
+          P(a!12, b!13), P(a!13, b!14), P(a!14, b!15), \
+          P(a!15, b!16), P(a!16, b!17), P(a!17, b!18), \
+          P(a!18, b!19), P(a!19, b!20), P(a!20, b!21), \
+          P(a!21, b!22), P(a!22, b!23), P(a!23, b!24), \
+          P(a!24, b!25), P(a!25, b!26), P(a!26, b!27), \
+          P(a!27, b!28), P(a!28, b!29), P(a!29, b!30), \
+          P(a!30, b!31), P(a!31, b!32), P(a!32, b!33), P(a!33, b!0))
+
+# observables
+%obs: 'P01' |P(d~0,b!1), P(a!1,d~1)| # 'P10' = 'P01'
+%obs: 'Y'   |Y()|
+%obs: 'P0'  |P(d~0)|
+%obs: 'P1'  |P(d~1)|
+
+# injection and removal of Ys
+%var: 'nY' 34
+%mod: [T] > 100 do $ADD 'nY' Y()
+%mod: [T] > 200 do $DEL 'nY' Y()
+
+# snapshots
+%mod: [T] > 50 do $SNAPSHOT "t50"
+%mod: [T] > 150 do $SNAPSHOT "t150"
+%mod: [T] > 250 do $SNAPSHOT "t250"
+\end{lstlisting}
+
+
+% \subsection{How to generate the rules}
+% \label{subsec:howto}
+
+% Our set of balanced rules was based on two generators,
+% $b$ for binding, $f$ for flipping:
+% Note that there is a design choice here.
+% In effect, we are saying that we are not interested in
+% forming/breaking the bonds between the $P$s in the ring.
+% meaning the ring is pre-assembled in this model.
+% If we wanted to incorporate also the ring assembly in the model,
+% we would have to add % $P(x),P(y) \lrar P(x^1),P(y^1)$
+% \medskip
+% \begin{center}
+%   \begin{tikzpicture}
+%     \node[grphnode,anchor=east] (lhs) at (0,0) {
+%       \tikz[ingrphdiag]{
+%         \e{0,0}{0.6,0};
+%         \e{1.4,0}{0.8,0};
+%         \nP{p1}{0,0}{r};
+%         \nP{p2}{1.4,0}{l};
+%       }};
+%     \begin{scope}[shift={(.5,0)}]
+%       \draw[rule] (0,.09) -- ++(1,0);
+%       \draw[rule] (1,-.09) -- ++(-1,0);
+%     \end{scope}
+%     \node[grphnode,anchor=west] (rhs) at (2,0) {
+%       \tikz[ingrphdiag]{
+%         \e{0,0}{1.2,0};
+%         \nP{p1}{0,0}{r};
+%         \nP{p2}{1.2,0}{l};
+%       }};
+%   \end{tikzpicture}
+% \end{center}
+% among our generator set $\generators$.
+% This would generate many more refined rules, as we will see.
+%
+% Recall that our patterns fall in three subgroups:
+% $P(f_i,x^1),P(y^1,f_j)$;
+% $P(f_i)$;
+% and $P(f_i,s^1),Y(s^1)$.
+
+Now we briefly show how the growth policy of \sct{energy-gp}
+generates the refinements introduced informally above.
+First, consider the extensions of the binding rule: % $b$:
+only patterns $\cost^Y_i$ can glue relevantly on it,
+so the corresponding (unique) site request is
+for $P$ to reveal its site $c$ and its state (\ie site $d$).
+% This gives the first two rules $b_0$, $b_1$.
+This gives us the two refinements presented earlier.
+
+Regarding the more interesting extensions of the flipping rule % $f$:
+we see that:
+\begin{enumerate}[label={(\roman*)}]
+\item Patterns $\cost_i$ glue relevantly
+  but do not generate any site request.
+\item Patterns $\cost^Y_i$ asks $P$ to reveal its site $c$,
+  resulting in two possible extensions:
+  one in which $P$ is bound to a $Y$ and one in which it is free.
+\item Patterns $\cost_{ij}$ can be glued on both sides of $P$,
+% These extensions are \emph{not} mature yet,
+% as one can glue relevantly patterns of
+% the first type on both sides of $P$,
+  inducing a request to reveal sites $a$ and $b$.
+  This results in four possible extensions:
+  $a$ free or bound to a $P$ and the similarly for $b$.
+\end{enumerate}
+Once a neighbour $P$ has been revealed,
+patterns $\cost_{ij}$ induce a further site request,
+this time on the neighbour $P$, to reveal its state.
+
+% If in the initial state the $P$s are arranged in a ring,
+% then we know that the neighbours on both sides exist and are $P$s;
+% this gives the final refinement of the flipping rules
+% as described earlier.
+% If, on the other hand, we do not know that,
+% we also have to add several rules where one or both of $a,b$ are free,
+% corresponding to open $P$-chains.
+
+% Hence, the rules we generated by hand
+% are indeed the ones we would generate
+% using our general refinement strategy of \sct{energy-gp}.
+
+% The choice of rates made in \citet{teuta} for the $f$-generator
+% is in accord with the symmetric linear kinetic model of \eqn{sym-lkm}.
 
 
 \section{Non-linear energy functions}

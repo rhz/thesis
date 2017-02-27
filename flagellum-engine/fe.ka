@@ -88,19 +88,23 @@
           P(a!25, b!26), P(a!26, b!27), P(a!27, b!28), P(a!28, b!29), P(a!29, b!30), \
           P(a!30, b!31), P(a!31, b!32), P(a!32, b!33), P(a!33, b!0))
 
-%obs: 'P01' |P(d~0,b!1), P(a!1,d~1)| # '10' = '01'
+# observables
+%obs: 'P01' |P(d~0,b!1), P(a!1,d~1)| # 'P10' = 'P01'
 %obs: 'Y'   |Y()|
 %obs: 'P0'  |P(d~0)|
 %obs: 'P1'  |P(d~1)|
 %obs: 'PY'  |Y(p!_)|
 
-# For plotting:
+# injection and removal of Ys
 %var: 'nY' 34
 %mod: [T] > 100 do $ADD 'nY' Y()
 %mod: [T] > 200 do $DEL 'nY' Y()
 
-# For movies:
-# %mod: [E+] > 1000 do $ADD 'nY' Y()
-# %mod: [E+] > 2000 do $DEL 'nY' Y()
+# snapshots
+%mod: [T] > 50 do $SNAPSHOT "t50"
+%mod: [T] > 150 do $SNAPSHOT "t150"
+%mod: [T] > 250 do $SNAPSHOT "t250"
+
+# for movies:
 # %var: 'E+' 0
 # %mod: repeat [E+] = ('E+' + 1) do $SNAPSHOT "fe"; $UPDATE 'E+' [E+] until [false]
