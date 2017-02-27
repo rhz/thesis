@@ -3454,19 +3454,26 @@ are $r^+_Y$ the binding of $P$ and $Y$ and its inverse $r^-_Y$.
       }};
   \end{tikzpicture}
 \end{center}
-The nature of the method outlined in \sct{energy-gp}
+An uncoloured $P$ means
+it can bind a $Y$ regardless of the state it is in.
+The nature of the method presented in \sct{energy-gp}
 allows us to refine each rule individually,
 so we proceed to refine $r^+_Y,r^-_Y$ immediately.
-The pair of rules has an ambiguous $\Delta E$
+We first give the rationale for the refinements informally.
+The pair of rules has an ambiguous energy balance % $\Delta E$
 % as it will be either $\cost^Y_0$ or $\cost^Y_1$
 % depending on its instances.
-because applying the forward rule to a $P$ in state~$0$
-will create a $\cost^Y_0$
-but when $P$ is in state~$1$ it will create a $\cost^Y_1$.
+because applying the forward rule $r^+_Y$ to a $P$ in state~$0$
+will create an $\cost^Y_0$ pattern
+% because applying the forward (backward) rule $r^+_Y$ ($r^-_Y$)
+% to a $P$ in state~$0$ will create (destroy) a $\cost^Y_0$ pattern
+while applying it to a $P$ in state~$1$
+% while $r^+_Y$ applied to a $P$ in state~$1$
+will create an $\cost^Y_1$ pattern.
 Hence, we cannot assign % have no hope of assigning
-rates to this rule that satisfy detailed balance ---
+rates to these rules that satisfy detailed balance ---
 unless $\cost^Y_0 = \cost^Y_1$, which contradicts \eqn{ePY}.
-To get $\shapes$-balanced rules one needs to refine them into
+To get $\shapes$-balanced rules one needs to refine $r^+_Y,r^-_Y$ into
 \begin{center}
   \begin{tikzpicture}
     \begin{scope}
@@ -3512,8 +3519,8 @@ To get $\shapes$-balanced rules one needs to refine them into
 We call the refined rules $r^+_{Y0},r^-_{Y0}$ and $r^+_{Y1},r^-_{Y1}$.
 Each rule $r^+_{Yi}$ ($i \in \set{0,1}$) specifies
 enough of the context in which it applies
-to have a definite energy balance $\cost^Y_i$.
-The second pair of rules in $\generators$ is
+to have a definite energy balance $\Delta E = \cost^Y_i$.
+The second pair of rules in $\generators$ flip the state of $P$:
 \begin{center}
   \begin{tikzpicture}
     \node[grphnode,anchor=east] (lhs) at (0,0) {
@@ -3530,25 +3537,28 @@ The second pair of rules in $\generators$ is
   \end{tikzpicture}
 \end{center}
 This pair of rules generates many more refinements
-as a change in the state of $P$ will create and destroy
+as changing the state of $P$ will create and destroy
 matches $\cost_{00},\cost_{11}$ and mismatches $\cost_{10},\cost_{01}$
 between $P$ and its neighbours in the ring.
-We must then reveal this context
-% , specifically the neighbourhood of $P$,
-and account for all combinations of neighbours' states.
-Since the neighbours do not change their state
+The refinements must then reveal a larger context
+that includes at least the neighbourhood of $P$
+and therefore account for all combinations of neighbours' states.
+% Since the rule does not change the state of the neighbours,
+% Since the neighbours do not change their state
+Since the state of the neighbours is not changed
 when the rule is applied,
-we do not need to reveal the state of \emph{their} neighbours,
+% we do not need to reveal the state of \emph{their} neighbours,
+we do not need to reveal the state of the neighbours' neighbours,
 which saves us from an infinite recursion of revelations.%
 \footnote{
   Indeed \thm{energy-gp} guarantees that
   such infinite recursions never occur.}
 We must also know whether the $P$
 that is subject to the action of the rule
-is bound to a $Y$ as in its presence
-patterns $\cost^Y_1$ and $\cost^Y_0$
-would be consumed or produced.
-The refinements of this second pair of rules are thus
+is bound to a $Y$ as when it is % in its presence
+patterns $\cost^Y_0$ and $\cost^Y_1$
+would be consumed and produced.
+Hence, the refinements of this second pair of rules are
 
 \input{alloring-f-refinements}
 
@@ -3559,7 +3569,7 @@ $\cost_{i1}+\cost_{1j}-\cost_{i0}-\cost_{0j}+\cost_1-\cost_0$
 and for the last 4 is
 $\cost_{i1}+\cost_{1j}-\cost_{i0}-\cost_{0j}+\cost_1-\cost_0+
 \cost^Y_1-\cost^Y_0$.
-As we have 10 pairs of refined rules in total ($2+8$)
+As there are 10 pairs of refined rules in total ($2+8$)
 % (2 for the first pair of rules and 8 for the second)
 and only 8 energy patterns,
 there must be linear dependencies between the various balances.
@@ -3572,7 +3582,25 @@ $\cost_{01}+\cost_{10}$ and $\cost_1-\cost_0$.
 % (\eg see \citet{et2}).
 This example portrays how thermodynamic consistency
 (\ie detailed balance)
-induces relationships between the rates of the 10 refined rules.
+induces relationships between the rates of the refined rules.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{flagellum-engine/y34/fe-sa}
+  \caption{
+    The simulation steps up the amount of $Y$ (green curve)
+    at $t=100$ and down again at $t=200$.
+    This sends the vast majority of the ring
+    into state~$1$ (orange curve)
+    and then back to state~$0$ (blue curve).
+    The number of mismatches (purple curve) stays low
+    even during transitions.
+    The parameters for the simulation are
+    $\cost_0 = \cost_{00} = \cost_{11} = -1$,
+    $\cost_1 = \cost_{01} = \cost_{10} = 1$,
+    $\cost^Y_0 = 2$ and $\cost^Y_1 = -2$.}
+  \label{fig:PY}
+\end{figure}
 
 The final step is to choose concrete rates for our refined rules.
 % This guarantees that the obtained rule set converges to the equilibrium
@@ -3603,41 +3631,101 @@ where the role of the magnetic field is played by $Y$.
 %  where the role of the magnetic field is played by $Y$.
 %  In this context, our rule set plays the role of
 %  the so-called Glauber dynamics.)
+%
+We can visualise the obtained simulations
+by extracting snapshots before, during and after
+the injection of $Y$s, as in \fig{snapshot}.
+% Again we see few mismatches in both regimes because of
+% the Ising interaction expressed by the $\cost_{ij}$ energy costs.
+% We use \href{https://github.com/Kappa-Dev/KaSim}{KaSim}
+% (the standard Kappa engine) for the simulation.
+
+\begin{figure}[t!]
+  \centering
+  \resizebox{\linewidth}{!}{%
+  \begin{tikzpicture}
+    \def\radius{2cm}
+    \begin{scope}
+      \foreach \angle [count=\i] in {0,10.588,...,350} {%
+        \begin{scope}[shift={(\angle:\radius)},rotate=\angle-90]
+          \def\state{off}
+          \ifnumequal{\i}{13}{\gdef\state{on}}{}
+          \path[draw=gray,\state] (0,0) circle (.18cm);
+        \end{scope}
+      };
+    \end{scope}
+    \begin{scope}[shift={(5.5cm,0)}]
+      \def\on{}
+      \foreach \i in {2,...,9}{\listxadd{\on}{\i}}
+      \foreach \i in {11,...,17}{\listxadd{\on}{\i}}
+      \foreach \i in {20,...,32}{\listxadd{\on}{\i}}
+      \def\ys{}
+      \foreach \i in {1,2,3}{\listxadd{\ys}{\i}}
+      \foreach \i in {5,...,17}{\listxadd{\ys}{\i}}
+      \foreach \i in {20,21,22}{\listxadd{\ys}{\i}}
+      \foreach \i in {24,...,28}{\listxadd{\ys}{\i}}
+      \foreach \i in {30,31,32}{\listxadd{\ys}{\i}}
+      \foreach \angle [count=\i] in {0,10.588,...,350} {%
+        \begin{scope}[shift={(\angle:\radius)},rotate=\angle-90]
+          \def\state{off}
+          \xifinlist{\i}{\on}{\gdef\state{on}}{}
+          \xifinlist{\i}{\ys}{%
+            \e{0,0}{0,.5};
+            \path[draw=gray,fill=white] (0,.5) circle (.18cm);
+          }{}
+          \path[draw=gray,\state] (0,0) circle (.18cm);
+        \end{scope}
+      };
+    \end{scope}
+    \begin{scope}[shift={(11cm,0)}]
+      \def\on{}
+      \foreach \i in {8,28}{\listxadd{\on}{\i}}
+      \foreach \angle [count=\i] in {0,10.588,...,350} {%
+        \begin{scope}[shift={(\angle:\radius)},rotate=\angle-90]
+          \def\state{off}
+          \xifinlist{\i}{\on}{\gdef\state{on}}{}
+          \path[draw=gray,\state] (0,0) circle (.18cm);
+        \end{scope}
+      };
+    \end{scope}
+  \end{tikzpicture}}
+  % \includegraphics[width=350pt]{pdf/ring}
+  \caption{Snapshots of the ring configuration
+    taken at times $50$, $150$, and $250$.
+    % Solid (green) circles indicate conformation $1$,
+    % hollow ones conformation $0$;
+    % a dot in the centre indicates a bound $Y$. % (hence active) $Y$.
+    At $50$ and $250$ no $Y$ is bound
+    (because they have not been yet injected into the system
+     or already removed)
+    and the ring is globally in state $0$,
+    up to tiny fluctuations.
+    At time $150$, it is globally in state $1$
+    as a consequence of the binding of $Y$s.}
+  \label{fig:snapshot}
+\end{figure}
 
 % In this model we assumed the ring fixed
 % and that there is no need for breaking/forming $PP$ bonds.
 It is important to note that the refined rules shown above
-assume that the $P$s lie on a ring and the ring is fixed,
+are those that
+assume the $P$s lie on a ring and the ring is fixed,
 \ie it does not break.
 The method of \sct{energy-gp},
 which makes no such assumptions,
-would generate many more rules
-as we would have to take into account the cases where,
-for instance, the $P$ that is changing its state
+generates many more rules
+as it takes into account the cases where,
+for instance, the $P$ that changes state
 is an end of the chain of protomers.
-
-\begin{figure}[t]
-  \centering
-  \includegraphics[width=\linewidth]{flagellum-engine/y34/fe-sa}
-  \caption{
-    The simulation steps up the amount of $Y$ (green curve)
-    at $t=100$ and down again at $t=200$.
-    This sends the vast majority of the ring
-    into state~$1$ (orange curve)
-    and then back to state~$0$ (blue curve).
-    The number of mismatches (purple curve) stays low
-    even during transitions.
-    The parameters for the simulation are
-    $\cost_0 = \cost_{00} = \cost_{11} = -1$,
-    $\cost_1 = \cost_{01} = \cost_{10} = 1$,
-    $\cost^Y_0 = 2$ and $\cost^Y_1 = -2$.}
-  \label{fig:PY}
-\end{figure}
 
 % Note that the example above plays out with simple energy patterns
 % which only incorporate edge and agent terms.
 % This corresponds to the restricted notion of energy
 % developed in \citet{anc}.
+
+% TODO: upload the model to github
+% The full model is available on-line at ...
+% TODO: actually, paste the model here
 
 
 \section{Non-linear energy functions}
