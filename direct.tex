@@ -2278,7 +2278,7 @@ introduced at the beginning of this chapter
 (page~\pageref{chp:direct})
 together with the balance vector $\Delta\phi$
 of a refined rule $r_\phi$ in $\refinedrules$
-with respect to $\shapes$
+% with respect to $\shapes$
 (page~\pageref{p:balance-vector})
 to constrain the ratio
 between the forward and the backward rate:
@@ -2444,7 +2444,7 @@ if one were contemplating fitting a model to data.
 
 
 \section{Linear kinetic model}
-\label{sec:kinetic-model}
+\label{sec:lkm}
 
 The theorem in the previous section holds
 for any rate map that agrees with \eqn{rates}.
@@ -2689,10 +2689,10 @@ In this section we will complete and conclude the example
 on the thermodynamical control of the formation of triangles
 that we have used throughout this chapter.
 Additionally we present the model in the format
-used by the simulation tool
+used by the Kappa simulator, % simulation tool
 \href{https://github.com/Kappa-Dev/KaSim}{KaSim}
 version 4.0
-\citep{KaSimManual2014}
+\citep{KaSimManual2014},
 and run a few simulations to get an idea
 of how the model behaves.
 We use the symmetric linear kinetic model of \eqn{sym-lkm}
@@ -3860,10 +3860,10 @@ we see that:
   inducing a request to reveal sites $a$ and $b$.
   This results in four possible extensions:
   $a$ free or bound to a $P$ and the similarly for $b$.
+\item Once a neighbour $P$ has been revealed,
+  patterns $\cost_{ij}$ induce a further site request,
+  this time on the neighbour $P$, to reveal its state.
 \end{enumerate}
-Once a neighbour $P$ has been revealed,
-patterns $\cost_{ij}$ induce a further site request,
-this time on the neighbour $P$, to reveal its state.
 
 % The choice of rates made in \citet{teuta} for the $f$-generator
 % is in accord with the symmetric linear kinetic model of \eqn{sym-lkm}.
@@ -3871,6 +3871,219 @@ this time on the neighbour $P$, to reveal its state.
 
 \section{Non-linear energy functions}
 \label{sec:non-linear-energy}
+
+At the beginning of this chapter,
+we made a key assumption in \eqn{graph-energy}
+that the energy function is linear
+in the cost and number of occurrences of energy patterns.
+Here we consider a more general situation
+where the energy function $E$ is no longer asked to be linear.
+For reasons to become clear shortly,
+we still assume the much weaker property that $E$
+can be factored as $v \circ \shapes(\_)$
+for some finite set of patterns $\shapes$,
+that is
+\begin{equation}
+  \label{eq:factor}
+  \rSGe_C \;\; \xtoby{\;\; \shapes(\_) \;\;} \;\;
+  \mSet(\shapes) \;\; \xtoby{\;\; v \;\;} \RR,
+\end{equation}
+where $\mSet(\shapes)$ is the set of all multisets over $\shapes$.
+% Note that if we see multisets as equipped with
+% the usual point-wise partial order,
+% $\shapes(\_)$ is evidently functorial.
+% NOTE: I think when Vincent says usual point-wise partial order
+% he is talking about the morphisms in \mSet being characterised
+% as X \to Y if X \leq Y.
+%
+% \begin{wrapfigure}[4]{r}{0.25\textwidth}
+%   \vspace{-1em}
+%   \begin{equation}
+%     \label{eq:cg-simple-loop}
+%     \tikz[grphdiag,baseline=-2.5]{
+%       \draw (0,-.17) ellipse (.4 and .3);
+%       \n[n]{x}{0,0};
+%       \site{a}{x.west};
+%       \site{b}{x.east};
+%       \node at (156:.41) {\scriptsize $a$};
+%       \node at (28:.42) {\scriptsize $b$};
+%     }
+%   \end{equation}
+% \end{wrapfigure}
+%
+As an example,
+consider the contact graph
+% consider an agent with contact graph (\eqn{cg-simple-loop}),
+\begin{center}
+  \begin{tikzpicture}[grphdiag]
+    \draw (0,-.17) ellipse (.4 and .3);
+    \n[n]{x}{0,0};
+    \site{a}{x.west};
+    \site{b}{x.east};
+    \node at (156:.41) {\scriptsize $a$};
+    \node at (28:.42) {\scriptsize $b$};
+  \end{tikzpicture}
+\end{center}
+% with which one can form only chains and cycles,
+and a pair of generator rules $r^+,r^-$
+% and a reversible generator rule $r$
+that create/delete the unique edge type.
+% With this pair of rules one can form
+The successive application of these rules can form
+chains of arbitrary length and cycles.
+Let us write $c_3$ for a cycle of length $3$ (a triangle)
+and $t_3$ for an open chain with $3$ nodes.
+We define a quadratic energy function
+$E(m) = |\matches{c_3}{m}|^2$,
+that is, $\shapes=\set{c_3}$ and $v(x)=x^2$.
+% NOTE: v(n)=n^2 is an abuse of notation as n is a multiset
+% with the number of copies of c_3 in the mixture.
+Applying $r^+$ to $t_3$ % a chain $t_3$
+% in a mixture $m$
+in a mixture of the form $m = t_3 + m'$
+will create a new copy of $c_3$
+and give the following energy balance:
+\begin{equation*}
+  \Delta E = (|\matches{c_3}{m}| + 1)^2 - (|\matches{c_3}{m}|)^2
+           = 2|\matches{c_3}{m}| + 1
+\end{equation*}
+% TODO: rewrite paragraph. start by mentioning that the refinement
+% is P-balanced? the log-ratio does depend on m in the linear case
+% when the rule is not P-balanced.
+Therefore, detailed balance forces
+the log-ratio of the backward and forward rates
+of an edge creation,
+$\ln(k(r^-_{\comatch{\phi}})/k(r^+_\phi))$,
+to depend on $m$.
+This is unlike the case of linear energy functions examined before
+where this ratio is independent of $m$.
+However, the refinement $r^+_\phi$ of $r^+$
+% The dependence on $m$ in the non-linear case happens
+% in spite of the refinement $r^+_\phi$ of $r^+$
+that extends the left-hand side of $r^+$ into $t_3$
+% (where it is applied to a chain $t_3$)
+% is $\shapes$-balanced.
+being $\shapes$-balanced.
+% This means, as we have seen,
+As we have seen, $\shapes$-balance means
+% that the stoichiometric $\shapes$-vector $\Delta\phi$
+that the $\shapes$-vector $\Delta\phi$
+associated to $r^+_\phi$~---
+where each component $\Delta\phi(p)$ is defined as
+the difference of $|\matches{p}{n}| - |\matches{p}{m}|$
+for an $r^+$-transition from $m$ to $n$~---
+is the same for all $m,n$.
+In the example $\Delta\phi$ has only one component,
+which is constant $\Delta\phi(c_3) = 1$
+because the binding of the two free extremes
+of an open chain $t_3$ can only produce one triangle,
+regardless of the context
+in which the refined rule $r_\phi$ is applied.
+
+% \begin{wrapfigure}[8]{r}{0.43\textwidth}
+%   \vspace{-1.2em}
+%   \begin{equation}
+%     \label{eq:non-linear}
+%     \tikz[baseline=-2.5]{
+%       \matrix (m) [matrix of math nodes,row sep=30pt,column sep=40pt] {
+%         x & y \\
+%         \shapes(x) & \shapes(y) \\
+%         \RR & \RR \\};
+%       \draw[hom] (m-1-1) -- node[above] {$r$} (m-1-2);
+%       \draw[hom] (m-2-1) -- node[above] {$+\Delta\phi$} (m-2-2);
+%       \draw[hom] (m-3-1) -- node[above] {$+\Delta E$} (m-3-2);
+%       \draw[hom] (m-1-1) -- node[left] {$\shapes$} (m-2-1);
+%       \draw[hom] (m-1-2) -- node[right] {$\shapes$} (m-2-2);
+%       \draw[hom] (m-2-1) -- node[left] {$v$} (m-3-1);
+%       \draw[hom] (m-2-2) -- node[right] {$v$} (m-3-2);
+%     }
+%   \end{equation}
+% \end{wrapfigure}
+
+In general, one can visualise the situation as follows.
+% In general, one can visualise the situation by \diagram{non-linear}.
+\begin{center}
+  \begin{tikzpicture}[x=3cm,y=2cm]
+    \node (x) at (0,2) {$x$};
+    \node (y) at (1,2) {$y$};
+    \node (Px) at (0,1) {$\shapes(x)$};
+    \node (Py) at (1,1) {$\shapes(y)$};
+    \node (Ex) at (0,0) {$\RR$};
+    \node (Ey) at (1,0) {$\RR$};
+    \draw[rule] (x) -- node[above] {$r$} (y);
+    \draw[rule] (Px) -- node[above] {$+\Delta\phi$} (Py);
+    \draw[rule] (Ex) -- node[above] {$+\Delta E$} (Ey);
+    \draw[rule] (x) -- node[left] {$\shapes$} (Px);
+    \draw[rule] (y) -- node[right] {$\shapes$} (Py);
+    \draw[rule] (Px) -- node[left] {$v$} (Ex);
+    \draw[rule] (Py) -- node[right] {$v$} (Ey);
+  \end{tikzpicture}
+\end{center}
+Detailed balance amounts to asking for
+% TODO: remove the subscripts from r and \inv{r}
+% or add a subscript \phi to K
+$K_r := \ln(k(\inv{r}_{\comatch{\phi}})/k(r_\phi)) =
+v(\shapes(m) + \Delta\phi(m)) - v(\shapes(m))$.
+If $v$ happens to be linear
+then this is the usual condition
+$K_r = v(\Delta\phi(m))$.
+% TODO: add definition of function v for our linear energy function
+If $v$ is not linear,
+the constraint does not seem very helpful as \emph{a priori}
+one has to know $m$ to compute the right-hand side.
+But by the assumption in \eqn{factor}, % opening the paragraph,
+$\Delta\phi$ factors through $\shapes$, hence:
+\begin{equation*}
+  K_r \; = \; v(\shapes(m) + \sitemap_r(\shapes(m))) - v(\shapes(m))
+      \; =: \; \psi_r \circ \shapes(m)
+\end{equation*}
+where the second equation defines $\psi_r$ uniquely
+as a real-valued function from $\shapes$-multisets.
+With this rewriting, it is plain that
+the constraint depends not on full knowledge of $m$,
+but only on $\shapes(m)$.
+Equivalently, we see that $K_r$
+factors through $\shapes(\_)$ just like $E$.
+In the example, $K_r = 2 |\matches{c_3}{x}| + 1$
+and $\psi_r(x) = 2\,x+1$.
+
+This is good enough to define rates
+for a $\shapes$-balanced $r_\phi$.
+For example,
+by analogy with the linear kinetic model of \sct{lkm},
+we can choose log-rates
+% TODO: seen as real-valued multiset functions?
+(seen as real-valued multiset functions)
+as follows:
+\begin{equation}
+  \label{eq:non-linear-lkm}
+  \ln\, k(r_\phi) = \alpha_r - \beta_r \psi_r
+\end{equation}
+with $\alpha_r,\beta_r$ real-valued functions
+on $\shapes$-multisets
+such that $\alpha_{\inv{r}} = \alpha_r$
+and $\beta_{\inv{r}} + \beta_r = 1$.
+This assignment solves the above constraint as
+$\psi_{\inv{r}} + \psi_r = 0$.
+
+From the \emph{simulation} point of view,
+this added generality requires two things:
+(i) that rates can be made to depend explicitly on observables;
+(ii) that the internal state of the simulation
+be extended to incorporate $\shapes(m)$.
+Both possibilities are already generically available in
+the current version of
+\href{https://github.com/Kappa-Dev/KaSim}{KaSim}.
+% the main Kappa simulator.
+A modification of the engine % (not implemented)
+could obtain direct updates to $\shapes(m)$ as,
+by assumption, applying $r_\phi$
+leads to a constant $+\Delta\phi$ update;
+and the same holds for propagating these updates
+to the rates of the rules which depend on them,
+\eg as in \eqn{non-linear-lkm}.
+Thus, the complexity properties of the simulation algorithm
+would be preserved \citep{scalable}.
 
 
 \section{Conclusions}
