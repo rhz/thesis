@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Minimal glueings</title>
+  <title>Relevant minimal glueings</title>
   <meta charset="utf-8">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css">
@@ -12,12 +12,13 @@
   <!-- <script src="https://d3js.org/d3.v3.min.js"></script> -->
   <script src="https://cdn.jsdelivr.net/lodash/4.17.4/lodash.min.js"></script>
   <script src="mg.js"></script>
+  <script src="rmg.js"></script>
 </head>
 <body>
   <div class="container">
     <div class="row">
       <div class="col-md-12">
-        <h2>&nbsp;Minimal glueings</h2>
+        <h2>&nbsp;Relevant minimal glueings</h2>
       </div>
     </div>
     <div class="row">
@@ -41,26 +42,35 @@ bond is any natural number</pre>
         </p>
       </div>
     </div>
-    <div class="row">
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="g">g</label>
-          <input class="form-control input-lg" type="text"
-                 name="g" value="A(x!1),A(y!1)"/>
-        </div>
+    <div class="row form-group vcentre"><!--style="line-height: 2em"-->
+      <div class="col-md-3" style="text-align: left">
+        <label for="g">energy pattern</label>
       </div>
-      <div class="col-md-6">
-        <div class="form-group">
-          <label for="h">h</label>
-          <input class="form-control input-lg" type="text"
-                 name="h" value="A(x!1),A(y!1)"/>
-        </div>
+      <div class="col-md-5 col-md-offset-1">
+        <input class="form-control input-lg" type="text"
+               name="g" value="A(x!1),A(y!1,x!2),A(y!2)"/>
+      </div>
+    </div>
+    <div class="row form-group vcentre">
+      <div class="col-md-1" style="text-align: left">
+        <label for="lhs">rule</label>
+      </div>
+      <div class="col-md-5">
+        <input class="form-control input-lg" type="text"
+               name="lhs" value="A(x),A(y)"/>
+      </div>
+      <div class="col-md-1">
+        <span class="glyphicon glyphicon-arrow-right"/>
+      </div>
+      <div class="col-md-5">
+        <input class="form-control input-lg" type="text"
+               name="rhs" value="A(x!1),A(y!1)"/>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-2 col-md-offset-5">
+      <div class="col-md-3 col-md-offset-5">
         <button class="btn btn-default btn-lg" name="go"
-                onclick="computeMg();">Compute</button>
+                onclick="computeRmg();">Compute</button>
       </div>
     </div>
     <div class="row" id="results"></div>

@@ -1,6 +1,6 @@
-function go() {
+function computeMg() {
   $("#results").empty();
-  var [gast, hast] = parseGraphs();
+  var [gast, hast] = parseGraphs(["g", "h"]);
   var g = buildGraph(gast),
       h = buildGraph(hast);
   var ps = intersections(g, h);
@@ -8,7 +8,7 @@ function go() {
   addResults(_.zip(ps, us));
 }
 
-function parseGraphs() {
+function parseGraphs(inputs) {
   var P = Parsimmon;
   function token(p) {
     return p.skip(P.optWhitespace);
@@ -24,20 +24,17 @@ function parseGraphs() {
       sites = parens(P.sepBy(site, comma)),
       agent = P.seqMap(name, sites, (a, s) => ({agent: a, sites: s})),
       graph = P.sepBy1(agent, comma);
-  var gin = $("input[name=g]").val(),
-      hin = $("input[name=h]").val();
-  var gres = graph.parse(gin),
-      hres = graph.parse(hin);
-  if (gres.status && hres.status) {
-    return [gres.value, hres.value];
-  } else {
-    if (!gres.status)
-      addError("error parsing <strong>g</strong>: " +
-               P.formatError(gin, gres));
-    if (!hres.status)
-      addError("error parsing <strong>h</strong>: " +
-               P.formatError(hin, hres));
+  var res = [];
+  for (var i = 0; i < inputs.length; i++) {
+    var si = $(`input[name=${inputs[i]}]`).val(),
+        gi = graph.parse(si);
+    if (gi.status)
+      res.push(gi.value);
+    else
+      addError(`error parsing <strong>${inputs[i]}</strong>: ` +
+               P.formatError(si, gi));
   }
+  return res;
 }
 
 function addError(error) {
@@ -93,6 +90,8 @@ function buildGraph(g) {
   // should refer to agents and site by their index in the
   // agents and sites arrays.
   // TODO: didn't use edges in the end, edgemap is enough.
+  // TODO: perhaps get rid of agenttype and sitetype
+  // and use agents and sites to store the types.
   return { agents: agents,
            sites: sites,
            sitemap: sitemap,
@@ -115,18 +114,23 @@ function flatten(xss) {
 // the following function isn't used anymore
 // but it's cool to have around
 // cartesian product
-function cartesian() {
-  var args = Array.from(arguments);
-  return args.reduce(
-    (a, b) => flatten(a.map(
-      x => b.map(y => x.concat([y])))),
-    [ [] ]);
-}
+// function cartesian() {
+//   var args = Array.from(arguments);
+//   return args.reduce(
+//     (a, b) => flatten(a.map(
+//       x => b.map(y => x.concat([y])))),
+//     [ [] ]);
+// }
+
+// cap as in the latex symbol for intersection
+// set intersection (not used, using _.intersection instead)
+// function cap(xs, ys) {
+//   return xs.reduce((a, x) => ys.includes(x) ? [x].concat(a) : a, []);
+// }
 
 function powerset(xs) {
   if (xs.length == 0) return [ [] ];
   else {
-    // var x = xs.shift(), ys = powerset(xs);
     var [x, ...rest] = xs, ys = powerset(rest);
     return ys.concat(ys.map(y => y.concat([x])));
   }
@@ -135,25 +139,18 @@ function powerset(xs) {
 // from an array of arrays it construct another array of arrays
 // in which there's one element of each one of the given arrays.
 // it's like a non-deterministic zip.
-function cross(xss, seen = new Set()) {
+function cross(xss) {
   if (xss.length == 0) return [ [] ];
   else {
-    var [xs, ...rest] = xss;
-    return xs.filter(([x, y]) => !seen.has(y)).map(
-      ([x, y]) => flatten(cross(rest, new Set(seen).add(y)).map(
-        ys => [ [x, y] ].concat(ys))));
+    var [xs, ...rest] = xss, cr = cross(rest);
+    return cr.concat(_.flatten(xs.map(
+      x => cr.map(ys => [x].concat(ys)))));
   }
 }
 
 // lodash saved me from this nightmare
 function nub(xs) {
   return _.uniqWith(xs, _.isEqual);
-}
-
-// cap as in the latex symbol for intersection
-// set intersection
-function cap(xs, ys) {
-  return xs.reduce((a, x) => ys.includes(x) ? [x].concat(a) : a, []);
 }
 
 // for easy debugging
@@ -173,12 +170,12 @@ function eqIn(x, xs) {
 function intersections(g, h) {
   // construct sets of type-compatible agent pairs
   // first get the type-compatible pairs
-  var t = g.agents.map((a, i) => h.agents.filter(
-    (b, j) => g.agenttype[i] === h.agenttype[j]).map(
-      (b, j) => [i, j]));
+  var t = g.agenttype.map((a, i) => h.agenttype.filter(
+    (b, j) => a === b).map((b, j) => [i, j]));
   // ais is an array of arrays, each array ai with as many elements
   // as agents in the intersection represented by ai.
-  var ais = nub(flatten(cross(t).map(ai => powerset(ai))));
+  var ais = cross(t).filter(
+    xs => xs.length == _.uniqBy(xs, ([i, j]) => j).length);
   // construct sets of type- and agent-compatible site pairs
   // sis is an array of arrays, each array si with as many elements
   // as agents in the intersection. then each agent array in si
@@ -288,18 +285,18 @@ function unions(g, h) {
         });
     // new edges are obtained by offseting the indices
     var edgemap = p.edgemap;
-    function addEdges(si, g, offset) {
-      s1.forEach((x, i) => {
-        if (x in g.edgemap)
-          // g.edgemap[x] must be in si because all sites
+    function addEdges(si, gi, gis_mg) {
+      si.forEach(x => {
+        if (x in gi.edgemap)
+          // gi.edgemap[x] must be in si because all sites
           // coming from p are either already bound or free.
           // remember that sites in si might belong to
           // agents that come from p.
-          edgemap[i + offset] = g.edgemap[x] + offset;
+          edgemap[gis_mg[x]] = gis_mg[gi.edgemap[x]];
       });
     }
-    addEdges(s1, g, sl);
-    addEdges(s2, h, sl + sm1.length);
+    addEdges(s1, g, gs_mg);
+    addEdges(s2, h, hs_mg);
     // create the graph
     return { agents: p.agents.concat(a1).concat(a2),
              sites: p.sites.concat(s1).concat(s2),
@@ -309,7 +306,11 @@ function unions(g, h) {
                ([x, y]) => [_.toNumber(x), y]),
              edgemap: edgemap,
              agenttype: p.agenttype.concat(at1).concat(at2),
-             sitetype: p.sitetype.concat(st1).concat(st2) };
+             sitetype: p.sitetype.concat(st1).concat(st2),
+             // additional fields for maps of agents and sites
+             ga_mg: ga_mg, gs_mg: gs_mg, 
+             ha_mg: ha_mg, hs_mg: hs_mg
+           };
   });
 }
 
