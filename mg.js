@@ -1,14 +1,12 @@
 function computeMg() {
   $("#results").empty();
-  var [gast, hast] = parseGraphs(["g", "h"]);
-  var g = buildGraph(gast),
-      h = buildGraph(hast);
+  var [g, h] = parseGraphs(["g", "h"]).map(g => buildGraph(g));
   var ps = intersections(g, h);
   var us = unions(g, h);
   addResults(_.zip(ps, us));
 }
 
-function parseGraphs(inputs) {
+function parseGraph(s, error) {
   var P = Parsimmon;
   function token(p) {
     return p.skip(P.optWhitespace);
@@ -24,17 +22,16 @@ function parseGraphs(inputs) {
       sites = parens(P.sepBy(site, comma)),
       agent = P.seqMap(name, sites, (a, s) => ({agent: a, sites: s})),
       graph = P.sepBy1(agent, comma);
-  var res = [];
-  for (var i = 0; i < inputs.length; i++) {
-    var si = $(`input[name=${inputs[i]}]`).val(),
-        gi = graph.parse(si);
-    if (gi.status)
-      res.push(gi.value);
-    else
-      addError(`error parsing <strong>${inputs[i]}</strong>: ` +
-               P.formatError(si, gi));
-  }
-  return res;
+  var g = graph.parse(s);
+  if (!g.status)
+    addError(error + P.formatError(s, g));
+  return g.value;
+}
+
+function parseGraphs(inputs) {
+  return _.compact(inputs.map(name => parseGraph(
+    $(`input[name=${name}]`).val(),
+    `error parsing <strong>${name}</strong>: `)));
 }
 
 function addError(error) {
@@ -103,8 +100,23 @@ function buildGraph(g) {
 }
 
 function buildContactGraph(gs) {
-  return { agents: new Set(flatten(gs.map(g => g.agenttype))),
-           sites: new Set(flatten(gs.map(g => g.sitetype))) };
+  var edges = nub(_.flatten(gs.map(g => g.edges.map(
+    ([a, b]) => [g.sitetype[a], g.sitetype[b]])))),
+      edgemap = {};
+  edges.forEach(([a, b]) => {
+    if (a in edgemap)
+      edgemap[a].push(b);
+    else
+      edgemap[a] = [b];
+    if (b in edgemap)
+      edgemap[b].push(a);
+    else
+      edgemap[b] = [a];
+  });
+  return { agents: nub(_.flatten(gs.map(g => g.agenttype))),
+           sites: nub(_.flatten(gs.map(g => g.sitetype))),
+           edges: edges,
+           edgemap: edgemap };
 }
 
 function flatten(xss) {
@@ -239,6 +251,10 @@ function or(x, y) { return _.isEmpty(x) ? y : x; }
 
 // graph (multi-)unions
 function unions(g, h) {
+  return unionsAndIntersections(g, h).map(_.first);
+}
+
+function unionsAndIntersections(g, h) {
   // there's a bijection between intersections and unions
   return intersections(g, h).map(p => {
     var sl = p.sites.length,
@@ -298,19 +314,19 @@ function unions(g, h) {
     addEdges(s1, g, gs_mg);
     addEdges(s2, h, hs_mg);
     // create the graph
-    return { agents: p.agents.concat(a1).concat(a2),
-             sites: p.sites.concat(s1).concat(s2),
-             sitemap: p.sitemap.concat(sm1).concat(sm2),
-             sitesOf: so3.concat(so1).concat(so2),
-             edges: _.toPairs(edgemap).map(
-               ([x, y]) => [_.toNumber(x), y]),
-             edgemap: edgemap,
-             agenttype: p.agenttype.concat(at1).concat(at2),
-             sitetype: p.sitetype.concat(st1).concat(st2),
-             // additional fields for maps of agents and sites
-             ga_mg: ga_mg, gs_mg: gs_mg, 
-             ha_mg: ha_mg, hs_mg: hs_mg
-           };
+    return [{ agents: p.agents.concat(a1).concat(a2),
+              sites: p.sites.concat(s1).concat(s2),
+              sitemap: p.sitemap.concat(sm1).concat(sm2),
+              sitesOf: so3.concat(so1).concat(so2),
+              edges: _.toPairs(edgemap).map(
+                ([x, y]) => [_.toNumber(x), y]),
+              edgemap: edgemap,
+              agenttype: p.agenttype.concat(at1).concat(at2),
+              sitetype: p.sitetype.concat(st1).concat(st2),
+              // additional fields with agent and site maps
+              ga_mg: ga_mg, gs_mg: gs_mg,
+              ha_mg: ha_mg, hs_mg: hs_mg
+            }, p];
   });
 }
 
@@ -368,6 +384,6 @@ function toString(g) {
     }
     agents.push(`${g.agenttype[i]}(${sites.join()})`);
   }
-  return agents.join();
+  return agents.join(", ");
 }
 

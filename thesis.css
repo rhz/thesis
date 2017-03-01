@@ -7,3 +7,7 @@ h5 { font-size: 100%; }
 .row { text-align: center; margin-top: 20px; }
 .centre { margin: 0 auto; padding: 5px; }
 .vcentre { display: flex; align-items: center; }
+.rule {}
+.energy-term {}
+.pattern {}
+.cost {}
