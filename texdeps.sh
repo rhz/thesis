@@ -193,5 +193,8 @@ if [ ! -z "${deps}" ]; then
   echo "${pdffile}:${deps}"
   for f in ${deps}; do
     echo "${f}:"
+    if [[ $f == *pdf ]]; then
+      echo -e "\t@echo skipping compilation of \"\$@\""
+    fi
   done
 fi
