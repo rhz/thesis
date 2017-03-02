@@ -31,7 +31,6 @@ function computeRefinements() {
         p, `error parsing <strong>${p}</strong>: `))),
       mods = modsites(l, r),
       contactGraph = buildContactGraph([l, r].concat(patterns));
-  console.log("contactGraph", contactGraph);
   // relevant minimal glueings
   function relevantUnions(g) { // g can be l or r
     return _.flatten(patterns.map(
@@ -55,63 +54,125 @@ function computeRefinements() {
     if (nreqs.length == 0)
       // found a refinement
       return iter(rest, refs.concat([[l, r]]));
+    // console.log("l", toString(l), l);
+    // console.log("requested sites", nreqs.map(
+    //   r => r.join(".")).join(", "));
+    // console.log("reqs", reqs.map(
+    //   r => r.join(".")).join(", "));
+    // console.log("lreqs", lreqs.map(
+    //   r => r.join(".")).join(", "));
+    // console.log("rreqs", rreqs.map(
+    //   r => r.join(".")).join(", "));
     var [[a, x], ...reqtail] = nreqs;
     // add requested site to l and r
     // free first
     var lf = addFree(_.cloneDeep(l), a, x),
         rf = addFree(_.cloneDeep(r), a, x),
         free = [lf, rf, reqtail];
-    console.log("requested sites", nreqs.map(
-      r => r.join(".")).join(", "));
-    console.log("reqs", reqs.map(
-      r => r.join(".")).join(", "), "...", reqs);
-    console.log("lreqs", lreqs.map(
-      r => r.join(".")).join(", "), "...", lreqs);
-    console.log("rreqs", rreqs.map(
-      r => r.join(".")).join(", "), "...", rreqs);
-    console.log("lf", toString(lf), a, x);
+    // console.log("lf", toString(lf), lf);
     // bound next
     var bound = contactGraph.edgemap[x].map(y => {
       var lb = addBound(_.cloneDeep(l), a, x, y),
           rb = addBound(_.cloneDeep(r), a, x, y);
+      // console.log("lb", toString(lb), lb);
       return [lb, rb, reqtail];
     });
-    // TODO: loops now
-    var loops = [];
+    // loops now
+    var loops = _.flatten(contactGraph.edgemap[x].map(y => {
+      // select all sites in l that are of type y
+      // and are not modified by the rule
+      // and that are free
+      var allys = _.compact(l.sitetype.map((z, i) => (y == z) && i)),
+          boundsites = _.keys(l.edgemap).map(_.toNumber),
+          yids = _.difference(allys, mods, boundsites);
+      // handle the case where a site of type y is not in l
+      // but could be added to an agent of y
+      // and the site is not requested by the growth policy
+      // (which means that the link would never be produced
+      //  if we don't create here)
+      // TODO: is this case handled in the manuscript?
+      var bt = y.split(".")[0],
+          bs = _.compact(l.agenttype.map((at, i) => (at == bt) && i)),
+          bs2 = bs.filter(b => l.sitesOf[b].every(
+            z => l.sitetype[z] != y)),
+          bs3 = bs2.filter(b => reqtail.every(
+            ([c, z]) => b != c && y != z));
+      return yids.map(yid => {
+        var ll = addLoop(_.cloneDeep(l), a, x, yid),
+            rl = addLoop(_.cloneDeep(r), a, x, yid);
+        // console.log("ll", toString(ll), ll);
+        return [ll, rl, reqtail];
+      }).concat(bs3.map(b => {
+        var ll = addBoundIn(_.cloneDeep(l), a, x, b, y),
+            rl = addBoundIn(_.cloneDeep(r), a, x, b, y);
+        console.log("adding sites", x, "in", x, "and", y, "in", b,
+                    "then linking them generates", toString(ll), ll);
+        return [ll, rl, reqtail];
+      }));
+    }));
     return iter(rest.concat([free], bound, loops), refs);
-  }
-  // add a free site of type x in agent a in graph g
-  function addFree(g, a, x) {
-    var xid = g.sites.length;
-    g.sitetype.push(x);
-    g.sites.push(x);
-    g.sitesOf[a].push(xid);
-    g.sitemap[xid] = a;
-    return g;
-  }
-  // add a site of type x in agent a bound to site y
-  function addBound(g, a, x, y) {
-    var bt = y.split(".")[0],
-        b = g.agents.length,
-        xid = g.sites.length,
-        yid = xid+1;
-    g.agenttype.push(bt);
-    g.agents.push(bt);
-    g.sitetype.push(x);
-    g.sites.push(x);
-    g.sitetype.push(y);
-    g.sites.push(y);
-    g.sitesOf[a].push(xid);
-    g.sitemap[xid] = a;
-    g.sitesOf[b] = [yid];
-    g.sitemap[yid] = b;
-    g.edgemap[xid] = yid;
-    g.edgemap[yid] = xid;
-    g.edges.push([xid, yid]);
-    return g;
+    // return iter(rest.concat(bound, loops), refs);
   }
   var refs = iter([[l, r, []]], []);
-  // display refinements
+  showRefinements(refs);
+}
+
+// add a site of type x in agent a
+// bound to site of type y in agent b
+function addBoundIn(g, a, x, b, y) {
+  var xid = addSite(g, a, x),
+      yid = addSite(g, b, y);
+  return addEdge(g, xid, yid);
+}
+
+// add a site of type x in agent a bound to site yid
+function addLoop(g, a, x, yid) {
+  var xid = addSite(g, a, x);
+  return addEdge(g, xid, yid);
+}
+
+// add a free site of type x in agent a in graph g
+function addFree(g, a, x) {
+  addSite(g, a, x);
+  return g;
+}
+
+// add a site of type x in agent a bound to site y
+function addBound(g, a, x, y) {
+  var b = addAgent(g, y.split(".")[0]),
+      xid = addSite(g, a, x),
+      yid = addSite(g, b, y);
+  return addEdge(g, xid, yid);
+}
+
+// add agent of type at to graph g and return agent id
+function addAgent(g, at) {
+  var a = g.agents.length;
+  g.agenttype.push(at);
+  g.agents.push(at);
+  g.sitesOf[a] = [];
+  return a;
+}
+
+// add site of type x to agent a and return site id
+function addSite(g, a, x) {
+  var xid = g.sites.length;
+  g.sitetype.push(x);
+  g.sites.push(x);
+  g.sitesOf[a].push(xid);
+  g.sitemap[xid] = a;
+  return xid;
+}
+
+// add edge between sites xid and yid
+function addEdge(g, xid, yid) {
+  g.edgemap[xid] = yid;
+  g.edgemap[yid] = xid;
+  g.edges.push([xid, yid]);
+  return g;
+}
+
+function showRefinements(refs) {
   var col = $("#results").append(
     `<div class="col-md-12"></div>`).find("div");
   col.append(
@@ -123,7 +184,7 @@ function computeRefinements() {
   refs.forEach(([l, r], i) => col.append(
     `<div class="row vcentre">
        <div class="col-md-1">
-         ${i}
+         ${i+1}
        </div>
        <div class="col-md-5">
          <div class="centre alert alert-info" role="alert">

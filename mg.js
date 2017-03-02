@@ -182,8 +182,8 @@ function eqIn(x, xs) {
 function intersections(g, h) {
   // construct sets of type-compatible agent pairs
   // first get the type-compatible pairs
-  var t = g.agenttype.map((a, i) => h.agenttype.filter(
-    (b, j) => a === b).map((b, j) => [i, j]));
+  var t = g.agenttype.map((a, i) => _.compact(h.agenttype.map(
+    (b, j) => (a == b) && [i, j])));
   // ais is an array of arrays, each array ai with as many elements
   // as agents in the intersection represented by ai.
   var ais = cross(t).filter(
