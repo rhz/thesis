@@ -3873,47 +3873,34 @@ we see that:
 \label{sec:non-linear-energy}
 
 At the beginning of this chapter,
-we made a key assumption in \eqn{graph-energy}
+we made the key assumption in \eqn{graph-energy}
 that the energy function is linear
 in the cost and number of occurrences of energy patterns.
 Here we consider a more general situation
 where the energy function $E$ is no longer asked to be linear.
-For reasons to become clear shortly,
-we still assume the much weaker property that $E$
+% For reasons to become clear shortly,
+% we still assume the much weaker property that $E$
+Instead we assume the much weaker property that $E$
 can be factored as $v \circ \shapes(\_)$
 for some finite set of patterns $\shapes$,
-that is
+meaning that the energy function is computed by
+an arbitrary function $v$ on the number of occurrences
+of energy patterns, not the graph itself.
+% that is
+We have
 \begin{equation}
   \label{eq:factor}
   \rSGe_C \;\; \xtoby{\;\; \shapes(\_) \;\;} \;\;
-  \mSet(\shapes) \;\; \xtoby{\;\; v \;\;} \RR,
+  \NN^\shapes \;\; \xtoby{\;\; v \;\;} \;\; \RR,
 \end{equation}
-where $\mSet(\shapes)$ is the set of all multisets over $\shapes$.
+% where $\mSet(\shapes)$ is the set of all multisets over $\shapes$.
 % Note that if we see multisets as equipped with
 % the usual point-wise partial order,
 % $\shapes(\_)$ is evidently functorial.
-% NOTE: I think when Vincent says usual point-wise partial order
-% he is talking about the morphisms in \mSet being characterised
-% as X \to Y if X \leq Y.
-%
-% \begin{wrapfigure}[4]{r}{0.25\textwidth}
-%   \vspace{-1em}
-%   \begin{equation}
-%     \label{eq:cg-simple-loop}
-%     \tikz[grphdiag,baseline=-2.5]{
-%       \draw (0,-.17) ellipse (.4 and .3);
-%       \n[n]{x}{0,0};
-%       \site{a}{x.west};
-%       \site{b}{x.east};
-%       \node at (156:.41) {\scriptsize $a$};
-%       \node at (28:.42) {\scriptsize $b$};
-%     }
-%   \end{equation}
-% \end{wrapfigure}
-%
-As an example,
+% NOTE: I think usual point-wise partial order means
+% morphisms in \mSet are characterised as X \to Y if X \leq Y.
+As an example of a non-linear energy function,
 consider the contact graph
-% consider an agent with contact graph (\eqn{cg-simple-loop}),
 \begin{center}
   \begin{tikzpicture}[grphdiag]
     \draw (0,-.17) ellipse (.4 and .3);
@@ -3924,9 +3911,7 @@ consider the contact graph
     \node at (28:.42) {\scriptsize $b$};
   \end{tikzpicture}
 \end{center}
-% with which one can form only chains and cycles,
 and a pair of generator rules $r^+,r^-$
-% and a reversible generator rule $r$
 that create/delete the unique edge type.
 % With this pair of rules one can form
 The successive application of these rules can form
@@ -3935,12 +3920,13 @@ Let us write $c_3$ for a cycle of length $3$ (a triangle)
 and $t_3$ for an open chain with $3$ nodes.
 We define a quadratic energy function
 $E(m) = |\matches{c_3}{m}|^2$,
-that is, $\shapes=\set{c_3}$ and $v(x)=x^2$.
+that is, we factor $E$ using
+$\shapes = \set{c_3}$ and $v(x) = x_{c_3}^2$.
 % NOTE: v(n)=n^2 is an abuse of notation as n is a multiset
 % with the number of copies of c_3 in the mixture.
 Applying $r^+$ to $t_3$ % a chain $t_3$
-% in a mixture $m$
-in a mixture of the form $m = t_3 + m'$
+in a mixture $m$
+% in a mixture of the form $m = t_3 + m'$
 will create a new copy of $c_3$
 and give the following energy balance:
 \begin{equation*}
@@ -3953,6 +3939,7 @@ and give the following energy balance:
 Therefore, detailed balance forces
 the log-ratio of the backward and forward rates
 of an edge creation,
+% TODO: remove subscripts
 $\ln(k(r^-_{\comatch{\phi}})/k(r^+_\phi))$,
 to depend on $m$.
 This is unlike the case of linear energy functions examined before
@@ -3962,10 +3949,10 @@ However, the refinement $r^+_\phi$ of $r^+$
 % in spite of the refinement $r^+_\phi$ of $r^+$
 that extends the left-hand side of $r^+$ into $t_3$
 % (where it is applied to a chain $t_3$)
-% is $\shapes$-balanced.
-being $\shapes$-balanced.
-% This means, as we have seen,
-As we have seen, $\shapes$-balance means
+is $\shapes$-balanced.
+% being $\shapes$-balanced.
+This means, as we have seen,
+% As we have seen, $\shapes$-balance means
 % that the stoichiometric $\shapes$-vector $\Delta\phi$
 that the $\shapes$-vector $\Delta\phi$
 associated to $r^+_\phi$~---
@@ -3980,28 +3967,7 @@ of an open chain $t_3$ can only produce one triangle,
 regardless of the context
 in which the refined rule $r_\phi$ is applied.
 
-% \begin{wrapfigure}[8]{r}{0.43\textwidth}
-%   \vspace{-1.2em}
-%   \begin{equation}
-%     \label{eq:non-linear}
-%     \tikz[baseline=-2.5]{
-%       \matrix (m) [matrix of math nodes,row sep=30pt,column sep=40pt] {
-%         x & y \\
-%         \shapes(x) & \shapes(y) \\
-%         \RR & \RR \\};
-%       \draw[hom] (m-1-1) -- node[above] {$r$} (m-1-2);
-%       \draw[hom] (m-2-1) -- node[above] {$+\Delta\phi$} (m-2-2);
-%       \draw[hom] (m-3-1) -- node[above] {$+\Delta E$} (m-3-2);
-%       \draw[hom] (m-1-1) -- node[left] {$\shapes$} (m-2-1);
-%       \draw[hom] (m-1-2) -- node[right] {$\shapes$} (m-2-2);
-%       \draw[hom] (m-2-1) -- node[left] {$v$} (m-3-1);
-%       \draw[hom] (m-2-2) -- node[right] {$v$} (m-3-2);
-%     }
-%   \end{equation}
-% \end{wrapfigure}
-
 In general, one can visualise the situation as follows.
-% In general, one can visualise the situation by \diagram{non-linear}.
 \begin{center}
   \begin{tikzpicture}[x=3cm,y=2cm]
     \node (x) at (0,2) {$x$};
@@ -4031,7 +3997,7 @@ $K_r = v(\Delta\phi(m))$.
 If $v$ is not linear,
 the constraint does not seem very helpful as \emph{a priori}
 one has to know $m$ to compute the right-hand side.
-But by the assumption in \eqn{factor}, % opening the paragraph,
+But by the assumption in \eqn{factor},
 $\Delta\phi$ factors through $\shapes$, hence:
 \begin{equation*}
   K_r \; = \; v(\shapes(m) + \sitemap_r(\shapes(m))) - v(\shapes(m))
@@ -4083,13 +4049,49 @@ and the same holds for propagating these updates
 to the rates of the rules which depend on them,
 \eg as in \eqn{non-linear-lkm}.
 Thus, the complexity properties of the simulation algorithm
-would be preserved \citep{scalable}.
+established by \citet{scalable} would be preserved.
+% would be preserved \citep{scalable}.
+
+We have explained how we can deal with non-linear energy functions
+that depend on local energy patterns.
+An interesting extension would be to deal with
+non-local forms of energies expressing
+% so as to treat well-known important phenomena such as so-called
+% `positional entropy' effects. We could also in principle accommodate
+long-range interactions, where the metric is read off the graph itself.
+In practice, there will be many more rules generated,
+and beyond the descriptive aspects,
+simulations will need new ideas to be feasible.
+% A ray of hope comes from the log-affine kinetic model
+% presented in \sct{rates},
+% as rules can be partitioned by energy balances for faster selection.
+% This in turn should help in accommodating feasible long-range terms.
+% However, in practice, even using shielded potentials~\cite{kiselev},
+% the explicit construction we propose will be unfeasible.
 
 
-\section{Conclusions}
-\label{sec:direct-conclusions}
+% \section{Generalisations}
+% \label{sec:generalisations}
 
-
+% There is a growing body of literature which turns a theoretical eye
+% to site graph rewriting \citep{jonandtobias,dixon,heckel,kappadpo},
+% and it is tempting to ask whether our derivation can be replayed
+% in more abstract settings.
+% In particular, it would be very interesting to investigate
+% its integration with the abstract framework for rule-based modelling
+% developed in \citet{lynch}.
+% The concept of refinements is only possible in a setting
+% where two extensions of a graph are incompatible or orthogonal
+% in the sense that there is no graph that can embed
+% both extensions simultaneously
+% (\ie there no square that makes the cospan commute).
+% This would be the case, for instance,
+% in the framework of rigid graph rewriting
+% developed by Vincent, Reiko and Pawel. % TODO: missing cite
+% Another possible generalisation is to drop the assumption
+% that refined rules have to be orthogonal.
+% Even though it is natural to ask for that property,
+% detailed balance does not require it.
 
 
 %%% Local Variables:
