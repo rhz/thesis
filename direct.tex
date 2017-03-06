@@ -1239,25 +1239,26 @@ an exhaustive collection of mutually exclusive subcases.
   then $\phi_1 = \phi_2$ and $\gamma_1 = \gamma_2$.
   \begin{equation}
     \label{eq:gp}
-    \tikz[baseline=-4.3]{
-      \matrix (m) [matrix of math nodes,row sep=25pt,column sep=25pt]{
-        g & & & h_1 \\
-        & p & & \\
-        & & m & \\
-        h_2 & & & m \\};
+    \tikz[x=1.4cm,y=1.4cm,baseline=2cm]{
+      \node (g) at (0,3) {$g$};
+      \node (h1) at (3,3) {$h_1$};
+      \node (h2) at (0,0) {$h_2$};
+      \node (p) at (1,2) {$p$};
+      \node (h) at (2,1) {$h$};
+      \node (m) at (3,0) {$m$};
       % outer square
-      \draw[hom] (m-1-1) -- node[above] {$\phi_1$} (m-1-4);
-      \draw[hom] (m-1-1) -- node[left] {$\phi_2$} (m-4-1);
-      \draw[hom] (m-4-1) -- node[below] {$\gamma_2$} (m-4-4);
-      \draw[hom] (m-1-4) -- node[right] {$\gamma_1$} (m-4-4);
+      \draw[hom] (g) -- node[above] {$\phi_1$} (h1);
+      \draw[hom] (g) -- node[left] {$\phi_2$} (h2);
+      \draw[hom] (h2) -- node[below] {$\gamma_2$} (m);
+      \draw[hom] (h1) -- node[right] {$\gamma_1$} (m);
       % inner square
-      \draw[hom] (m-2-2) -- node[onarrow] {$\pi_1$} (m-4-1);
-      \draw[hom] (m-2-2) -- node[onarrow] {$\pi_2$} (m-1-4);
-      \draw[hom] (m-4-1) -- node[onarrow] {$\theta_1$} (m-3-3);
-      \draw[hom] (m-1-4) -- node[onarrow] {$\theta_2$} (m-3-3);
+      \draw[hom] (p) -- node[onarrow] {$\pi_1$} (h1);
+      \draw[hom] (p) -- node[onarrow] {$\pi_2$} (h2);
+      \draw[hom] (h1) -- node[onarrow] {$\theta_1$} (h);
+      \draw[hom] (h2) -- node[onarrow] {$\theta_2$} (h);
       % mediating arrows
-      \draw[hom] (m-1-1) -- node[onarrow] {$\phi$} (m-2-2);
-      \draw[hom,dashed] (m-3-3) -- (m-4-4);
+      \draw[hom] (g) -- node[onarrow] {$\phi$} (p);
+      \draw[hom,dashed] (h) -- (m);
     }
   \end{equation}
 \end{theorem}
@@ -2179,7 +2180,7 @@ is in general well-defined and well-behaved.
   % \emph{Surjectivity}:
   \emph{Exhaustive}:
   Take any embedding $\psi$ of $r_L$ into a mixture $m$.
-  We can restrict the co-domain of $\psi$ to be
+  We can restrict the codomain of $\psi$ to be
   the connected closure $n$ of the image of $\psi$ in $m$,
   resulting in an epi $\psi_n: r_L \to n$.
   Let us further restrict $n$ by removing
