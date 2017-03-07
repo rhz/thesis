@@ -44,178 +44,86 @@ function computeRefinements() {
         ms => [ga, m.sitetype[ms]])))));
   }
   //
-  // compute a summary graph (contact graph where agent types
-  // can be repeated) annotated with site requests
-  function reqGraph(g) {
-    // TODO: create all new subgraphs of g for which
-    // we haven't checked site requests
-    // g.toCheck[a] => create subgraph by adding
-    // g.apath[a] and [the rest non-deterministically]
-    var lreqs = siteRequests(relevantUnions(l)),
-        rreqs = siteRequests(relevantUnions(r)),
-        areqs = _.unionWith(lreqs, rreqs, _.isEqual);
-    function addSiteRG(a, x) {
-      var xid = g.sites.length;
-      g.sites.push(x);
-      g.sitesOf[a].push(xid);
-      g.sitemap[xid] = a;
-      g.edgemap[xid] = [];
-      return xid;
-    }
-    function addAgentRG(at) {
-      var a = g.agents.length;
-      g.agents.push(at);
-      g.sitesOf[a] = [];
-      return a;
-    }
-    function addEdgeRG(xid, yid) {
-      g.edgemap[xid].push(yid);
-      g.edgemap[yid].push(xid);
-      g.edges.push([xid, yid]);
-    }
-    areqs.forEach(([a, x]) => {
-      var xid = addSiteRG(a, x);
-      if (xid in g.spath)
-        console.log("xid", xid, "in g.spath:", g.spath);
-      else
-        g.spath[xid] = g.apath[a].concat([x]);
-      contactGraph.edgemap[x].forEach(y => {
-        var b = addAgentRG(y.split(".")[0]);
-        var yid = addSiteRG(b, y);
-        if (yid in g.spath)
-          console.log("yid", yid, "in g.spath:", g.spath);
-        else
-          g.spath[yid] = g.spath[xid].concat([y]);
-        g.toCheck.push(yid);
-        // TODO: deal with multiple paths
-        if (b in g.apath)
-          console.log("agent", b, "in g.apath:", g.apath);
-        else
-          g.apath[b] = g.spath[yid];
-        addEdgeRG(xid, yid);
-      });
-    });
-    console.log("g", g);
-    console.log("g.apath", g.apath);
-    console.log("g.spath", g.spath);
-    var lsites = _.flatten(l.agents.map(
-      a => _.difference(g.sitesOf[a], mods)));
-    console.log("lsites", lsites);
-    // compute subgraphs using the sites in g.toCheck
-    // as starting points: they have to include their
-    // path to the original rule and non-deterministically
-    // add all other paths
-    var subs = g.toCheck.map(); // ...
-    // NOTE: perhaps apath and spath are useless, i just need a map
-    // from the agents and sites in the subgraph to those in g
-  }
-  var initialRG = _.cloneDeep(l);
-  initialRG.toCheck = [];
-  initialRG.agents = l.agenttype;
-  initialRG.sites = l.sitetype;
-  _.unset(initialRG, "agenttype");
-  _.unset(initialRG, "sitetype");
-  initialRG.apath = {};
-  initialRG.spath = {};
-  initialRG.agents.map(
-    (a, i) => initialRG.apath[i] = [i]);
-  initialRG.sites.map(
-    (x, j) => initialRG.spath[j] = [initialRG.sitemap[j],
-                                    initialRG.sites[j]]);
-  reqGraph(initialRG);
+  // // compute a summary graph (contact graph where agent types
+  // // can be repeated) annotated with site requests
+  // function reqGraph(g) {
+  //   // TODO: create all new subgraphs of g for which
+  //   // we haven't checked site requests
+  //   // g.toCheck[a] => create subgraph by adding
+  //   // g.apath[a] and [the rest non-deterministically]
+  //   var lreqs = siteRequests(relevantUnions(l)),
+  //       rreqs = siteRequests(relevantUnions(r)),
+  //       areqs = _.unionWith(lreqs, rreqs, _.isEqual);
+  //   function addSiteRG(a, x) {
+  //     var xid = g.sites.length;
+  //     g.sites.push(x);
+  //     g.sitesOf[a].push(xid);
+  //     g.sitemap[xid] = a;
+  //     g.edgemap[xid] = [];
+  //     return xid;
+  //   }
+  //   function addAgentRG(at) {
+  //     var a = g.agents.length;
+  //     g.agents.push(at);
+  //     g.sitesOf[a] = [];
+  //     return a;
+  //   }
+  //   function addEdgeRG(xid, yid) {
+  //     g.edgemap[xid].push(yid);
+  //     g.edgemap[yid].push(xid);
+  //     g.edges.push([xid, yid]);
+  //   }
+  //   areqs.forEach(([a, x]) => {
+  //     var xid = addSiteRG(a, x);
+  //     if (xid in g.spath)
+  //       console.log("xid", xid, "in g.spath:", g.spath);
+  //     else
+  //       g.spath[xid] = g.apath[a].concat([x]);
+  //     contactGraph.edgemap[x].forEach(y => {
+  //       var b = addAgentRG(y.split(".")[0]);
+  //       var yid = addSiteRG(b, y);
+  //       if (yid in g.spath)
+  //         console.log("yid", yid, "in g.spath:", g.spath);
+  //       else
+  //         g.spath[yid] = g.spath[xid].concat([y]);
+  //       g.toCheck.push(yid);
+  //       // TODO: deal with multiple paths
+  //       if (b in g.apath)
+  //         console.log("agent", b, "in g.apath:", g.apath);
+  //       else
+  //         g.apath[b] = g.spath[yid];
+  //       addEdgeRG(xid, yid);
+  //     });
+  //   });
+  //   console.log("g", g);
+  //   console.log("g.apath", g.apath);
+  //   console.log("g.spath", g.spath);
+  //   var lsites = _.flatten(l.agents.map(
+  //     a => _.difference(g.sitesOf[a], mods)));
+  //   console.log("lsites", lsites);
+  //   // compute subgraphs using the sites in g.toCheck
+  //   // as starting points: they have to include their
+  //   // path to the original rule and non-deterministically
+  //   // add all other paths
+  //   var subs = g.toCheck.map(); // ...
+  //   // NOTE: perhaps apath and spath are useless, i just need a map
+  //   // from the agents and sites in the subgraph to those in g
+  // }
+  // var initialRG = _.cloneDeep(l);
+  // initialRG.toCheck = [];
+  // initialRG.agents = l.agenttype;
+  // initialRG.sites = l.sitetype;
+  // _.unset(initialRG, "agenttype");
+  // _.unset(initialRG, "sitetype");
+  // initialRG.apath = {};
+  // initialRG.spath = {};
+  // initialRG.agents.map(
+  //   (a, i) => initialRG.apath[i] = [i]);
+  // initialRG.sites.map(
+  //   (x, j) => initialRG.spath[j] = [initialRG.sitemap[j],
+  //                                   initialRG.sites[j]]);
+  // reqGraph(initialRG);
   //
-  function iter() {
-    var lreqs = siteRequests(relevantUnions(l)),
-        rreqs = siteRequests(relevantUnions(r)),
-        areqs = _.unionWith(lreqs, rreqs, _.isEqual);
-    function add(a, x, ys, f) {
-      return ys.map(y => {
-        var ly = f(_.cloneDeep(l), a, x, y),
-            ry = f(_.cloneDeep(r), a, x, y);
-        console.log("ly", toString(ly), ly);
-        return [ly, ry];
-      });
-    }
-    var q = areqs.map(([a, x]) => {
-      var breqs = _.differenceWith(areqs, [[a, x]]);
-      var bound = add(a, x, contactGraph.edgemap[x], addBound);
-      var loops = _.flatten(contactGraph.edgemap[x].map(y => {
-        var allys = _.compact(l.sitetype.map((z, i) => (y == z) && i)),
-            boundsites = _.keys(l.edgemap).map(_.toNumber),
-            yids = _.difference(allys, mods, boundsites);
-        var bt = y.split(".")[0],
-            bs = _.compact(l.agenttype.map((at, i) => (at == bt) && i)),
-            bs2 = bs.filter(b => l.sitesOf[b].every(
-              z => l.sitetype[z] != y)),
-            bs3 = bs2.filter(b => breqs.every(
-              ([c, z]) => b != c && y != z));
-        return add(a, x, yids, addLoop).concat(
-          add(a, x, bs3.map(b => [b, y]), addBoundIn));
-      }));
-      return bound.concat(loops).map(x => x.concat([breqs]));
-    });
-  }
-  // paths has the site requests as paths
-  function newiter(queue, paths) {
-    if (queue.length == 0)
-      return paths;
-    var [[l, r, reqs, pathTo], ...rest] = queue,
-        lreqs = siteRequests(relevantUnions(l)),
-        rreqs = siteRequests(relevantUnions(r)),
-        areqs = _.unionWith(reqs, lreqs, rreqs, _.isEqual);
-    if (areqs.length == 0)
-      return iter(rest, paths, pathTo);
-    var p = areqs.map(([a, x]) => pathTo[a].concat([x])),
-        pp = _.unionWith(paths, p, _.isEqual);
-    // function tails(xs, acc, f) {
-    //   if (xs.length == 0) return acc;
-    //   else {
-    //     var [x, ...ys] = xs, y = f(x, ys);
-    //     return tails(ys, acc.concat([y]), f);
-    //   }
-    // }
-    var q = areqs.map(([a, x]) => { // tails(areqs, ([a, x]) => {
-      var breqs = _.differenceWith(areqs, [[a, x]]),
-          bound = contactGraph.edgemap[x].map(y => {
-            var lb = addBound(_.cloneDeep(l), a, x, y),
-                rb = addBound(_.cloneDeep(r), a, x, y),
-                pt = _.cloneDeep(pathTo),
-                b = lb.agents.length-1;
-            pt[b] = pt[a].concat([x, y]);
-            console.log("lb", toString(lb), lb);
-            return [lb, rb, breqs, pt];
-          });
-      // loops now
-      var loops = _.flatten(contactGraph.edgemap[x].map(y => {
-        var allys = _.compact(l.sitetype.map((z, i) => (y == z) && i)),
-            boundsites = _.keys(l.edgemap).map(_.toNumber),
-            yids = _.difference(allys, mods, boundsites);
-        var bt = y.split(".")[0],
-            bs = _.compact(l.agenttype.map((at, i) => (at == bt) && i)),
-            bs2 = bs.filter(b => l.sitesOf[b].every(
-              z => l.sitetype[z] != y)),
-            bs3 = bs2.filter(b => breqs.every(
-              ([c, z]) => b != c && y != z));
-        return yids.map(yid => {
-          var ll = addLoop(_.cloneDeep(l), a, x, yid),
-              rl = addLoop(_.cloneDeep(r), a, x, yid);
-          console.log("ll", toString(ll), ll);
-          return [ll, rl, breqs];
-        }).concat(bs3.map(b => {
-          var ll = addBoundIn(_.cloneDeep(l), a, x, b, y),
-              rl = addBoundIn(_.cloneDeep(r), a, x, b, y);
-          console.log("adding sites", x, "in", x, "and", y, "in", b,
-                      "then linking them generates", toString(ll), ll);
-          return [ll, rl, breqs];
-        }));
-      }));
-      return bound.concat(loops);
-    });
-    return iter(q, pp, pathTo);
-  }
-  // var pathTo = l.agents.map(a => [a]);
-  // console.log("pathTo", pathTo);
-  // var reqs = iter([[l, r, [], pathTo]], []);
   // add site requests iteratively
   function iter(queue, refs) {
     if (queue.length == 0)
@@ -227,28 +135,21 @@ function computeRefinements() {
     if (nreqs.length == 0)
       // found a refinement
       return iter(rest, refs.concat([[l, r]]));
-    // console.log("l", toString(l), l);
     // console.log("requested sites", nreqs.map(
-    //   r => r.join(".")).join(", "));
-    // console.log("reqs", reqs.map(
-    //   r => r.join(".")).join(", "));
-    // console.log("lreqs", lreqs.map(
-    //   r => r.join(".")).join(", "));
-    // console.log("rreqs", rreqs.map(
     //   r => r.join(".")).join(", "));
     var [[a, x], ...reqtail] = nreqs;
     // add requested site to l and r
     // free first
     var lf = addFree(_.cloneDeep(l), a, x),
         rf = addFree(_.cloneDeep(r), a, x),
-        free = [lf, rf]; //, reqtail];
-    console.log("lf", toString(lf), lf);
+        free = [lf, rf];
+    // console.log("lf", toString(lf), lf);
     // bound next
     function add(a, x, ys, f) {
       return ys.map(y => {
         var ly = f(_.cloneDeep(l), a, x, y),
             ry = f(_.cloneDeep(r), a, x, y);
-        console.log("ly", toString(ly), ly);
+        // console.log("ly", toString(ly), ly);
         return [ly, ry];
       });
     }
@@ -265,7 +166,7 @@ function computeRefinements() {
       // but could be added to an agent of y
       // and the site is not requested by the growth policy
       // (which means that the link would never be produced
-      //  if we don't create here)
+      //  if we don't create it here)
       // TODO: is this case handled in the manuscript?
       var bt = y.split(".")[0],
           bs = _.compact(l.agenttype.map((at, i) => (at == bt) && i)),
@@ -280,8 +181,8 @@ function computeRefinements() {
       x => x.concat([reqtail]));
     return iter(rest.concat(exts), refs);
   }
-  // var refs = iter([[l, r, []]], []);
-  // showRefinements(refs);
+  var refs = iter([[l, r, []]], []);
+  showRefinements(refs);
 }
 
 // add a site of type x in agent a
