@@ -3878,17 +3878,18 @@ we made the key assumption in \eqn{graph-energy}
 that the energy function is linear
 in the cost and number of occurrences of energy patterns.
 Here we consider a more general situation
-where the energy function $E$ is no longer asked to be linear.
+in which the energy function $E$ is no longer asked to be linear.
 % For reasons to become clear shortly,
 % we still assume the much weaker property that $E$
 Instead we assume the much weaker property that $E$
-can be factored as $v \circ \shapes(\_)$
-for some finite set of patterns $\shapes$,
-meaning that the energy function is computed by
+can be factored as $v \circ \shapes(\_)$,
+where $\shapes(\_)$ is the function that counts
+the number of occurrences of energy patterns
+in some finite set $\shapes$.
+That is, the energy function is computed by
 an arbitrary function $v$ on the number of occurrences
 of energy patterns, not the graph itself.
-% that is
-We have
+Schematically we have
 \begin{equation}
   \label{eq:factor}
   \rSGe_C \;\; \xtoby{\;\; \shapes(\_) \;\;} \;\;
@@ -3900,6 +3901,8 @@ We have
 % $\shapes(\_)$ is evidently functorial.
 % NOTE: I think usual point-wise partial order means
 % morphisms in \mSet are characterised as X \to Y if X \leq Y.
+We can reconstruct \eqn{graph-energy}
+by using the linear function $v(x) = \cost \cdot x$.
 As an example of a non-linear energy function,
 consider the contact graph
 \begin{center}
@@ -3916,68 +3919,63 @@ and a pair of generator rules $r^+,r^-$
 that create/delete the unique edge type.
 % With this pair of rules one can form
 The successive application of these rules can form
-chains of arbitrary length and cycles.
+chains and cycles of arbitrary length.
 Let us write $c_3$ for a cycle of length $3$ (a triangle)
 and $t_3$ for an open chain with $3$ nodes.
 We define a quadratic energy function
-$E(m) = |\matches{c_3}{m}|^2$,
-that is, we factor $E$ using
-$\shapes = \set{c_3}$ and $v(x) = x_{c_3}^2$.
-% NOTE: v(n)=n^2 is an abuse of notation as n is a multiset
-% with the number of copies of c_3 in the mixture.
-Applying $r^+$ to $t_3$ % a chain $t_3$
-in a mixture $m$
+$E(m) = |\matches{c_3}{m}|^2$.
+In terms of \diagram{factor},
+we factor $E$ using $\shapes = \set{c_3}$ and $v(x) = x(c_3)^2$.
+Applying $r^+$ to $t_3$ in a mixture $m$
 % in a mixture of the form $m = t_3 + m'$
 will create a new copy of $c_3$
 and give the following energy balance:
-\begin{equation*}
+\begin{equation}
+  \label{eq:c3delta}
   \Delta E = (|\matches{c_3}{m}| + 1)^2 - (|\matches{c_3}{m}|)^2
            = 2|\matches{c_3}{m}| + 1
-\end{equation*}
-% TODO: rewrite paragraph. start by mentioning that the refinement
-% is P-balanced? the log-ratio does depend on m in the linear case
-% when the rule is not P-balanced.
-Therefore, detailed balance forces
-the log-ratio of the backward and forward rates
-of an edge creation,
-% TODO: remove subscripts
-$\ln(k(r^-_{\comatch{\phi}})/k(r^+_\phi))$,
-to depend on $m$.
-This is unlike the case of linear energy functions examined before
-where this ratio is independent of $m$.
-However, the refinement $r^+_\phi$ of $r^+$
-% The dependence on $m$ in the non-linear case happens
-% in spite of the refinement $r^+_\phi$ of $r^+$
+\end{equation}
+Note that the refinement $r^+_\phi$ of $r^+$
 that extends the left-hand side of $r^+$ into $t_3$
-% (where it is applied to a chain $t_3$)
 is $\shapes$-balanced.
-% being $\shapes$-balanced.
-This means, as we have seen,
-% As we have seen, $\shapes$-balance means
-% that the stoichiometric $\shapes$-vector $\Delta\phi$
-that the $\shapes$-vector $\Delta\phi$
-associated to $r^+_\phi$~---
+% This means, as we have seen,
+As we have seen at the end of \sct{refinements},
+whenever a rule is $\shapes$-balance % means that
+% the stoichiometric $\shapes$-vector $\Delta\phi$
+the $\shapes$-vector $\Delta\phi$ associated to $r^+_\phi$~---
 where each component $\Delta\phi(p)$ is defined as
-the difference of $|\matches{p}{n}| - |\matches{p}{m}|$
-for an $r^+$-transition from $m$ to $n$~---
+the difference $|\matches{p}{n}| - |\matches{p}{m}|$
+for an $r^+_\phi$-transition from $m$ to $n$~---
 is the same for all $m,n$.
 In the example $\Delta\phi$ has only one component,
-which is constant $\Delta\phi(c_3) = 1$
-because the binding of the two free extremes
-of an open chain $t_3$ can only produce one triangle,
-regardless of the context
-in which the refined rule $r_\phi$ is applied.
+$\Delta\phi(c_3) = 1$. % which is constant,
+% because the binding of the two free extremes
+% of an open chain $t_3$ can only produce one triangle,
+% regardless of the context
+% in which the refined rule $r^+_\phi$ is applied.
+Despite being $\shapes$-balanced
+and having a constant $\Delta\phi$,
+\eqn{c3delta} shows us that its $\Delta E$ is not constant
+and so detailed balance forces
+the log-ratio of the backward and forward rates
+of an edge creation,
+$\ln(k(r^-_{\comatch{\phi}})/k(r^+_\phi))$,
+to depend on $m$.
+This is unlike the case of linear energy functions
+examined before where the log-ratio is independent of $m$.
 
-In general, one can visualise the situation as follows.
+More generally,
+whenever the refined rule $r_\phi$ is $\shapes$-balanced
+one can visualise the situation as follows.
 \begin{center}
   \begin{tikzpicture}[x=3cm,y=2cm]
-    \node (x) at (0,2) {$x$};
-    \node (y) at (1,2) {$y$};
-    \node (Px) at (0,1) {$\shapes(x)$};
-    \node (Py) at (1,1) {$\shapes(y)$};
+    \node (x) at (0,2) {$m$};
+    \node (y) at (1,2) {$n$};
+    \node (Px) at (0,1) {$\shapes(m)$};
+    \node (Py) at (1,1) {$\shapes(n)$};
     \node (Ex) at (0,0) {$\RR$};
     \node (Ey) at (1,0) {$\RR$};
-    \draw[rule] (x) -- node[above] {$r$} (y);
+    \draw[rule] (x) -- node[above] {$r_\phi$} (y);
     \draw[rule] (Px) -- node[above] {$+\Delta\phi$} (Py);
     \draw[rule] (Ex) -- node[above] {$+\Delta E$} (Ey);
     \draw[rule] (x) -- node[left] {$\shapes$} (Px);
@@ -3986,52 +3984,54 @@ In general, one can visualise the situation as follows.
     \draw[rule] (Py) -- node[right] {$v$} (Ey);
   \end{tikzpicture}
 \end{center}
-Detailed balance amounts to asking for
-% TODO: remove the subscripts from r and \inv{r}
-% or add a subscript \phi to K
-$K_r := \ln(k(\inv{r}_{\comatch{\phi}})/k(r_\phi)) =
-v(\shapes(m) + \Delta\phi(m)) - v(\shapes(m))$.
+In this setting, detailed balance amounts to asking for
+\begin{equation}
+  \label{eq:non-linear-db}
+  K_r := \ln\, \frac{ k(\inv{r_{\comatch{\phi}}}) }{ k(r_\phi) } =
+  v(\shapes(m) + \Delta\phi) - v(\shapes(m))
+\end{equation}
 If $v$ happens to be linear
 then this is the usual condition
-$K_r = v(\Delta\phi(m))$.
-% TODO: add definition of function v for our linear energy function
+$K_r = v(\Delta\phi)$.
 If $v$ is not linear,
-the constraint does not seem very helpful as \emph{a priori}
-one has to know $m$ to compute the right-hand side.
-But by the assumption in \eqn{factor},
-$\Delta\phi$ factors through $\shapes$, hence:
-\begin{equation*}
-  K_r \; = \; v(\shapes(m) + \sitemap_r(\shapes(m))) - v(\shapes(m))
-      \; =: \; \psi_r \circ \shapes(m)
-\end{equation*}
-where the second equation defines $\psi_r$ uniquely
-as a real-valued function from $\shapes$-multisets.
-With this rewriting, it is plain that
-the constraint depends not on full knowledge of $m$,
+detailed balance does not seem very helpful
+as \emph{a priori} one has to know $m$
+to compute the right-hand side.
+% But by the assumption in \diagram{factor},
+% $\Delta\phi$ factors through $\shapes(\_)$
+% and we have
+% \begin{equation*}
+%   K_r \; = \; v(\shapes(m) + u_r(\shapes(m))) - v(\shapes(m))
+%       \; =: \; w_r \circ \shapes(m)
+% \end{equation*}
+% where the second equation defines $w_r$ uniquely
+% as a real-valued function on $\NN^\shapes$.
+However, since $\Delta\phi$ only depends on $r_\phi$,
+% With this rewriting,
+we see that $K_r$ factors through $\shapes(\_)$ just like $E$
+and thus does not depend on a full knowledge of $m$,
 but only on $\shapes(m)$.
-Equivalently, we see that $K_r$
-factors through $\shapes(\_)$ just like $E$.
 In the example, $K_r = 2 |\matches{c_3}{x}| + 1$
-and $\psi_r(x) = 2\,x+1$.
-
-This is good enough to define rates
-for a $\shapes$-balanced $r_\phi$.
+and $\psi_r(x) = 2\,x(c_3)+1$.
+%
+This is good enough to define rates for $r_\phi$.
+% for a $\shapes$-balanced refined rule $r_\phi$.
 For example,
 by analogy with the linear kinetic model of \sct{lkm},
 we can choose log-rates
-% TODO: seen as real-valued multiset functions?
-(seen as real-valued multiset functions)
+(seen as real-valued functions on $\NN^\shapes$)
 as follows:
 \begin{equation}
   \label{eq:non-linear-lkm}
-  \ln\, k(r_\phi) = \alpha_r - \beta_r \psi_r
+  \ln\, k(r_\phi) = \alpha_r - \beta_r w_\phi
 \end{equation}
-with $\alpha_r,\beta_r$ real-valued functions
-on $\shapes$-multisets
+with $w_\phi(x) = v(x + \Delta\phi) - v(x)$
+and $\alpha_r,\beta_r$ real-valued functions on $\NN^\shapes$
 such that $\alpha_{\inv{r}} = \alpha_r$
 and $\beta_{\inv{r}} + \beta_r = 1$.
-This assignment solves the above constraint as
-$\psi_{\inv{r}} + \psi_r = 0$.
+This assignment solves the constraint
+imposed by \eqn{non-linear-db}
+as $w_{\comatch{\phi}} + w_\phi = 0$.
 
 From the \emph{simulation} point of view,
 this added generality requires two things:
@@ -4041,17 +4041,14 @@ be extended to incorporate $\shapes(m)$.
 Both possibilities are already generically available in
 the current version of
 \href{https://github.com/Kappa-Dev/KaSim}{KaSim}.
-% the main Kappa simulator.
-A modification of the engine % (not implemented)
-could obtain direct updates to $\shapes(m)$ as,
-by assumption, applying $r_\phi$
-leads to a constant $+\Delta\phi$ update;
+A modification of the engine could obtain
+direct updates to $\shapes(m)$ as, by assumption,
+applying $r_\phi$ leads to a constant $+\Delta\phi$ update;
 and the same holds for propagating these updates
 to the rates of the rules which depend on them,
 \eg as in \eqn{non-linear-lkm}.
 Thus, the complexity properties of the simulation algorithm
 established by \citet{scalable} would be preserved.
-% would be preserved \citep{scalable}.
 
 We have explained how we can deal with non-linear energy functions
 that depend on local energy patterns.
@@ -4059,10 +4056,17 @@ An interesting extension would be to deal with
 non-local forms of energies expressing
 % so as to treat well-known important phenomena such as so-called
 % `positional entropy' effects. We could also in principle accommodate
-long-range interactions, where the metric is read off the graph itself.
-In practice, there will be many more rules generated,
-and beyond the descriptive aspects,
-simulations will need new ideas to be feasible.
+long-range interactions,
+where the energy is a function of the graph itself.
+Non-local energy functions, however,
+would generate many more refined rules,
+making the simulation of such systems unfeasible
+unless the simulation algorithm is improved,
+\eg by partitioning rules according to energy balances
+for faster selection.
+% In practice, there will be many more rules generated,
+% and beyond the descriptive aspects,
+% simulations will need new ideas to be feasible.
 % A ray of hope comes from the log-affine kinetic model
 % presented in \sct{rates},
 % as rules can be partitioned by energy balances for faster selection.
