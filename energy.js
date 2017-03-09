@@ -240,6 +240,7 @@ function addEdge(g, xid, yid) {
 }
 
 function showRefinements(refs, patterns, costs, balance, cg) {
+  $("#results").empty();
   var col = $("#results").append(
     `<div class="col-md-12"></div>`).find("div");
   col.append(
@@ -317,6 +318,17 @@ function rate(balance) {
     (p, i) => (p == 1) ? `'e${i+1}'` : `${p} * 'e${i+1}'`);
   return `[exp] (-1/2 * (${delta.join(" + ")}))`;
 }
+
+// compute the embeddings of g into h
+// function embs(g, h) {
+//   var gs = ccs(g),
+//       hs = ccs(h),
+//       es = gs.map(sg => hs.map(sh => cembs(sg, sh)));
+// }
+
+// return the connected components of g
+// function ccs(g) {
+// }
 
 // compute the embeddings of g into h
 // assumes g and h are connected
