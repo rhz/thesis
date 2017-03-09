@@ -100,9 +100,9 @@ function buildGraph(g) {
 }
 
 function buildContactGraph(gs) {
-  var edges = nub(_.flatten(gs.map(g => g.edges.map(
-    ([a, b]) => [g.sitetype[a], g.sitetype[b]])))),
-      edgemap = {};
+  var edgemap = {},
+      edges = nub(_.flatten(gs.map(g => g.edges.map(
+        ([a, b]) => [g.sitetype[a], g.sitetype[b]]))));
   edges.forEach(([a, b]) => {
     if (a in edgemap)
       edgemap[a].push(b);

@@ -163,11 +163,8 @@ function computeRefinements() {
           boundsites = _.keys(l.edgemap).map(_.toNumber),
           yids = _.difference(allys, mods, boundsites);
       // handle the case where a site of type y is not in l
-      // but could be added to an agent of y
+      // but could be added to an agent of l
       // and the site is not requested by the growth policy
-      // (which means that the link would never be produced
-      //  if we don't create it here)
-      // TODO: is this case handled in the manuscript?
       var bt = y.split(".")[0],
           bs = _.compact(l.agenttype.map((at, i) => (at == bt) && i)),
           bs2 = bs.filter(b => l.sitesOf[b].every(
@@ -181,8 +178,10 @@ function computeRefinements() {
       x => x.concat([reqtail]));
     return iter(rest.concat(exts), refs);
   }
-  var refs = iter([[l, r, []]], []);
-  showRefinements(refs);
+  var refs = iter([[l, r, []]], []),
+      balance = refs.map(([l, r]) =>
+        patterns.map(p => embs(p, r).length - embs(p, l).length));
+  showRefinements(refs, patterns, costs, balance, contactGraph);
 }
 
 // add a site of type x in agent a
@@ -240,7 +239,7 @@ function addEdge(g, xid, yid) {
   return g;
 }
 
-function showRefinements(refs) {
+function showRefinements(refs, patterns, costs, balance, cg) {
   var col = $("#results").append(
     `<div class="col-md-12"></div>`).find("div");
   col.append(
@@ -250,7 +249,7 @@ function showRefinements(refs) {
        </div>
      </div>`);
   refs.forEach(([l, r], i) => col.append(
-    `<div class="row vcentre">
+    `<div class="row vcentre" id="r${i+1}">
        <div class="col-md-1">
          ${i+1}
        </div>
@@ -267,14 +266,109 @@ function showRefinements(refs) {
            ${toString(r)}
          </div>
        </div>
-     </div>`));
+     </div>`).find(`#r${i+1}`).click(function() {
+       $(this).after(
+         `<div class="row" style="display: none">
+            <div class="col-md-12">
+              ${balance[i].map((e, j) =>
+                `<p>balance for ${toString(patterns[j])} is ${e}</p>`).join("")}
+            </div>
+          </div>`).next().slideDown();
+       $(this).off("click");
+       $(this).click(function() {
+         var n = $(this).next();
+         if (n.is(":hidden"))
+           n.slideDown();
+         else
+           n.slideUp();
+       });
+     }));
   col.append(
     `<div class="row">
        <div class="col-md-11 col-md-offset-1">
-         <button class="btn btn-default btn-lg" name="download"
-                 onclick="downloadKaSim();">
+         <button class="btn btn-default btn-lg">
            Download KaSim code
          </button>
        </div>
-     </div>`);
+     </div>`).find("button").click(function() {
+       var sites = _.groupBy(cg.sites, x => x.split(".")[0]),
+           agents = _.values(_.mapValues(sites, (xs, a) =>
+             `%agent: ${a}(${xs.map(x => x.split(".")[1]).join()})`)),
+           vars = patterns.map((p, i) =>
+             `%var: 'e${i+1}' ${costs[i]} # ${toString(patterns[i])}`),
+           rules = refs.map(([l, r], i) => {
+             var name = `'r${i+1}'`,
+                 indent = _.repeat(" ", name.length);
+             return name + ` ${toString(l)} -> \\\n` +
+               `${indent} ${toString(r)} \\\n` +
+               `${indent} @ ${rate(balance[i])}`;
+           }),
+           kasim = agents.concat(vars, rules, [""]).join("\n"),
+           blob = new Blob([kasim], {type: "text/plain;charset=utf-8"});
+       saveAs(blob, "model.ka");
+     });
+}
+
+function rate(balance) {
+  var nzb = balance.filter(p => p != 0);
+  if (nzb.length == 0)
+    return "1";
+  var delta = nzb.map(
+    (p, i) => (p == 1) ? `'e${i+1}'` : `${p} * 'e${i+1}'`);
+  return `[exp] (-1/2 * (${delta.join(" + ")}))`;
+}
+
+// compute the embeddings of g into h
+// assumes g and h are connected
+function embs(g, h) {
+  var root = 0;
+  return _.compact(h.agents.map(b => {
+    // try to match the root on b
+    function match(queue, matched) {
+      if (queue.length == 0)
+        return matched;
+      var [[a, b], ...rest] = queue;
+      if (g.agenttype[a] != h.agenttype[b])
+        return false;
+      var q = g.sitesOf[a].reduce((acc, x) => {
+        if (acc === false)
+          return false;
+        var ys = h.sitesOf[b].filter(
+          y => h.sitetype[y] == g.sitetype[x]);
+        if (ys.length == 0)
+          return false;
+        else if (ys.length > 1) {
+          console.log("w: agent", b,
+            "has more than one site of type", g.sitetype[x]);
+          return false;
+        } else if (x in g.edgemap) { // x is bound
+          var [y] = ys, nb = (x, g) => g.sitemap[g.edgemap[x]];
+          if (y in h.edgemap)
+            return _.unionWith(acc, [[nb(x, g), nb(y, h)]], _.isEqual);
+          else
+            return false;
+          // return (x in g.edgemap && y in h.edgemap) ||
+          //   (!(x in g.edgemap) && !(y in h.edgemap));
+        } else { // x is free
+          if (ys[0] in h.edgemap)
+            return false;
+          else
+            return acc;
+        }
+      }, []);
+      if (q === false)
+        return false;
+      else {
+        var m = matched.concat([[a, b]]),
+            r = _.differenceWith(q, m, _.isEqual),
+            t = r.every(([a, b]) => m.every(
+              ([c, d]) => (a != c) && (b != d)));
+        if (t)
+          return match(_.unionWith(rest, r, _.isEqual), m);
+        else
+          return false;
+      }
+    }
+    return match([[root, b]], []);
+  }));
 }
