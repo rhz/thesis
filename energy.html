@@ -48,55 +48,40 @@ bond is any natural number</pre>
         </p>
       </div>
     </div>
-    <div class="row form-group vcentre rule">
-      <div class="col-md-1" style="text-align: left">
-        <label for="lhs">rule</label>
-      </div>
-      <div class="col-md-5">
-        <input class="form-control input-lg" type="text"
-               name="lhs" value="A(r),B(l)"/>
-               <!-- name="lhs" value="A(x),A(x)"/> -->
-               <!-- name="lhs" value="A(x),A(y)"/> -->
-      </div>
-      <div class="col-md-1">
-        <span class="glyphicon glyphicon-arrow-right"/>
-      </div>
-      <div class="col-md-5">
-        <input class="form-control input-lg" type="text"
-               name="rhs" value="A(r!1),B(l!1)"/>
-               <!-- name="rhs" value="A(x!1),A(x!1)"/> -->
-               <!-- name="rhs" value="A(x!1),A(y!1)"/> -->
-      </div>
-    </div>
-    <div class="row form-group vcentre energy-term">
-      <div class="col-md-3" style="text-align: left">
-        <label for="pat1">energy pattern 1</label>
-      </div>
-      <div class="col-md-5">
-        <input class="form-control input-lg pattern" type="text"
-               name="pat1" value="A(l!1,r!2),B(l!2,r!3),C(l!3,r!1)"/>
-               <!-- name="pat1" value="A(x!1),A(x!1,y!2),B(y!2)"/> -->
-               <!-- name="pat1" value="A(x!1),A(y!1,x!2),A(y!2)"/> -->
-      </div>
-      <div class="col-md-2">
-        <label for="cost1">with cost</label>
-      </div>
-      <div class="col-md-2">
-        <input class="form-control input-lg cost" type="text"
-               name="cost1" value="1"/>
-      </div>
-    </div>
+    <div id="rules"></div>
+    <div id="energy-terms"></div>
     <div class="row">
-      <div class="col-md-3 col-md-offset-3">
+      <div class="col-md-3">
+        <button class="btn btn-default btn-lg" name="addRule"
+                onclick="addRule();">Add rule</button>
+      </div>
+      <div class="col-md-3">
         <button class="btn btn-default btn-lg" name="addPattern"
                 onclick="addPattern();">Add energy pattern</button>
       </div>
       <div class="col-md-3">
-        <button class="btn btn-default btn-lg" name="go"
+        <button class="btn btn-default btn-lg btn-success" name="go"
                 onclick="computeRefinements();">Compute</button>
       </div>
+      <div class="col-md-3">
+        <div class="btn-group" role="group"
+             aria-label="download and upload models">
+          <button class="btn btn-default btn-lg" name="load"
+                  onclick="$('#file').click();">
+            <!-- <span class="glyphicon glyphicon-download"/> -->
+            Load
+          </button>
+          <input type="file" style="display:none;"
+                 id="file" onchange="loadModel();"/>
+          <button class="btn btn-default btn-lg" name="save"
+                  onclick="saveModel();">
+            <!-- <span class="glyphicon glyphicon-upload"/> -->
+            Save
+          </button>
+        </div>
+      </div>
     </div>
-    <div class="row" id="results"></div>
+    <div id="results"></div>
     <div style="margin: 100px"></div>
   </div>
 </body>

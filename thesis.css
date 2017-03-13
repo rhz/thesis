@@ -8,6 +8,37 @@ h5 { font-size: 100%; }
 .centre { margin: 0 auto; padding: 5px; }
 .vcentre { display: flex; align-items: center; }
 .rule {}
+.lhs {}
+.rhs {}
 .energy-term {}
 .pattern {}
 .cost {}
+/* http://stackoverflow.com/questions/2812770/add-centered-text-to-the-middle-of-a-hr-like-line */
+.strike {
+  display: block;
+  text-align: center;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.strike > span {
+  position: relative;
+  display: inline-block;
+  color: #aaaaaa;
+}
+.strike > span:before,
+.strike > span:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 9999px;
+  height: 1px;
+  background: #eeeeee;
+}
+.strike > span:before {
+  right: 100%;
+  margin-right: 15px;
+}
+.strike > span:after {
+  left: 100%;
+  margin-left: 15px;
+}

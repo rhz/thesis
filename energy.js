@@ -1,21 +1,52 @@
-var lastIdx = 1;
+var lastPat = 0;
+var lastRule = 0;
+$(document).ready(() => {
+  addRule();
+  addPattern();
+});
+
 function addPattern() {
-  lastIdx++;
-  $(".energy-term").filter(":last").after(
+  addP(++lastPat, "A(l!1,r!2),B(l!2,r!3),C(l!3,r!1)", "1");
+}
+function addP(i, pattern, cost) {
+  $("#energy-terms").append(
     `<div class="row form-group vcentre energy-term">
        <div class="col-md-3" style="text-align: left">
-         <label for="pat${lastIdx}">energy pattern ${lastIdx}</label>
+         <label for="pat${i}">energy pattern ${i}</label>
        </div>
        <div class="col-md-5">
          <input class="form-control input-lg pattern" type="text"
-                name="pat${lastIdx}" value="A(x!1),A(y!1,x!2),A(y!2)"/>
+                name="pat${i}" value="${pattern}"/>
        </div>
        <div class="col-md-2">
-         <label for="cost${lastIdx}">with cost</label>
+         <label for="cost${i}">with cost</label>
        </div>
        <div class="col-md-2">
          <input class="form-control input-lg cost" type="text"
-                name="cost${lastIdx}" value="1"/>
+                name="cost${i}" value="${cost}"/>
+       </div>
+     </div>`);
+}
+
+function addRule() {
+  addR(++lastRule, "A(r),B(l)", "A(r!1),B(l!1)");
+}
+function addR(i, lhs, rhs) {
+  $("#rules").append(
+    `<div class="row form-group vcentre rule">
+       <div class="col-md-1" style="text-align: left">
+         <label for="lhs${i}">rule ${i}</label>
+       </div>
+       <div class="col-md-5">
+         <input class="form-control input-lg lhs" type="text"
+                name="lhs${i}" value="${lhs}"/>
+       </div>
+       <div class="col-md-1">
+         <span class="glyphicon glyphicon-arrow-right"/>
+       </div>
+       <div class="col-md-5">
+         <input class="form-control input-lg rhs" type="text"
+                name="rhs${i}" value="${rhs}"/>
        </div>
      </div>`);
 }
@@ -25,12 +56,150 @@ function vals(sel, f = x => x) {
 }
 
 function computeRefinements() {
-  var [l, r] = parseGraphs(["lhs", "rhs"]).map(g => buildGraph(g)),
-      costs = vals(".cost", c => _.toNumber(c)),
+  var costs = vals(".cost", c => _.toNumber(c)),
+      rules = _.zip(
+        vals(".lhs", lhs => buildGraph(parseGraph(
+          lhs, `error parsing <strong>${lhs}</strong>: `))),
+        vals(".rhs", rhs => buildGraph(parseGraph(
+          rhs, `error parsing <strong>${rhs}</strong>: `)))),
       patterns = vals(".pattern", p => buildGraph(parseGraph(
         p, `error parsing <strong>${p}</strong>: `))),
-      mods = modsites(l, r),
-      contactGraph = buildContactGraph([l, r].concat(patterns));
+      cg = buildContactGraph(_.flatten(rules).concat(patterns));
+  $("#results").empty().append(
+    `<div class="row">
+       <div class="col-md-11 col-md-offset-1">
+         <h5>Refinements</h5>
+       </div>
+     </div>`);
+  rules.forEach(([l, r], i) => {
+    var refs = refsOfRule(l, r, patterns, costs, cg);
+    // compute energy balances
+    var balance = refs.map(([l, r]) =>
+      patterns.map(p => embs(p, r).length - embs(p, l).length));
+    $("#results").append(
+      `<div class="row">
+         <div class="col-md-11 col-md-offset-1">
+           <div class="strike">
+             <span>rule ${i+1}</span>
+           </div>
+         </div>
+       </div>`);
+    showRefinements(refs, patterns, costs, balance, cg);
+  });
+  $("#results").append(
+    `<div class="row">
+       <div class="col-md-11 col-md-offset-1">
+         <button class="btn btn-default btn-lg">
+           Download KaSim code
+         </button>
+       </div>
+     </div>`).find("button").click(function() {
+       var sites = _.groupBy(cg.sites, x => x.split(".")[0]),
+           agents = _.values(_.mapValues(sites, (xs, a) =>
+             `%agent: ${a}(${xs.map(x => x.split(".")[1]).join()})`)),
+           vars = patterns.map((p, i) =>
+             `%var: 'e${i+1}' ${costs[i]} # ${toString(patterns[i])}`),
+           rules = refs.map(([l, r], i) => {
+             var name = `'r${i+1}'`,
+                 indent = _.repeat(" ", name.length);
+             return name + ` ${toString(l)} -> \\\n` +
+               `${indent} ${toString(r)} \\\n` +
+               `${indent} @ ${rate(balance[i])}`;
+           }),
+           kasim = agents.concat(vars, rules, [""]).join("\n"),
+           blob = new Blob([kasim], {type: "text/plain;charset=utf-8"});
+       saveAs(blob, "model.ka");
+     });
+}
+
+function showRefinements(refs, patterns, costs, balance, cg) {
+  refs.forEach(([l, r], i) => $("#results").append(
+    `<div class="row vcentre" id="r${i+1}">
+       <div class="col-md-1">
+         ${i+1}
+       </div>
+       <div class="col-md-5">
+         <div class="centre alert alert-info" role="alert">
+           ${toString(l)}
+         </div>
+       </div>
+       <div class="col-md-1">
+         <span class="glyphicon glyphicon-arrow-right"/>
+       </div>
+       <div class="col-md-5">
+         <div class="centre alert alert-info" role="alert">
+           ${toString(r)}
+         </div>
+       </div>
+     </div>`).find(`#r${i+1}`).click(function() {
+       $(this).after(
+         `<div class="row" style="display: none">
+            <div class="col-md-12">
+              ${balance[i].map((e, j) =>
+                `<p>balance for ${toString(patterns[j])} is ${e}</p>`).join("")}
+            </div>
+          </div>`).next().slideDown();
+       $(this).off("click");
+       $(this).click(function() {
+         var n = $(this).next();
+         if (n.is(":hidden"))
+           n.slideDown();
+         else
+           n.slideUp();
+       });
+     }));
+}
+
+function rate(balance) {
+  var nzb = balance.filter(p => p != 0);
+  if (nzb.length == 0)
+    return "1";
+  var delta = nzb.map(
+    (p, i) => (p == 1) ? `'e${i+1}'` : `${p} * 'e${i+1}'`);
+  return `[exp] (-1/2 * (${delta.join(" + ")}))`;
+}
+
+function loadModel() {
+  var file = $("#file")[0].files[0],
+      reader = new FileReader(),
+      rules = $("#rules").empty(),
+      terms = $("#energy-terms").empty();
+  lastPat = 0;
+  lastRule = 0;
+  reader.onload = evt => {
+    var filecontents = evt.target.result;
+    filecontents.split("\n").forEach(line => {
+      var rule = line.match(/^'.*' (.*) -> (.*)$/) ||
+                 line.match(/^(.*) -> (.*)$/);
+      if (rule) {
+        var lhs = rule[1],
+            rhs = rule[2];
+        addR(++lastRule, lhs, rhs);
+      } else {
+        var energy = line.match(/^%energy: ([0-9eE.-]*) (.*)$/);
+        if (energy) {
+          var cost = energy[1],
+              pattern = energy[2];
+          addP(++lastPat, pattern, cost);
+        }
+      }
+    });
+  };
+  reader.readAsText(file);
+}
+
+function saveModel() {
+  var rules = _.zip(vals(".lhs"), vals(".rhs")).map(
+        ([l, r]) => `${l} -> ${r}`),
+      patterns = _.zip(vals(".pattern"), vals(".cost")).map(
+        ([p, c]) => `%energy: ${c} ${p}`),
+      blob = new Blob([rules.concat(patterns, [""]).join("\n")],
+                      {type: "text/plain;charset=utf-8"});
+  saveAs(blob, "model.eka"); // eka = energy kappa
+}
+
+function refsOfRule(l, r, patterns, costs, contactGraph) {
+  var mods = modsites(l, r);
   // relevant minimal glueings
   function relevantUnions(g) { // g can be l or r
     return _.flatten(patterns.map(
@@ -43,87 +212,6 @@ function computeRefinements() {
       (ma, ga) => _.difference(m.sitesOf[ma], m.gs_mg).map(
         ms => [ga, m.sitetype[ms]])))));
   }
-  //
-  // // compute a summary graph (contact graph where agent types
-  // // can be repeated) annotated with site requests
-  // function reqGraph(g) {
-  //   // TODO: create all new subgraphs of g for which
-  //   // we haven't checked site requests
-  //   // g.toCheck[a] => create subgraph by adding
-  //   // g.apath[a] and [the rest non-deterministically]
-  //   var lreqs = siteRequests(relevantUnions(l)),
-  //       rreqs = siteRequests(relevantUnions(r)),
-  //       areqs = _.unionWith(lreqs, rreqs, _.isEqual);
-  //   function addSiteRG(a, x) {
-  //     var xid = g.sites.length;
-  //     g.sites.push(x);
-  //     g.sitesOf[a].push(xid);
-  //     g.sitemap[xid] = a;
-  //     g.edgemap[xid] = [];
-  //     return xid;
-  //   }
-  //   function addAgentRG(at) {
-  //     var a = g.agents.length;
-  //     g.agents.push(at);
-  //     g.sitesOf[a] = [];
-  //     return a;
-  //   }
-  //   function addEdgeRG(xid, yid) {
-  //     g.edgemap[xid].push(yid);
-  //     g.edgemap[yid].push(xid);
-  //     g.edges.push([xid, yid]);
-  //   }
-  //   areqs.forEach(([a, x]) => {
-  //     var xid = addSiteRG(a, x);
-  //     if (xid in g.spath)
-  //       console.log("xid", xid, "in g.spath:", g.spath);
-  //     else
-  //       g.spath[xid] = g.apath[a].concat([x]);
-  //     contactGraph.edgemap[x].forEach(y => {
-  //       var b = addAgentRG(y.split(".")[0]);
-  //       var yid = addSiteRG(b, y);
-  //       if (yid in g.spath)
-  //         console.log("yid", yid, "in g.spath:", g.spath);
-  //       else
-  //         g.spath[yid] = g.spath[xid].concat([y]);
-  //       g.toCheck.push(yid);
-  //       // TODO: deal with multiple paths
-  //       if (b in g.apath)
-  //         console.log("agent", b, "in g.apath:", g.apath);
-  //       else
-  //         g.apath[b] = g.spath[yid];
-  //       addEdgeRG(xid, yid);
-  //     });
-  //   });
-  //   console.log("g", g);
-  //   console.log("g.apath", g.apath);
-  //   console.log("g.spath", g.spath);
-  //   var lsites = _.flatten(l.agents.map(
-  //     a => _.difference(g.sitesOf[a], mods)));
-  //   console.log("lsites", lsites);
-  //   // compute subgraphs using the sites in g.toCheck
-  //   // as starting points: they have to include their
-  //   // path to the original rule and non-deterministically
-  //   // add all other paths
-  //   var subs = g.toCheck.map(); // ...
-  //   // NOTE: perhaps apath and spath are useless, i just need a map
-  //   // from the agents and sites in the subgraph to those in g
-  // }
-  // var initialRG = _.cloneDeep(l);
-  // initialRG.toCheck = [];
-  // initialRG.agents = l.agenttype;
-  // initialRG.sites = l.sitetype;
-  // _.unset(initialRG, "agenttype");
-  // _.unset(initialRG, "sitetype");
-  // initialRG.apath = {};
-  // initialRG.spath = {};
-  // initialRG.agents.map(
-  //   (a, i) => initialRG.apath[i] = [i]);
-  // initialRG.sites.map(
-  //   (x, j) => initialRG.spath[j] = [initialRG.sitemap[j],
-  //                                   initialRG.sites[j]]);
-  // reqGraph(initialRG);
-  //
   // add site requests iteratively
   function iter(queue, refs) {
     if (queue.length == 0)
@@ -178,10 +266,7 @@ function computeRefinements() {
       x => x.concat([reqtail]));
     return iter(rest.concat(exts), refs);
   }
-  var refs = iter([[l, r, []]], []),
-      balance = refs.map(([l, r]) =>
-        patterns.map(p => embs(p, r).length - embs(p, l).length));
-  showRefinements(refs, patterns, costs, balance, contactGraph);
+  return iter([[l, r, []]], []);
 }
 
 // add a site of type x in agent a
@@ -239,99 +324,8 @@ function addEdge(g, xid, yid) {
   return g;
 }
 
-function showRefinements(refs, patterns, costs, balance, cg) {
-  $("#results").empty();
-  var col = $("#results").append(
-    `<div class="col-md-12"></div>`).find("div");
-  col.append(
-    `<div class="row">
-       <div class="col-md-11 col-md-offset-1">
-         <h5>Refinements</h5>
-       </div>
-     </div>`);
-  refs.forEach(([l, r], i) => col.append(
-    `<div class="row vcentre" id="r${i+1}">
-       <div class="col-md-1">
-         ${i+1}
-       </div>
-       <div class="col-md-5">
-         <div class="centre alert alert-info" role="alert">
-           ${toString(l)}
-         </div>
-       </div>
-       <div class="col-md-1">
-         <span class="glyphicon glyphicon-arrow-right"/>
-       </div>
-       <div class="col-md-5">
-         <div class="centre alert alert-info" role="alert">
-           ${toString(r)}
-         </div>
-       </div>
-     </div>`).find(`#r${i+1}`).click(function() {
-       $(this).after(
-         `<div class="row" style="display: none">
-            <div class="col-md-12">
-              ${balance[i].map((e, j) =>
-                `<p>balance for ${toString(patterns[j])} is ${e}</p>`).join("")}
-            </div>
-          </div>`).next().slideDown();
-       $(this).off("click");
-       $(this).click(function() {
-         var n = $(this).next();
-         if (n.is(":hidden"))
-           n.slideDown();
-         else
-           n.slideUp();
-       });
-     }));
-  col.append(
-    `<div class="row">
-       <div class="col-md-11 col-md-offset-1">
-         <button class="btn btn-default btn-lg">
-           Download KaSim code
-         </button>
-       </div>
-     </div>`).find("button").click(function() {
-       var sites = _.groupBy(cg.sites, x => x.split(".")[0]),
-           agents = _.values(_.mapValues(sites, (xs, a) =>
-             `%agent: ${a}(${xs.map(x => x.split(".")[1]).join()})`)),
-           vars = patterns.map((p, i) =>
-             `%var: 'e${i+1}' ${costs[i]} # ${toString(patterns[i])}`),
-           rules = refs.map(([l, r], i) => {
-             var name = `'r${i+1}'`,
-                 indent = _.repeat(" ", name.length);
-             return name + ` ${toString(l)} -> \\\n` +
-               `${indent} ${toString(r)} \\\n` +
-               `${indent} @ ${rate(balance[i])}`;
-           }),
-           kasim = agents.concat(vars, rules, [""]).join("\n"),
-           blob = new Blob([kasim], {type: "text/plain;charset=utf-8"});
-       saveAs(blob, "model.ka");
-     });
-}
-
-function rate(balance) {
-  var nzb = balance.filter(p => p != 0);
-  if (nzb.length == 0)
-    return "1";
-  var delta = nzb.map(
-    (p, i) => (p == 1) ? `'e${i+1}'` : `${p} * 'e${i+1}'`);
-  return `[exp] (-1/2 * (${delta.join(" + ")}))`;
-}
-
 // compute the embeddings of g into h
-// function embs(g, h) {
-//   var gs = ccs(g),
-//       hs = ccs(h),
-//       es = gs.map(sg => hs.map(sh => cembs(sg, sh)));
-// }
-
-// return the connected components of g
-// function ccs(g) {
-// }
-
-// compute the embeddings of g into h
-// assumes g and h are connected
+// assumes g is connected
 function embs(g, h) {
   var root = 0;
   return _.compact(h.agents.map(b => {
