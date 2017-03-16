@@ -162,7 +162,7 @@
 %  #4 -- site caption/text
 \newcommand{\sitet}[4][]{%
   % \node[site,execute macro=#1] (#2) at #3 {#4}
-  \node[site,execute macro=#1] (#2) at (#3) {#4}%
+  \node[site,#1] (#2) at (#3) {#4}%
 }
 \newcommand{\site}[3][]{\sitet[#1]{#2}{#3}{}}
 

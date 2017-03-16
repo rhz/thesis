@@ -1,0 +1,384 @@
+In this chapter
+we would like to explore restricted versions of Kappa
+for which it is possible to infer the energy function
+from the rewriting rules and their associated rates.
+Recall from the introduction
+that in Kappa itself this problem is undecidable \citep{et1}.
+One such restriction is when agents do not have sites
+and thus cannot bind.
+This is Petri nets.
+We briefly present here the result obtained by \citet{et2}
+and show the construction of the energy function
+for \emph{simple} and \emph{symmetric} Petri nets
+with \emph{mass action} semantics
+(sisma Petri net for short).
+\begin{definition}
+A \emph{sisma Petri net} is a Petri net
+on species $\species$ and reactions $\reactions$ for which:
+\begin{enumerate}[label={(\roman*)}]
+\item (simple) there are no two reactions that have
+  the same stoichiometry (net change in species).
+\item (symmetric) for each reaction $r \in \reactions$,
+  there is a reaction $\inv{r} \in \reactions$
+  that has the reverse direction,
+  \ie the inputs of one are the outputs of the other.
+\item (mass action) the jumping rate $q_{xy,r}$
+  of going from a state $x$ to $y$
+  by a reaction $r$ is proportional to
+  the number of ocurrences of its left-hand side in $x$.
+  In particular,
+  given a rate constant $k(r)$ for reaction $r$,
+  % the jumping rate of $r$ at state $x$ is
+  we have
+  \[ q_{xy,r} = k(r) \prod_{A \in \species}
+     \frac{x(A)!}{(x(A)-\Delta_r(A))!} \]
+  where $x(A)$ is the number of $A$s in $x$
+  and $\Delta_r(A)$ is the net change of $A$ in reaction $r$.
+\end{enumerate}
+\end{definition}
+Note that simple implies
+no two distinct reactions can be applied
+to a state $x$ to obtain state $y$.
+A sisma Petri net has an energy function
+\begin{equation}\label{eq:pn-energy}
+  E(x) = \sum_{A \in \species} \cost(A) x(A) + \ln\bigl(x(A)!\bigr)
+\end{equation}
+for some function $\cost: \species \to \RR$ such that,
+for all $r \in \reactions$,
+\[ \sum_{A \in \species} \Delta_r(A) \cost(A) = \ln(k(r^\star)) - \ln(k(r)). \]
+If there is no such function $\cost$,
+the Petri net does not have detailed balance and
+an energy function.
+%
+In the rest of the chapter
+we introduce two other restrictions of Kappa
+and show how to construct their energy function.
+
+
+\section{Cooperative assembly systems}
+\label{sec:cas}
+
+The first restriction is when
+rules can only create or destroy one edge at a time
+and their rates can only depend on
+how many bound sites the endpoints of the edge have.
+% the type of the neighbours of the two endpoints of the edge
+% but not the state of their sites
+% (whether they are free or bound).
+% Moreover, sites in an agent are regarded as \emph{indistinguishable}
+% and thus rules can only count how many are bound.
+Therefore sites are treated as \emph{indistinguishable}.
+In addition, agents of the same type cannot bind.
+\citet{cas} have proposed these restrictions
+and a simple formalism incorporating them
+to study the thermodynamics of polymer formation
+when there are two types of monomers.
+Here we extend their result to any number of monomer types.
+% TODO: perhaps take the idea in the next sentence
+% and integrate into the paragraph:
+% Cooperativity means that the rate of binding (and unbinding)
+% depends on the number of connections that have been established
+% by the participating nodes.
+
+In the case of two monomers,
+rules are of the form
+\begin{center}
+  \begin{tikzpicture}
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \begin{scope}[shift={(0,0)}]
+          \e{0,0}{90:1.1};
+          \e{0,0}{150:1.1};
+          \e{0,0}{270:1.1};
+          % a
+          \n[n1]{a}{0,0};
+          \e{a}{.5,0};
+          \site{x1}{a.north};
+          \site{x2}{150:.25};
+          \site{xn}{a.south};
+          \site{xn+1}{a.east};
+          % b1
+          \n[n2]{b1}{90:1.1};
+          \site{z}{b1.south};
+          % b2
+          \n[n2]{b2}{150:1.1};
+          \site[shift={(150:1.1)}]{z}{-30:.25};
+          % ellipsis
+          \node at (200:.79) {\Large .};
+          \node at (210:.8) {\Large .};
+          \node at (220:.79) {\Large .};
+          % bn
+          \n[n2]{bn}{270:1.1};
+          \site{z}{bn.north};
+        \end{scope}
+        \begin{scope}[shift={(1.2,0)}]
+          \e{0,0}{90:1.1};
+          \e{0,0}{30:1.1};
+          \e{0,0}{270:1.1};
+          % b
+          \n[n2]{b}{0,0};
+          \e{b}{-.5,0};
+          \site{y1}{b.north};
+          \site{y2}{30:7pt};
+          \site{yn}{b.south};
+          \site{yn+1}{b.west};
+          % a1
+          \n[n1]{a1}{90:1.1};
+          \site{z}{a1.south};
+          % a2
+          \n[n1]{a2}{30:1.1};
+          \site[shift={(30:1.1)}]{z}{210:.25};
+          % ellipsis
+          \node at (-20:.79) {\Large .};
+          \node at (-30:.8) {\Large .};
+          \node at (-40:.79) {\Large .};
+          % an
+          \n[n1]{an}{270:1.1};
+          \site{z}{an.north};
+        \end{scope}
+      }};
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \e{0,0}{1.1,0};
+        \begin{scope}[shift={(0,0)}]
+          \e{0,0}{90:1.1};
+          \e{0,0}{150:1.1};
+          \e{0,0}{270:1.1};
+          % a
+          \n[n1]{a}{0,0};
+          \site{x1}{a.north};
+          \site{x2}{150:.25};
+          \site{xn}{a.south};
+          \site{xn+1}{a.east};
+          % b1
+          \n[n2]{b1}{90:1.1};
+          \site{z}{b1.south};
+          % b2
+          \n[n2]{b2}{150:1.1};
+          \site[shift={(150:1.1)}]{z}{-30:.25};
+          % ellipsis
+          \node at (200:.79) {\Large .};
+          \node at (210:.8) {\Large .};
+          \node at (220:.79) {\Large .};
+          % bn
+          \n[n2]{bn}{270:1.1};
+          \site{z}{bn.north};
+        \end{scope}
+        \begin{scope}[shift={(1.1,0)}]
+          \e{0,0}{90:1.1};
+          \e{0,0}{30:1.1};
+          \e{0,0}{270:1.1};
+          % b
+          \n[n2]{b}{0,0};
+          \site{y1}{b.north};
+          \site{y2}{30:7pt};
+          \site{yn}{b.south};
+          \site{yn+1}{b.west};
+          % a1
+          \n[n1]{a1}{90:1.1};
+          \site{z}{a1.south};
+          % a2
+          \n[n1]{a2}{30:1.1};
+          \site[shift={(30:1.1)}]{z}{210:.25};
+          % ellipsis
+          \node at (-20:.79) {\Large .};
+          \node at (-30:.8) {\Large .};
+          \node at (-40:.79) {\Large .};
+          % an
+          \n[n1]{an}{270:1.1};
+          \site{z}{an.north};
+        \end{scope}
+      }};
+  \end{tikzpicture}
+\end{center}
+where the three black dots on the sides of each graph
+are an ellipsis to mean that monomers can be bound
+to an arbitrary number of monomers of the other type
+as long as each site is bound only once
+and there is a finite number of sites per monomer
+fixed by the monomer type.
+% TODO: is this sentence clear?
+Hence, the rule schema % formula?
+represents a family of rules indexed by % $i,j$
+the number of bound sites in the two monomers.
+% TODO: add the following?
+% Note that no nodes can be created or destroyed
+% by this family of rules
+% and so the total number of nodes is fixed.
+
+We formalise the ideas in the first paragraph as follows.
+Let $\types$ be the set of monomer types % $A,B,\dots$
+and $\valence: \types \to \NN$ the map that assigns
+% for each type the number of sites they have,
+to each type the number of sites a monomer of that type has,
+which we refer to as their valence.
+A~monomer $u$ has type $\typeof(u) \in \types$
+and degree $\degree_x(u) \in \NN$ in state $x$.
+We simply write $\valence(u)$ for $\valence(\typeof(u))$.
+The rate constant of a rule that binds
+a monomer of type $\tp \in \types$ and degree $i$ with
+a monomer of type $\tp' \in \types$ and degree $j$
+is $\gamma^+_{\tp,i,\tp',j}$.
+The rate constant of the reverse rule (unbinding)
+is $\gamma^-_{\tp,i,\tp',j}$.
+%
+The jumping rate $q_{xy}$ from state $x$ to $y$
+% is then determined by mass action semantics,
+% \ie is linear in the number of ocurrences
+% of the left-hand side of the rule that operates the transition.
+is then linearly determined by the number of ocurrences
+of the left-hand side of the rule and the rate constant
+(mass action semantics).
+
+The binding or unbinding of any two nodes $u,v$ in $x$
+can only be carried out by one rule,
+namely the one that operates on degrees $\degree_x(u),\degree_x(v)$.
+The binding rule has rate constant
+$\alpha(u,v) := \gamma^+_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}$
+while the unbinding rate constant is
+$\beta(u,v) := \gamma^-_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}$.
+Moreover, we are free to choose
+one site among the $\valence(u)-\degree_x(u)$ free sites of $u$
+and one site among the $\valence(v)-\degree_x(v)$ free sites of $v$
+in order to apply the binding rule.
+Hence, $q_{xy}$ is equal to $\alpha(u,v)
+(\valence(u) - \degree_x(u)) (\valence(v) - \degree_x(v))$
+% in the forward direction (binding)
+when the binding rule is applied to $x$ to obtain $y$
+and $\beta(u,v)$
+% in the backward direction (unbinding).
+when the unbinding rule is.
+
+Below it is the theorem that shows under which conditions
+the systems presented in this section have an energy function.
+
+\if0
+\begin{proposition}
+  Let $\types$ be a finite set of monomer types.
+  The system has detailed balance
+  (and thus an energy function)
+  if and only if
+  \begin{equation}
+    \label{eq:cas-db}
+    \gamma^-_{\tp,i,\tp',j} / \gamma^+_{\tp,i,\tp',j} =
+    \Gamma_\tp(i) \Gamma_{\tp'}(j)
+  \end{equation}
+  for all $\tp,\tp' \in \types$,
+  $i \in \set{0,1,\ldots,\valence(\tp)}$ and
+  $j \in \set{0,1,\ldots,\valence(\tp')}$.
+\end{proposition}
+\begin{proof}
+  % Let $n_\tp$ be the total number of nodes of type $\tp$ and
+  Let $x_0$ the state where all nodes have degree $0$,
+  \ie the completely disconnected graph.
+  % We define the energy of a state $x$ as
+  We construct a function $E: \states \to \RR$ as
+  \[ E(x) = \sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
+            \cost_\tp(i) x(\tp_i) \]
+  with $x(\tp_i)$ the number of nodes of type $\tp$
+  with degree $i$ in $x$ and
+  % TODO: which other variable name is good for the iterator a?
+  \[ \cost_\tp(i) = \sum_{0 \leqslant a < i}
+     \ln\, \frac{\Gamma_\tp(a)}{\valence_\tp - a} \]
+  Note that $E(x_0) = 0$ since $x_0(\tp_i) = 0$ for all $i > 0$.
+
+  ($\Leftarrow$):
+  We can now verify that $E$ is an energy function
+  that describes an invariant distribution $\pi$
+  of the continuous-time Markov chain
+  by showing detailed balance with respect to $\pi$.
+  Recall from \eqn{detailed-balance}
+  the detailed balance condition,
+  that for all $x,y \in \states$ 
+  \[ \pi_x q_{xy} = \pi_y q_{yx} \]
+  When $q_{xy} = 0$ this equality holds % trivially holds
+  % as $q_{yx}$ is also zero.
+  as \eqn{cas-db} dictates that
+  a rate constant is non-zero only if
+  the reverse rate constant is also non-zero.
+  % NOTE: q_{xy} = 0 might be because there is no transition
+  % between x and y or because the rate constant is zero.
+  % Also, by reversibility of rules
+  % % TODO: better word for enabled?
+  % whenever a transition from $x$ to $y$ is enabled by a rule $r$,
+  % its inverse $\inv{r}$ enables a transition in the opposite direction,
+  % \ie from $y$ to $x$.
+  In the case when $y = x + (u,v)$
+  the equality becomes,
+  % FIXME: here it seems that we are proving the right-direction
+  % but before we said we are proving the left-direction
+  by substituting $\pi(x)$ and $\pi(y)$ as in \eqn{energy},
+  % and $q(\_,\!\_)$ as in \eqn{cas-jump-rate},
+  \begin{equation*}
+    \expn\left[
+    -\sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
+    \cost_\tp(i) x(\tp_i)
+    \right] q_{xy} =
+    % \gamma^+_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}
+    % (\valence(u) - \degree_x(u)) (\valence(v) - \degree_x(v)) = \\
+    \expn\left[
+    -\sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
+    \cost_\tp(i) y(\tp_i)
+    \right] q_{yx}
+    % \gamma^-_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}
+  \end{equation*}
+  % with $\expn(x) = e^x$.
+  where the divisors from \eqn{energy} have cancelled each other out.
+  By rearranging
+  \[ \prod_{\tp \in \types} \prod_{0 < i \leqslant \valence(\tp)}
+     e^{\,\cost_\tp(i) (y(\tp_i) - x(\tp_i))} =
+     \frac{q_{yx}}{q_{xy}} \]
+  % FIXME: rephrase
+  However $y(\tp_i) - x(\tp_i) = 0$ for most $\tp$ and $i$
+  since $y = x + (u,v)$.
+  Only when $\tp$ is $\typeof(u)$ and $i$ is $\degree_x(u)$
+  or $\tp$ is $\typeof(v)$ and $i$ is $\degree_x(v)$
+  will $y(\tp_i) - x(\tp_i)$ equal $-1$.
+  On the other hand, when $\tp$ is $\typeof(u)$
+  and $i$ is $\degree_y(u) = \degree_x(u) + 1$
+  or $\tp$ is $\typeof(v)$
+  and $i$ is $\degree_y(v) = \degree_x(v) + 1$,
+  $y(\tp_i) - x(\tp_i)$ will be $1$.
+  For conciseness, let $\tp = \typeof(u)$, $\tp' = \typeof(v)$,
+  $i = \degree_x(u)$ and $j = \degree_x(v)$.
+  It follows the above equality can be rewritten as
+  \[ \expn\left(
+       \cost_{\tp}(i+1) +
+       \cost_{\tp'}(j+1) -
+       \cost_{\tp}(i) -
+       \cost_{\tp'}(j) \right) =
+     \frac{q_{yx}}{q_{xy}} \]
+  % By expanding ... % Philipp didn't like expanding
+  By substituting $\cost$ and $q$ we obtain
+  \[ \frac{
+       \Gamma_\tp(i) \Gamma_{\tp'}(j)}{
+       (\valence(u) - i) (\valence(v) - j)} =
+     \frac{
+       \gamma^-_{\tp,i,\tp',j}}{
+       \gamma^+_{\tp,i,\tp',j}
+       (\valence(u) - i) (\valence(v) - j)}, \]
+  which in turn can be trivially obtained from
+  \[ \Gamma_\tp(i) \Gamma_{\tp'}(j) =
+     \gamma^-_{\tp,i,\tp',j} / \gamma^+_{\tp,i,\tp',j}.
+     \qedhere \]
+\end{proof}
+\fi
+
+\if0
+\section{Flipping and binding} % co-ANC
+\label{sec:fb}
+\fi
+
+
+
+
+
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "thesis"
+%%% End:
