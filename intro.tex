@@ -882,7 +882,7 @@ agents of type $1$ with agents of type $2$ as follows.
 \begin{flushright}
 \begin{minipage}{.43\linewidth}
 \begin{center}
-  \begin{tikzpicture}[thick]
+  \begin{tikzpicture}
     \node[grphnode] (lhs) at (0,0) {
       \tikz[ingrphdiag]{
         \begin{scope}[shift={(0,0)}]
@@ -1048,7 +1048,8 @@ with $\states = \MM(C)$ and
 %     0 & \text{otherwise}
 %   \end{array}\right.
 % \end{equation*}
-It is easy to see that the number of embeddings
+% It is easy to see that
+The number of embeddings
 between any two contact maps $x,y$ is finite.
 Hence, $q_{mm} = -\sum_{n \neq m} q_{mn} > -\infty$
 for any fixed $m \in \states$
