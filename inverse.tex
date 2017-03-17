@@ -232,6 +232,7 @@ The jumping rate $q_{xy}$ from state $x$ to $y$
 is then linearly determined by the number of ocurrences
 of the left-hand side of the rule and the rate constant
 (mass action semantics).
+We assume that any two agents can be bound only once.
 
 The binding or unbinding of any two nodes $u,v$ in $x$
 can only be carried out by one rule,
@@ -240,132 +241,126 @@ The binding rule has rate constant
 $\alpha(u,v) := \gamma^+_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}$
 while the unbinding rate constant is
 $\beta(u,v) := \gamma^-_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}$.
-Moreover, we are free to choose
+When binding we are free to choose
 one site among the $\valence(u)-\degree_x(u)$ free sites of $u$
-and one site among the $\valence(v)-\degree_x(v)$ free sites of $v$
+and one among the $\valence(v)-\degree_x(v)$ free sites of $v$
 in order to apply the binding rule.
-Hence, $q_{xy}$ is equal to $\alpha(u,v)
-(\valence(u) - \degree_x(u)) (\valence(v) - \degree_x(v))$
+On the other hand, when unbinding we have only one choice,
+namely removing the only edge between $u$ and $v$.
+Hence, $q_{xy}$ is equal to $\alpha(u,v) \,
+(\valence(u) - \degree_x(u)) \, (\valence(v) - \degree_x(v))$
 % in the forward direction (binding)
 when the binding rule is applied to $x$ to obtain $y$
-and $\beta(u,v)$
+and to $\beta(u,v)$
 % in the backward direction (unbinding).
-when the unbinding rule is.
+when unbinding.
 
-Below it is the theorem that shows under which conditions
-the systems presented in this section have an energy function.
+The theorem below shows under which conditions
+the type of systems presented in this section
+have an energy function.
 
-\if0
 \begin{proposition}
-  Let $\types$ be a finite set of monomer types.
-  The system has detailed balance
-  (and thus an energy function)
-  if and only if
-  \begin{equation}
-    \label{eq:cas-db}
-    \gamma^-_{\tp,i,\tp',j} / \gamma^+_{\tp,i,\tp',j} =
-    \Gamma_\tp(i) \Gamma_{\tp'}(j)
-  \end{equation}
-  for all $\tp,\tp' \in \types$,
-  $i \in \set{0,1,\ldots,\valence(\tp)}$ and
-  $j \in \set{0,1,\ldots,\valence(\tp')}$.
+  \label{prop:cas}
+  Let $\types$ be a finite set of monomer types
+  and $\gamma^-_{\tp,i,\tp',j},\gamma^+_{\tp,i,\tp',j}$
+  families of real values indexed by types $\tp,\tp' \in \types$,
+  $0 \leqslant i < \valence(\tp)$ and
+  $0 \leqslant j < \valence(\tp')$ as above.
+  Given a family $\Gamma_{\tp,i}$ of non-zero real values
+  the following two statements are equivalent
+  \begin{enumerate}[label={(\roman*)}]
+  \item The \qmatrix $\qm$ as defined above by $q_{xy}$
+    has detailed balance with respect to the \pmf $\pi$
+    determined by the energy function
+    \[ E(x) = \sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
+              \cost_\tp(i) \, x(\tp_i) \]
+    where $x(\tp_i)$ is the number of nodes of type $\tp$
+    with degree $i$ in $x$ and
+    % TODO: which other variable name is good for the iterator a?
+    \[ \cost_\tp(i) = \sum_{0 \leqslant j < i}
+       \ln\, \frac{\Gamma_{\tp,j}}{\valence_\tp - j} \]
+  % \item The ratio $\gamma^-_{\tp,i,\tp',j} / \gamma^+_{\tp,i,\tp',j}$
+  %   is equal to $\Gamma_{\tp,i} \, \Gamma_{\tp',j}$
+  \item For all $\tp,\tp' \in \types$,
+    $0 \leqslant i < \valence(\tp)$ and
+    $0 \leqslant j < \valence(\tp')$ we have
+    \begin{equation*}
+      \frac{\gamma^-_{\tp,i,\tp',j}}{\gamma^+_{\tp,i,\tp',j}} =
+      \Gamma_{\tp,i} \, \Gamma_{\tp',j}
+    \end{equation*}
+  \end{enumerate}
 \end{proposition}
 \begin{proof}
-  % Let $n_\tp$ be the total number of nodes of type $\tp$ and
-  Let $x_0$ the state where all nodes have degree $0$,
-  \ie the completely disconnected graph.
-  % We define the energy of a state $x$ as
-  We construct a function $E: \states \to \RR$ as
-  \[ E(x) = \sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
-            \cost_\tp(i) x(\tp_i) \]
-  with $x(\tp_i)$ the number of nodes of type $\tp$
-  with degree $i$ in $x$ and
-  % TODO: which other variable name is good for the iterator a?
-  \[ \cost_\tp(i) = \sum_{0 \leqslant a < i}
-     \ln\, \frac{\Gamma_\tp(a)}{\valence_\tp - a} \]
-  Note that $E(x_0) = 0$ since $x_0(\tp_i) = 0$ for all $i > 0$.
-
-  ($\Leftarrow$):
-  We can now verify that $E$ is an energy function
-  that describes an invariant distribution $\pi$
-  of the continuous-time Markov chain
-  by showing detailed balance with respect to $\pi$.
-  Recall from \eqn{detailed-balance}
-  the detailed balance condition,
-  that for all $x,y \in \states$ 
-  \[ \pi_x q_{xy} = \pi_y q_{yx} \]
-  When $q_{xy} = 0$ this equality holds % trivially holds
-  % as $q_{yx}$ is also zero.
-  as \eqn{cas-db} dictates that
-  a rate constant is non-zero only if
-  the reverse rate constant is also non-zero.
-  % NOTE: q_{xy} = 0 might be because there is no transition
-  % between x and y or because the rate constant is zero.
-  % Also, by reversibility of rules
-  % % TODO: better word for enabled?
-  % whenever a transition from $x$ to $y$ is enabled by a rule $r$,
-  % its inverse $\inv{r}$ enables a transition in the opposite direction,
-  % \ie from $y$ to $x$.
-  In the case when $y = x + (u,v)$
-  the equality becomes,
-  % FIXME: here it seems that we are proving the right-direction
-  % but before we said we are proving the left-direction
-  by substituting $\pi(x)$ and $\pi(y)$ as in \eqn{energy},
-  % and $q(\_,\!\_)$ as in \eqn{cas-jump-rate},
+  ($\Rightarrow$):
+  Recall the detailed balance condition
+  from \defn{detailed-balance}
+  which says that for all states $x,y$
+  \[ \pi_x \, q_{xy} = \pi_y \, q_{yx} \]
+  By substituting $\pi_x$ and $\pi_y$ as in \eqn{energy} we obtain
   \begin{equation*}
     \expn\left[
-    -\sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
-    \cost_\tp(i) x(\tp_i)
+      -\sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
+      \cost_\tp(i) \, x(\tp_i)
     \right] q_{xy} =
-    % \gamma^+_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}
-    % (\valence(u) - \degree_x(u)) (\valence(v) - \degree_x(v)) = \\
     \expn\left[
-    -\sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
-    \cost_\tp(i) y(\tp_i)
+      -\sum_{\tp \in \types} \sum_{0 < i \leqslant \valence(\tp)}
+      \cost_\tp(i) \, y(\tp_i)
     \right] q_{yx}
-    % \gamma^-_{\typeof(u),\degree_x(u),\typeof(v),\degree_x(v)}
   \end{equation*}
-  % with $\expn(x) = e^x$.
-  where the divisors from \eqn{energy} have cancelled each other out.
-  By rearranging
+  and by rearranging
   \[ \prod_{\tp \in \types} \prod_{0 < i \leqslant \valence(\tp)}
-     e^{\,\cost_\tp(i) (y(\tp_i) - x(\tp_i))} =
+     e^{\,\cost_\tp(i) \, (y(\tp_i) - x(\tp_i))} =
      \frac{q_{yx}}{q_{xy}} \]
-  % FIXME: rephrase
-  However $y(\tp_i) - x(\tp_i) = 0$ for most $\tp$ and $i$
-  since $y = x + (u,v)$.
-  Only when $\tp$ is $\typeof(u)$ and $i$ is $\degree_x(u)$
-  or $\tp$ is $\typeof(v)$ and $i$ is $\degree_x(v)$
-  will $y(\tp_i) - x(\tp_i)$ equal $-1$.
-  On the other hand, when $\tp$ is $\typeof(u)$
-  and $i$ is $\degree_y(u) = \degree_x(u) + 1$
-  or $\tp$ is $\typeof(v)$
-  and $i$ is $\degree_y(v) = \degree_x(v) + 1$,
-  $y(\tp_i) - x(\tp_i)$ will be $1$.
-  For conciseness, let $\tp = \typeof(u)$, $\tp' = \typeof(v)$,
-  $i = \degree_x(u)$ and $j = \degree_x(v)$.
-  It follows the above equality can be rewritten as
-  \[ \expn\left(
-       \cost_{\tp}(i+1) +
-       \cost_{\tp'}(j+1) -
-       \cost_{\tp}(i) -
-       \cost_{\tp'}(j) \right) =
+
+  When $y$ is obtained from $x$ by binding nodes $u,v$,
+  the difference $y(\tp_i) - x(\tp_i)$ is equal to $0$
+  for all pairs $\tp, i$ except
+  i) when $\tp = \typeof(u), i = \degree_x(u)$
+  or $\tp = \typeof(v)$, $i = \degree_x(v)$,
+  then $y(\tp_i) - x(\tp_i) = -1$; and
+  ii) when $\tp = \typeof(u), i = \degree_y(u) = \degree_x(u) + 1$
+  or $\tp = \typeof(v), i = \degree_y(v) = \degree_x(v) + 1$,
+  then $y(\tp_i) - x(\tp_i) = 1$.
+  Let $\tp_u = \typeof(u)$, $\tp_v = \typeof(v)$,
+  $d_u = \degree_x(u)$ and $d_v = \degree_x(v)$.
+  It follows that the last equation can be rewritten as
+  \[ \expn\left[
+       \cost_{\tp_u}(d_u+1) +
+       \cost_{\tp_v}(d_v+1) -
+       \cost_{\tp_u}(d_u) -
+       \cost_{\tp_v}(d_v) \right] =
      \frac{q_{yx}}{q_{xy}} \]
   % By expanding ... % Philipp didn't like expanding
-  By substituting $\cost$ and $q$ we obtain
+  By substituting $\cost$ and $q$ we have
   \[ \frac{
-       \Gamma_\tp(i) \Gamma_{\tp'}(j)}{
-       (\valence(u) - i) (\valence(v) - j)} =
+       \Gamma_{\tp_u,d_u} \, \Gamma_{\tp_v,d_v}}{
+       (\valence(u) - d_u) \, (\valence(v) - d_v)} =
      \frac{
-       \gamma^-_{\tp,i,\tp',j}}{
-       \gamma^+_{\tp,i,\tp',j}
-       (\valence(u) - i) (\valence(v) - j)}, \]
-  which in turn can be trivially obtained from
-  \[ \Gamma_\tp(i) \Gamma_{\tp'}(j) =
-     \gamma^-_{\tp,i,\tp',j} / \gamma^+_{\tp,i,\tp',j}.
-     \qedhere \]
+       % \gamma^-_{\tp_u,d_u,\tp_v,d_v}}{
+       % \gamma^+_{\tp_u,d_u,\tp_v,d_v} \,
+       \beta(u,v)}{
+       \alpha(u,v) \, (\valence(u) - d_u) \, (\valence(v) - d_v)} \]
+  which by simplification yields
+  \[ \Gamma_{\tp_u,d_u} \, \Gamma_{\tp_v,d_v} =
+    \frac{\gamma^-_{\tp_u,d_u,\tp_v,d_v}}{\gamma^+_{\tp_u,d_u,\tp_v,d_v}} \]
+  This equality holds in general for nodes of any degree and type.
+
+  ($\Leftarrow$):
+  We prove that, whenever (ii) holds,
+  $\pi$ verifies the detailed balance condition.
+  For all $x,y$ such that $q_{xy} = 0$
+  the equality $\pi_x\,q_{xy} = \pi_y\,q_{yx}$ holds
+  as (ii) dictates that
+  a rate constant is zero if the reverse rate constant is.
+  % NOTE: q_{xy} = 0 might be because there is no transition
+  % between x and y or because the rate constant is zero.
+  Also, by reversibility of rules
+  % TODO: better word for enabled?
+  whenever a transition from $x$ to $y$ is enabled by a rule $r$,
+  its inverse $\inv{r}$ enables a transition in the opposite direction.
+  % \ie from $y$ to $x$.
 \end{proof}
-\fi
+
 
 \if0
 \section{Flipping and binding} % co-ANC
