@@ -278,16 +278,17 @@ have an energy function.
     with degree $i$ in $x$ and
     % TODO: which other variable name is good for the iterator a?
     \[ \cost_\tp(i) = \sum_{0 \leqslant j < i}
-       \ln\, \frac{\Gamma_{\tp,j}}{\valence_\tp - j} \]
+       \ln\, \frac{\Gamma_{\tp,j}}{\valence(\tp) - j} \]
   % \item The ratio $\gamma^-_{\tp,i,\tp',j} / \gamma^+_{\tp,i,\tp',j}$
   %   is equal to $\Gamma_{\tp,i} \, \Gamma_{\tp',j}$
   \item For all $\tp,\tp' \in \types$,
     $0 \leqslant i < \valence(\tp)$ and
     $0 \leqslant j < \valence(\tp')$ we have
-    \begin{equation*}
+    \begin{equation}
+      \label{eq:cas-ratio}
       \frac{\gamma^-_{\tp,i,\tp',j}}{\gamma^+_{\tp,i,\tp',j}} =
       \Gamma_{\tp,i} \, \Gamma_{\tp',j}
-    \end{equation*}
+    \end{equation}
   \end{enumerate}
 \end{proposition}
 \begin{proof}
@@ -331,16 +332,35 @@ have an energy function.
        \cost_{\tp_v}(d_v) \right] =
      \frac{q_{yx}}{q_{xy}} \]
   % By expanding ... % Philipp didn't like expanding
-  By substituting $\cost$ and $q$ we have
+  By substituting $\cost$ we get % and $q$ we have
+  % \[ \frac{
+  %      \Gamma_{\tp_u,d_u} \, \Gamma_{\tp_v,d_v}}{
+  %      (\valence(u) - d_u) \, (\valence(v) - d_v)} =
+  \[ \frac{
+     \prod_{0 \leqslant i < d_u+1}%\limits
+     \frac{\Gamma_{\tp_u,i}}{\valence(u) - i} \,
+     \prod_{0 \leqslant i < d_v+1}%\limits
+     \frac{\Gamma_{\tp_v,i}}{\valence(v) - i}}{
+     \prod_{0 \leqslant i < d_u}%\limits
+     \frac{\Gamma_{\tp_u,i}}{\valence(u) - i} \,
+     \prod_{0 \leqslant i < d_v}%\limits
+     \frac{\Gamma_{\tp_v,i}}{\valence(v) - i}} =
+     \frac{q_{yx}}{q_{xy}} \]
+     % \frac{
+     %   % \gamma^-_{\tp_u,d_u,\tp_v,d_v}}{
+     %   % \gamma^+_{\tp_u,d_u,\tp_v,d_v} \,
+     %   \beta(u,v)}{
+     %   \alpha(u,v) \, (\valence(u) - d_u) \, (\valence(v) - d_v)} \]
+  Products on the left cancel out and yield,
+  after substituting $q$ on the right,
+  % which by simplification and substitution of $q$ yields
   \[ \frac{
        \Gamma_{\tp_u,d_u} \, \Gamma_{\tp_v,d_v}}{
        (\valence(u) - d_u) \, (\valence(v) - d_v)} =
      \frac{
-       % \gamma^-_{\tp_u,d_u,\tp_v,d_v}}{
-       % \gamma^+_{\tp_u,d_u,\tp_v,d_v} \,
        \beta(u,v)}{
        \alpha(u,v) \, (\valence(u) - d_u) \, (\valence(v) - d_v)} \]
-  which by simplification yields
+  which then simplifies to
   \[ \Gamma_{\tp_u,d_u} \, \Gamma_{\tp_v,d_v} =
     \frac{\gamma^-_{\tp_u,d_u,\tp_v,d_v}}{\gamma^+_{\tp_u,d_u,\tp_v,d_v}} \]
   This equality holds in general for nodes of any degree and type.
@@ -350,15 +370,20 @@ have an energy function.
   $\pi$ verifies the detailed balance condition.
   For all $x,y$ such that $q_{xy} = 0$
   the equality $\pi_x\,q_{xy} = \pi_y\,q_{yx}$ holds
-  as (ii) dictates that
+  as rules are reversible and (ii) dictates that
   a rate constant is zero if the reverse rate constant is.
   % NOTE: q_{xy} = 0 might be because there is no transition
   % between x and y or because the rate constant is zero.
-  Also, by reversibility of rules
-  % TODO: better word for enabled?
-  whenever a transition from $x$ to $y$ is enabled by a rule $r$,
-  its inverse $\inv{r}$ enables a transition in the opposite direction.
-  % \ie from $y$ to $x$.
+  When $q_{xy} > 0$ then $y$ can be obtained from $x$
+  by binding or unbinding some nodes $u,v$.
+  By substituting $\tp$ for $\typeof(u)$, $\tp'$ for $\typeof(v)$,
+  $i$ for $\degree_x(u)$ and $j$ for $\degree_x(v)$
+  in \eqn{cas-ratio} we obtain the last equation
+  in the first part of the proof.
+  We can replay the transformations backwards
+  to obtain $\pi_x\,q_{xy} = \pi_y\,q_{yx}$
+  when $y$ is obtained by binding.
+  The case of unbinding follows a similar argument.
 \end{proof}
 
 
