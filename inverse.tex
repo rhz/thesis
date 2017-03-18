@@ -387,10 +387,118 @@ have an energy function.
 \end{proof}
 
 
-\if0
 \section{Flipping and binding} % co-ANC
 \label{sec:fb}
-\fi
+
+Now we look at systems whose nodes have sites
+that possess an internal state.
+This internal state is used to decide when to bind other nodes
+or change the internal state of other sites.
+For simplicity, internal states can
+take one of only two possible values. %, 0 and 1.
+Unlike cooperative assembly systems,
+% where sites were undistinguishable from each other,
+here sites are \emph{distinguishable}
+% and thus have a unique name that distinguishes it from the rest
+as in Kappa.
+Hence, we will use contact maps as defined in \sct{kappa}
+as graphs in this section.
+% TODO: add the order of sites wherever it's used.
+% In addition, sites are \emph{ordered}
+% by a total order $<_a$ with a an agent type
+% (node in the contact graph).
+
+A site's internal state can be changed by rules
+we call \emph{flips}.
+The rate at which we flip a site may depend on
+the type of the site and the node it belongs to,
+the internal state of sites on the same node
+and the type of the neighbours.
+Note that it cannot depend on
+the internal states of the neighbours' sites
+or the nodes they are bound to.
+Graphically, flips are of the form
+\begin{center}
+  \begin{tikzpicture}[thick]
+    \node[grphnode,anchor=east] (lhs) at (0,0) {
+      \tikz[ingrphdiag]{
+        \nn[n4]{a}{0,0}{$u$};
+        \n[n4,dotted]{b1}{10:1.1};
+        \n[n4,dotted]{b2}{170:1.1};
+        \n[n4,dotted]{b3}{-90:1.1};
+        \e[dotted]{a}{b1};
+        \e[dotted]{a}{b2};
+        \e[dotted]{a}{b3};
+        \site[n]{s1}{a.south};
+        \site[n6]{s2}{170:.33};
+        \site[n6]{s3}{10:.33};
+        \site[n4,dotted,shift={(10:1.1)}]{s4}{190:.25};
+        \site[n4,dotted,shift={(170:1.1)}]{s5}{-10:.25};
+        \site[n4,dotted]{s6}{b3.north};
+        \node at (-65:.48) {\scriptsize x};
+        \node at (110:.7) {\Large .};
+        \node at (90:.7) {\Large .};
+        \node at (70:.7) {\Large .};
+      }};
+    % \begin{scope}[shift={(2,-0.5)}]
+    %   \draw[rule] (0,.09) -- node[above] {
+    %     $\lambda^+_{\tp,x,\sitestates,\neighbours}$} ++(1.4,0);
+    %   \draw[rule] (1.4,-.09) -- node[below] {
+    %     $\lambda^-_{\tp,x,\sitestates,\neighbours}$} ++(-1.4,0);
+    % \end{scope}
+    \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
+      +(1.3,0) coordinate (r);
+    \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
+    \node[grphnode,anchor=west] (rhs) at (r) {
+      \tikz[ingrphdiag]{
+        \nn[n4]{a}{0,0}{$u$};
+        \n[n4,dotted]{b1}{10:1.1};
+        \n[n4,dotted]{b2}{170:1.1};
+        \n[n4,dotted]{b3}{-90:1.1};
+        \e[dotted]{a}{b1};
+        \e[dotted]{a}{b2};
+        \e[dotted]{a}{b3};
+        \site[n5]{s1}{a.south};
+        \site[n6]{s2}{170:.33};
+        \site[n6]{s3}{10:.33};
+        \site[n4,dotted,shift={(10:1.1)}]{s4}{190:.25};
+        \site[n4,dotted,shift={(170:1.1)}]{s5}{-10:.25};
+        \site[n4,dotted]{s6}{b3.north};
+        \node at (-65:.48) {\scriptsize x};
+        \node at (110:.7) {\Large .};
+        \node at (90:.7) {\Large .};
+        \node at (70:.7) {\Large .};
+      }};
+  \end{tikzpicture}
+\end{center}
+where the dotted lines % in the rule diagram
+denote an optional node or edge
+and site $x$ changes state from white to black.
+As usual, we write $r_L$ for the left-hand side contact map of rule $r$
+and $r_R$ for that of the right-hand side,
+both contact maps over some fixed contact graph $C$.
+The rate constants of the forward and backward rules are parametrised
+by the type $\tp := r_{L,\agents}(u) = r_{R,\agents}(u)$ of $u$ in $C$,
+the type $s := r_{L,\sites}(x) = r_{R,\sites}(x)$ of $x$,
+the internal state vector
+$\sitestates \in \set{0,1}^{\sitemap^{-1}(u)}$ of $u$,
+% TODO: do we need to know site its connected to as well?
+and the vector of neighbours' types
+$\neighbours \in (\agents_C \union \set{\star})^{\sitemap^{-1}(u)}$
+where $\star$ represents a free site.
+% When all sites are free we use $\emptyvec$.
+We write $\lambda^+_{\tp,s,\sitestates,\neighbours}$
+for the rate constant of the forward rule,
+$\lambda^-_{\tp,s,\sitestates,\neighbours}$
+for that of the backward rule,
+and $\Lambda_{\typeof(u),a,\sitestates,\neighbours} =
+\lambda^-_{\typeof(u),a,\sitestates,\neighbours}/
+\lambda^+_{\typeof(u),a,\sitestates,\neighbours}$ for the ratio
+between the backward and forward rate constants % of flips.
+% TODO: do we (have to) use them?
+% Also, later we use $\sitestatesof_x(u)$ and $\neighboursof_x(u)$
+% for the internal state vector and neighbour vector % of neighbours' types
+% of node $u$ in $x$.
 
 
 
