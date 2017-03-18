@@ -194,7 +194,7 @@ rules are of the form
       }};
   \end{tikzpicture}
 \end{center}
-where the three black dots on the sides of each graph
+where the three grey dots on the sides of each graph
 are an ellipsis to mean that monomers can be bound
 to an arbitrary number of monomers of the other type
 as long as each site is bound only once
@@ -477,7 +477,7 @@ and site $x$ changes state from white to black.
 As usual, we write $r_L$ for the left-hand side contact map of rule $r$
 and $r_R$ for that of the right-hand side,
 both contact maps over some fixed contact graph $C$.
-The rate constants of the forward and backward rules are parametrised
+The rate constants of the forward and backward flip rules are parametrised
 by the type $\tp := r_{L,\agents}(u) = r_{R,\agents}(u)$ of $u$ in $C$,
 the type $i := r_{L,\sites}(x) = r_{R,\sites}(x)$ of $x$,
 the internal state vector
@@ -493,8 +493,8 @@ $\lambda^-_{\tp,i,\sitestates,\neighbours}$
 for that of the backward rule,
 and $\Lambda_{\typeof(u),i,\sitestates,\neighbours} =
 \lambda^-_{\typeof(u),i,\sitestates,\neighbours}/
-\lambda^+_{\typeof(u),i,\sitestates,\neighbours}$ for the ratio
-between the backward and forward rate constants. % of flips.
+\lambda^+_{\typeof(u),i,\sitestates,\neighbours}$ for their ratio.
+% between the backward and forward rate constants. % of flips.
 % TODO: do we (have to) use them?
 % Also, later we use $\sitestatesof_x(u)$ and $\neighboursof_x(u)$
 % for the internal state vector and neighbour vector % of neighbours' types
@@ -564,6 +564,119 @@ They are of the form
       }};
   \end{tikzpicture}
 \end{center}
+% with $\tp,\tp'$ the types of nodes $u,v$;
+% $\sitestates,\sitestates'$ their internal state vectors
+% and $a,b$ any two sites of $u,v$, respectively.
+where the three grey dots are an ellipsis
+meaning that nodes $u$ and $v$ must declare
+an internal state to all sites they have.
+The rate constant of the binding and unbinding rules
+depends on the internal state of the sites
+on the participating nodes $\sitestates$ and $\sitestates'$
+as well as the type of the nodes $\tp,\tp'$ and the bound sites~$i,j$.
+We write $\Gamma_{\tp,i,\sitestates,\tp',j,\sitestates'} =
+\gamma^-_{\tp,i,\sitestates,\tp',j,\sitestates'}/
+\gamma^+_{\tp,i,\sitestates,\tp',j,\sitestates'}$ for
+the ratio between the backward and forward rate constants of binds.
+
+We refer to systems composed by flips and binds
+as \emph{flip-bind systems} or FB-systems for short.
+We will show how the energy function of an FB-system looks like.
+But first, we prove a lemma that shows us
+how detailed balance fixes the value of some $\Lambda$ ratios
+and so reduces the number of free parameters in the system.
+To simplify notation in the following lemmas,
+let $\sitestates+i$ be the vector $\sitestates$
+with site $i$ flipped.
+
+\begin{lemma}
+  \label{lemma:flipflip}
+  Let $x$ be a state of an FB-system with detailed balance.
+  For all nodes $u$ in $x$ and sites $i,j$ in $u$ it is true that
+  \begin{equation}
+    \label{eq:flipflip}
+    \Lambda_{\tp,i,\sitestates,\neighbours}
+    \Lambda_{\tp,j,\sitestates+i,\neighbours} =
+    \Lambda_{\tp,j,\sitestates,\neighbours}
+    \Lambda_{\tp,i,\sitestates+j,\neighbours}
+  \end{equation}
+  where $\tp$ is the type of $u$,
+  $\sitestates$ its internal state vector
+  and $\neighbours$ its vector of neighbours.
+\end{lemma}
+\begin{proof}
+  Take any node $u$ in $x$.
+  We can find a square in the transition graph
+  with 4 flips starting from $x$:
+  flip site $i$ first then $j$ and flip $j$ first then $i$.
+  \begin{center}
+    \begin{tikzpicture}
+      \node (x) at (0,0) {$x$};
+      \node (xi) at (4,0) {$x_i$};
+      \node (xj) at (0,-3) {$x_j$};
+      \node (xij) at (4,-3) {$x_{ij}$};
+      % x -- xi
+      \path (.5,.09) edge[rule]
+        node[above] {$\lambda^+_{\tp,i,\sitestates,\neighbours}$}
+        (3.5,.09);
+      \path (3.5,-.09) edge[rule]
+        node[below] {$\lambda^-_{\tp,i,\sitestates,\neighbours}$}
+        (.5,-.09);
+      % x -- xj
+      \path (.09,-.5) edge[rule]
+        node[right] {$\lambda^+_{\tp,j,\sitestates,\neighbours}$}
+        (.09,-2.5);
+      \path (-.09,-2.5) edge[rule]
+        node[left] {$\lambda^-_{\tp,j,\sitestates,\neighbours}$}
+        (-.09,-.5);
+      % xi -- xij
+      \path (4.09,-.5) edge[rule]
+        node[right] {$\lambda^+_{\tp,j,\sitestates+i,\neighbours}$}
+        (4.09,-2.5);
+      \path (3.91,-2.5) edge[rule]
+        node[left] {$\lambda^-_{\tp,j,\sitestates+i,\neighbours}$}
+        (3.91,-.5);
+      % x -- xi
+      \path (.5,-2.91) edge[rule]
+        node[above] {$\lambda^+_{\tp,i,\sitestates+j,\neighbours}$}
+        (3.5,-2.91);
+      \path (3.5,-3.09) edge[rule]
+        node[below] {$\lambda^-_{\tp,i,\sitestates+j,\neighbours}$}
+        (.5,-3.09);
+    \end{tikzpicture}
+  \end{center}
+  By detailed balance we have that
+  the product of rates along a cycle must be equal to 1.
+  Hence, starting from $x$ and going through the cycle
+  in one direction and the reverse we get
+  \begin{equation*}
+    \lambda^+_{\tp,i,\sitestates,\neighbours}
+    \lambda^+_{\tp,j,\sitestates+i,\neighbours}
+    \lambda^-_{\tp,i,\sitestates+j,\neighbours}
+    \lambda^-_{\tp,j,\sitestates,\neighbours} =
+    \lambda^+_{\tp,j,\sitestates,\neighbours}
+    \lambda^+_{\tp,i,\sitestates+j,\neighbours}
+    \lambda^-_{\tp,j,\sitestates+i,\neighbours}
+    \lambda^-_{\tp,i,\sitestates,\neighbours}
+  \end{equation*}
+  By rearranging we obtain \eqn{flipflip}.
+\end{proof}
+
+When we consider all flips for a node with $n$ sites,
+we find an $n$-hypercube in the transition graph.
+This hypercube has $2^{n-1} n$ edges
+where an edge corresponds to a pair of forward and backward flips.
+It follows that there are the same number of $\Lambda$ ratios.
+In addition, each face of the hypercube generates an equation
+by \lem{flipflip} % detailed balance
+and there are $2^{n-3} (n-1) n$ faces in an $n$-hypercube.
+This is a severe constraint on the number of parameters
+that can be freely set in an FB-system with detailed balance.
+% Note also that the number of faces of an $n$-hypercube grows faster
+% than the number of edges and thus when $n \geqslant 5$
+% there are no free parameters.
+% What does this mean practically?
+% What is the concrete value that $\Lambda$s take?
 
 
 
