@@ -682,6 +682,211 @@ that can be freely set in an FB-system with detailed balance.
 % What does this mean practically?
 % What is the concrete value that $\Lambda$s take?
 
+A further constrain to the values of
+the rate constant ratios of flips and bindings
+can be obtained and its proved in the following lemma.
+For this lemma we will use a fixed total order $<_a$
+on the sites of an agent type $a$ in the contact graph $C$.
+
+\begin{lemma}
+  \label{lemma:flipbind}
+  % Let $x$ be a state of an FB-system with detailed balance.
+  % For all nodes $u$ in $x$ and sites $i$ in $u$ it is true that
+  Let $C$ be a contact graph.
+  For all agent types $a \in \agents_C$,
+  let $I = \sitemap_C^{-1}(a)$,
+  and for all
+  site types $i \in I$, % \sites_C such that $\sitemap_C(i) = a$,
+  binding state vectors
+  $\neighbours \in ((\agents_C\times\sites_C)\union\set{\star})^I$
+  and internal state vectors
+  $\sitestates \in \set{0,1}^I$,
+  % $\sitestates_{jb} \in \set{0,1}^{\sitemap_C^{-1}(b)}$
+  % with $j \in I$, $b \in \agents_C$,
+  $\sitestates_{j} \in \set{0,1}^{\sitemap_C^{-1}(b)}$
+  with $j \in I$ and $b$ the agent type in $\neighbours(j)$,
+  an FB-system with detailed balance verifies
+  \begin{equation}
+    \label{eq:flipbind}
+    \frac{\Lambda_{a,i,\sitestates,\neighbours}}{
+          \Lambda_{a,i,\sitestates,\emptyvec}} =
+    \prod_{\substack{i' \in I\\\neighbours(i') \neq \star\\\tuple{b,j} := \neighbours(i')}}
+    \frac{\Gamma_{a,i',\sitestates,b,j,\sitestates_{i'}}}{
+          \Gamma_{a,i',\sitestates+i,b,j,\sitestates_{i'}}}
+  \end{equation}
+  % where $a$ is the type of $u$,
+  % $\sitestates$ its internal state vector,
+  % $\neighbours$ its vector of neighbours
+  % and $\emptyvec$ a vector of free sites,
+  where $\emptyvec$ a vector of free sites,
+  \ie $\emptyvec(i) = \star$ for all $i \in I$.
+\end{lemma}
+\begin{proof}
+  We construct a series of squares
+  with 2 flips and 2 bindings each.
+  Pick a state $x$ and a node $u$ in $x$.
+  Strip $u$ of all its neighbours and
+  call that state $x_0$.
+  Choose a site $i$ of $u$.
+  The first square starts from $x_0$, then
+  i) flips site $i$ and
+  ii) binds the smallest site $i_1$
+  according to the order $<_{x_\agents(u)}$
+  to site $j$ of an agent of type $b$
+  that has internal vector state $\sitestates_{i_1}$,
+  where $(j,b) = \neighbours(i_1)$.
+  % or does (ii) first then (i).
+  After performing (i) then (ii) or (ii) then (i)
+  % the flip and bind in any of the two possible orders
+  we reach state $x_1$.\\[.09cm]
+  % \begin{center}
+  % \vspace{.2cm}
+  \hspace*{-.3cm}
+    \begin{tikzpicture}
+      %
+      % first square
+      %
+      \node[outer sep=.2cm] (x0) at (0,0) {$x_0$};
+      \node[outer sep=.2cm] (x0f) at (0,-3) {$\widehat{x_0}$};
+      \node[outer sep=.2cm] (x1f) at (4,0) {$\widehat{x_1}$};
+      \node[outer sep=.2cm] (x1) at (4,-3) {$x_1$};
+      % x0 -- x1f
+      \draw[rule,transform canvas={yshift=.09cm}] (x0) --
+        node[above] {$\gamma^+_{a,i_1,\sitestates,b,j,\sitestates_{i_1}}$}
+        (x1f);
+      \draw[rule,transform canvas={yshift=-.09cm}] (x1f) --
+        node[below] {$\gamma^-_{a,i_1,\sitestates,b,j,\sitestates_{i_1}}$}
+        (x0);
+      % x0 -- x0f
+      \draw[rule,transform canvas={xshift=.09cm}] (x0) --
+        node[right] {$\lambda^+_{a,i,\sitestates,\emptyvec}$}
+        (x0f);
+      \draw[rule,transform canvas={xshift=-.09cm}] (x0f) --
+        node[left] {$\lambda^-_{a,i,\sitestates,\emptyvec}$}
+        (x0);
+      % x1f -- x1
+      \draw[rule,transform canvas={xshift=.09cm}] (x1f) --
+        node[right] {$\lambda^+_{a,i,\sitestates,\neighbours_1}$}
+        (x1);
+      \draw[rule,transform canvas={xshift=-.09cm}] (x1) --
+        node[left] {$\lambda^-_{a,i,\sitestates,\neighbours_1}$}
+        (x1f);
+      % x0f -- x1
+      \draw[rule,transform canvas={yshift=.09cm}] (x0f) --
+        node[above] {$\gamma^+_{a,i_1,\sitestates+i,b,j,\sitestates_{i_1}}$}
+        (x1);
+      \draw[rule,transform canvas={yshift=-.09cm}] (x1) --
+        node[below] {$\gamma^-_{a,i_1,\sitestates+i,b,j,\sitestates_{i_1}}$}
+        (x0f);
+      %
+      % middle square
+      %
+      \node[outer sep=.2cm] (xn) at (7.5,0) {$x_n$};
+      \node[outer sep=.2cm] (xnf) at (7.5,-3) {$\widehat{x_n}$};
+      % x1f -- xn
+      \draw[rule,transform canvas={yshift=.09cm}] (x1f) -- (xn);
+      \draw[rule,transform canvas={yshift=-.09cm}] (xn) --
+        node[below] {$\ldots$} (x1f);
+      % xn -- xnf
+      \draw[rule,transform canvas={xshift=.09cm}] (xn) --
+        node[right] {$\lambda^+_{a,i,\sitestates,\neighbours_n}$}
+        (xnf);
+      \draw[rule,transform canvas={xshift=-.09cm}] (xnf) --
+        node[left] {$\lambda^-_{a,i,\sitestates,\neighbours_n}$}
+        (xn);
+      % x1 -- xnf
+      \draw[rule,transform canvas={yshift=.09cm}] (x1) --
+        node[above] {$\ldots$} (xnf);
+      \draw[rule,transform canvas={yshift=-.09cm}] (xnf) -- (x1);
+      %
+      % nth square
+      %
+      \node (xn+1) at (11.5,-3) {$x_{n+1}$};
+      \node (xn+1f) at (11.5,0) {$\widehat{x_n}_{+1}$};
+      % xn -- xn+1f
+      \draw[rule,transform canvas={yshift=.09cm}] (xn) --
+        node[above] {$\gamma^+_{a,i_n,\sitestates,b',j',\sitestates_{i_n}}$}
+        (xn+1f);
+      \draw[rule,transform canvas={yshift=-.09cm}] (xn+1f) --
+        node[below] {$\gamma^-_{a,i_n,\sitestates,b',j',\sitestates_{i_n}}$}
+        (xn);
+      % xn+1f -- xn+1
+      \draw[rule,transform canvas={xshift=.09cm}] (xn+1f) --
+        node[right] {$\lambda^+_{a,i,\sitestates,\neighbours_{n+1}}$}
+        (xn+1);
+      \draw[rule,transform canvas={xshift=-.09cm}] (xn+1) --
+        node[left] {$\lambda^-_{a,i,\sitestates,\neighbours_{n+1}}$}
+        (xn+1f);
+      % x0f -- x1
+      \draw[rule,transform canvas={yshift=.09cm}] (xnf) --
+        node[above] {$\gamma^+_{a,i_n,\sitestates+i,b',j',\sitestates_{i_n}}$}
+        (xn+1);
+      \draw[rule,transform canvas={yshift=-.09cm}] (xn+1) --
+        node[below] {$\gamma^-_{a,i_n,\sitestates+i,b',j',\sitestates_{i_n}}$}
+        (xnf);
+    \end{tikzpicture}
+  % \end{center}
+  % with $\neighbours_1$ the neighbour vector of $u$ in $x_1$.
+  with $\neighbours_1(i) = \star$ for all $i$ except $i_1$,
+  where $\neighbours_1(i_1) = \neighbours(i_1)$.
+  In general, $\neighbours_n(i)$ is equal to $\neighbours(i)$
+  if $i \leq_{x_\agents(u)} i_n$ and $\star$ otherwise.
+
+  By detailed balance we obtain the following relation
+  for the first square
+  \begin{equation}
+    \label{eq:fb1}
+    \Lambda_{a,i,\sitestates,\emptyvec} \,
+    \Gamma_{a,i_1,\sitestates+i,b,j,\sitestates_{i_1}} =
+    \Gamma_{a,i_1,\sitestates,b,j,\sitestates_{i_1}} \,
+    \Lambda_{a,i,\sitestates,\neighbours_1}
+  \end{equation}
+
+  We construct the $n$th square
+  starting from $x_n$ by flipping site $i$
+  and binding site $i_n$ to site $j'$ in an agent of type $b'$
+  as indicated by $\neighbours(i_n)$.
+  This neighbour has an internal state vector $\sitestates_{i_n}$.
+  Again, by detailed balance we get
+  \begin{equation*}
+    \label{eq:fbn}
+    \Lambda_{a,i,\sitestates,\neighbours_n} \,
+    \Gamma_{a,i,\sitestates+i,b',j',\sitestates_{i_n}} =
+    \Gamma_{a,i,\sitestates,b',j',\sitestates_{i_n}} \,
+    \Lambda_{a,i,\sitestates,\neighbours_{n+1}}
+  \end{equation*}
+  % with $\neighbours_n$ the neighbour vector of $u$ in $x_n$.
+
+  \eqn{fb1} can be rewritten as
+  \begin{equation*}
+    \frac{
+      \Lambda_{a,i,\sitestates,\neighbours_1}}{
+      \Lambda_{a,i,\sitestates,\emptyvec}} =
+    \frac{
+      \Gamma_{a,i,\sitestates+i,
+              b,j,\sitestates_{i_1}}}{
+      \Gamma_{a,i,\sitestates,
+              b,j,\sitestates_{i_1}}}
+  \end{equation*}
+  Then we substitute $\Lambda_{a,i,\sitestates,\neighbours_1}$
+  according to \eqn{fbn} and obtain
+  \begin{equation*}
+    \frac{
+      \Lambda_{a,i,\sitestates,\neighbours_2}}{
+      \Lambda_{a,i,\sitestates,\emptyvec}} =
+    \frac{
+      \Gamma_{a,i,\sitestates+i,
+              b,j,\sitestates_{i_1}}}{
+      \Gamma_{a,i,\sitestates,
+              b,j,\sitestates_{i_1}}} \,
+    \frac{
+      \Gamma_{a,i,\sitestates+i,
+              c,k,\sitestates_{i_2}}}{
+      \Gamma_{a,i,\sitestates,
+              c,k,\sitestates_{i_2}}}
+  \end{equation*}
+  We repeat until we recover \eqn{flipbind}.
+\end{proof}
 
 
 
