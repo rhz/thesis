@@ -401,8 +401,10 @@ Unlike cooperative assembly systems,
 here sites are \emph{distinguishable}
 % and thus have a unique name that distinguishes it from the rest
 as in Kappa.
-Hence, we will use contact maps as defined in \sct{kappa}
-as graphs in this section.
+Hence, we will extend contact maps $g$ as defined in \sct{kappa}
+with maps that assign an internal state in $\set{0,1}$
+to sites in $\sites_{\anon{g}}$
+and use that as graphs in this section.
 % TODO: add the order of sites wherever it's used.
 % In addition, sites are \emph{ordered}
 % by a total order $<_a$ with a an agent type
@@ -440,12 +442,6 @@ Graphically, flips are of the form
         \node at (90:.7) {\Large .};
         \node at (70:.7) {\Large .};
       }};
-    % \begin{scope}[shift={(2,-0.5)}]
-    %   \draw[rule] (0,.09) -- node[above] {
-    %     $\lambda^+_{\tp,x,\sitestates,\neighbours}$} ++(1.4,0);
-    %   \draw[rule] (1.4,-.09) -- node[below] {
-    %     $\lambda^-_{\tp,x,\sitestates,\neighbours}$} ++(-1.4,0);
-    % \end{scope}
     \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
       +(1.3,0) coordinate (r);
     \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
@@ -477,23 +473,30 @@ and site $x$ changes state from white to black.
 As usual, we write $r_L$ for the left-hand side contact map of rule $r$
 and $r_R$ for that of the right-hand side,
 both contact maps over some fixed contact graph $C$.
-The rate constants of the forward and backward flip rules are parametrised
-by the type $\tp := r_{L,\agents}(u) = r_{R,\agents}(u)$ of $u$ in $C$,
-the type $i := r_{L,\sites}(x) = r_{R,\sites}(x)$ of $x$,
-the internal state vector
-$\sitestates \in \set{0,1}^{\sitemap_{r_L}^{-1}(u)}$ of $u$,
-% TODO: do we need to know site its connected to as well?
-and the vector of neighbours' types
-$\neighbours \in (\agents_C \union \set{\star})^{\sitemap_{r_L}^{-1}(u)}$
-where $\star$ represents a free site.
+
+In a flip we have a complete view
+over the internal state of sites in $u$
+and those of the neighbours,
+which we characterise as vectors indexed by site types
+in $I := \sitemap_C^{-1}(r_{L,\agents}(u))$.
+The rate constants of the forward and backward
+flip rules are then parametrised by the agent type
+$a := r_{L,\agents}(u) = r_{R,\agents}(u)$ of $u$ in $C$,
+the site type $i := r_{L,\sites}(x) = r_{R,\sites}(x)$ of $x$,
+the internal state vector $\sitestates \in \set{0,1}^I$ of $u$,
+% TODO: how do i get the internal state vector of the neighbour?
+and the binding state vector $\neighbours \in
+((\agents_C \times \sites_C) \union \set{\star})^I$
+% ((\agents_C \times \sites_C \times \set{0,1}^I) \union \set{\star})^I
+where $\star$ is used to denote a free site.
 % When all sites are free we use $\emptyvec$.
-We write $\lambda^+_{\tp,i,\sitestates,\neighbours}$
+We write $\lambda^+_{a,i,\sitestates,\neighbours}$
 for the rate constant of the forward rule,
-$\lambda^-_{\tp,i,\sitestates,\neighbours}$
+$\lambda^-_{a,i,\sitestates,\neighbours}$
 for that of the backward rule,
-and $\Lambda_{\typeof(u),i,\sitestates,\neighbours} =
-\lambda^-_{\typeof(u),i,\sitestates,\neighbours}/
-\lambda^+_{\typeof(u),i,\sitestates,\neighbours}$ for their ratio.
+and $\Lambda_{a,i,\sitestates,\neighbours} =
+\lambda^-_{a,i,\sitestates,\neighbours}/
+\lambda^+_{a,i,\sitestates,\neighbours}$ for their ratio.
 % between the backward and forward rate constants. % of flips.
 % TODO: do we (have to) use them?
 % Also, later we use $\sitestatesof_x(u)$ and $\neighboursof_x(u)$
@@ -529,12 +532,6 @@ They are of the form
           \site[n6]{s3}{-70:.33};
         \end{scope}
       }};
-    % \begin{scope}[shift={(2.3,0)}]
-    %   \draw[rule] (0,.09) -- node[above] {
-    %     $\gamma^+_{\type,a,\sitestates,\type',b,\sitestates'}$} ++(2,0);
-    %   \draw[rule] (2,-.09) -- node[below] {
-    %     $\gamma^-_{\type,a,\sitestates,\type',b,\sitestates'}$} ++(-2,0);
-    % \end{scope}
     \path (lhs.east) +(.3,.09) edge[rule] +(1,.09)
       +(1.3,0) coordinate (r);
     \path (lhs.east) +(1,-.09) edge[rule] +(.3,-.09);
@@ -564,48 +561,55 @@ They are of the form
       }};
   \end{tikzpicture}
 \end{center}
-% with $\tp,\tp'$ the types of nodes $u,v$;
-% $\sitestates,\sitestates'$ their internal state vectors
-% and $a,b$ any two sites of $u,v$, respectively.
 where the three grey dots are an ellipsis
 meaning that nodes $u$ and $v$ must declare
 an internal state to all sites they have.
 The rate constant of the binding and unbinding rules
 depends on the internal state of the sites
 on the participating nodes $\sitestates$ and $\sitestates'$
-as well as the type of the nodes $\tp,\tp'$ and the bound sites~$i,j$.
-We write $\Gamma_{\tp,i,\sitestates,\tp',j,\sitestates'} =
-\gamma^-_{\tp,i,\sitestates,\tp',j,\sitestates'}/
-\gamma^+_{\tp,i,\sitestates,\tp',j,\sitestates'}$ for
+as well as the type of the nodes $a,b$ and the bound sites~$i,j$.
+We write $\Gamma_{a,i,\sitestates,b,j,\sitestates'} =
+\gamma^-_{a,i,\sitestates,b,j,\sitestates'}/
+\gamma^+_{a,i,\sitestates,b,j,\sitestates'}$ for
 the ratio between the backward and forward rate constants of binds.
 
 We refer to systems composed by flips and binds
 as \emph{flip-bind systems} or FB-systems for short.
 We will show how the energy function of an FB-system looks like.
-But first, we prove a lemma that shows us
-how detailed balance fixes the value of some $\Lambda$ ratios
-and so reduces the number of free parameters in the system.
+But first, we prove two lemmas that show us how detailed balance
+fixes the value of some ratios of rate constants,
+reducing so the number of free parameters in the system.
 To simplify notation in the following lemmas,
 let $\sitestates+i$ be the vector $\sitestates$
 with site $i$ flipped.
 
 \begin{lemma}
   \label{lemma:flipflip}
-  Let $x$ be a state of an FB-system with detailed balance.
-  For all nodes $u$ in $x$ and sites $i,j$ in $u$ it is true that
+  % Let $x$ be a state of an FB-system with detailed balance.
+  % For all nodes $u$ in $x$ and sites $i,j$ in $u$ it is true that
+  Let $C$ be a contact graph.
+  For all agent types $a \in \agents_C$,
+  let $I = \sitemap_C^{-1}(a)$,
+  and for all
+  site types $i \in I$, % \sites_C such that $\sitemap_C(i) = a$,
+  internal state vectors
+  $\sitestates \in \set{0,1}^I$ and
+  binding state vectors
+  $\neighbours \in ((\agents_C\times\sites_C)\union\set{\star})^I$,
+  an FB-system with detailed balance verifies
   \begin{equation}
     \label{eq:flipflip}
-    \Lambda_{\tp,i,\sitestates,\neighbours}
-    \Lambda_{\tp,j,\sitestates+i,\neighbours} =
-    \Lambda_{\tp,j,\sitestates,\neighbours}
-    \Lambda_{\tp,i,\sitestates+j,\neighbours}
+    \Lambda_{a,i,\sitestates,\neighbours} \,
+    \Lambda_{a,j,\sitestates+i,\neighbours} =
+    \Lambda_{a,j,\sitestates,\neighbours} \,
+    \Lambda_{a,i,\sitestates+j,\neighbours}
   \end{equation}
-  where $\tp$ is the type of $u$,
-  $\sitestates$ its internal state vector
-  and $\neighbours$ its vector of neighbours.
+  % where $a$ is the type of $u$,
+  % $\sitestates$ its internal state vector
+  % and $\neighbours$ its vector of neighbours.
 \end{lemma}
 \begin{proof}
-  Take any node $u$ in $x$.
+  Pick a state $x$ and a node $u$ in $x$.
   We can find a square in the transition graph
   with 4 flips starting from $x$:
   flip site $i$ first then $j$ and flip $j$ first then $i$.
@@ -617,31 +621,31 @@ with site $i$ flipped.
       \node (xij) at (4,-3) {$x_{ij}$};
       % x -- xi
       \path (.5,.09) edge[rule]
-        node[above] {$\lambda^+_{\tp,i,\sitestates,\neighbours}$}
+        node[above] {$\lambda^+_{a,i,\sitestates,\neighbours}$}
         (3.5,.09);
       \path (3.5,-.09) edge[rule]
-        node[below] {$\lambda^-_{\tp,i,\sitestates,\neighbours}$}
+        node[below] {$\lambda^-_{a,i,\sitestates,\neighbours}$}
         (.5,-.09);
       % x -- xj
       \path (.09,-.5) edge[rule]
-        node[right] {$\lambda^+_{\tp,j,\sitestates,\neighbours}$}
+        node[right] {$\lambda^+_{a,j,\sitestates,\neighbours}$}
         (.09,-2.5);
       \path (-.09,-2.5) edge[rule]
-        node[left] {$\lambda^-_{\tp,j,\sitestates,\neighbours}$}
+        node[left] {$\lambda^-_{a,j,\sitestates,\neighbours}$}
         (-.09,-.5);
       % xi -- xij
       \path (4.09,-.5) edge[rule]
-        node[right] {$\lambda^+_{\tp,j,\sitestates+i,\neighbours}$}
+        node[right] {$\lambda^+_{a,j,\sitestates+i,\neighbours}$}
         (4.09,-2.5);
       \path (3.91,-2.5) edge[rule]
-        node[left] {$\lambda^-_{\tp,j,\sitestates+i,\neighbours}$}
+        node[left] {$\lambda^-_{a,j,\sitestates+i,\neighbours}$}
         (3.91,-.5);
       % x -- xi
       \path (.5,-2.91) edge[rule]
-        node[above] {$\lambda^+_{\tp,i,\sitestates+j,\neighbours}$}
+        node[above] {$\lambda^+_{a,i,\sitestates+j,\neighbours}$}
         (3.5,-2.91);
       \path (3.5,-3.09) edge[rule]
-        node[below] {$\lambda^-_{\tp,i,\sitestates+j,\neighbours}$}
+        node[below] {$\lambda^-_{a,i,\sitestates+j,\neighbours}$}
         (.5,-3.09);
     \end{tikzpicture}
   \end{center}
@@ -650,14 +654,14 @@ with site $i$ flipped.
   Hence, starting from $x$ and going through the cycle
   in one direction and the reverse we get
   \begin{equation*}
-    \lambda^+_{\tp,i,\sitestates,\neighbours}
-    \lambda^+_{\tp,j,\sitestates+i,\neighbours}
-    \lambda^-_{\tp,i,\sitestates+j,\neighbours}
-    \lambda^-_{\tp,j,\sitestates,\neighbours} =
-    \lambda^+_{\tp,j,\sitestates,\neighbours}
-    \lambda^+_{\tp,i,\sitestates+j,\neighbours}
-    \lambda^-_{\tp,j,\sitestates+i,\neighbours}
-    \lambda^-_{\tp,i,\sitestates,\neighbours}
+    \lambda^+_{a,i,\sitestates,\neighbours} \,
+    \lambda^+_{a,j,\sitestates+i,\neighbours} \,
+    \lambda^-_{a,i,\sitestates+j,\neighbours} \,
+    \lambda^-_{a,j,\sitestates,\neighbours} =
+    \lambda^+_{a,j,\sitestates,\neighbours} \,
+    \lambda^+_{a,i,\sitestates+j,\neighbours} \,
+    \lambda^-_{a,j,\sitestates+i,\neighbours} \,
+    \lambda^-_{a,i,\sitestates,\neighbours}
   \end{equation*}
   By rearranging we obtain \eqn{flipflip}.
 \end{proof}
