@@ -401,10 +401,16 @@ Unlike cooperative assembly systems,
 here sites are \emph{distinguishable}
 % and thus have a unique name that distinguishes it from the rest
 as in Kappa.
-Hence, we will extend contact maps $g$ as defined in \sct{kappa}
-with maps that assign an internal state in $\set{0,1}$
-to sites in $\sites_{\anon{g}}$
-and use that as graphs in this section.
+Hence, we extend contact maps $g$ as defined in~\sct{kappa}
+with a map $\sitestate_g$
+% that assign an internal state $\sitestate_g(i)$ in $\set{0,1}$
+% to sites $i$ in $\sites_{\anon{g}}$
+that assigns an internal state vector
+$\sitestate_g(u)$ in $\set{0,1}^{\sitemap_C^{-1}(g_\agents(u))}$
+to agents $u$ in $\agents_{\anon{g}}$.
+The internal state vector is indexed by
+the sites of the agent type $g_\agents(u)$ of $u$.
+We use these extended contact maps as graphs in this section.
 % TODO: add the order of sites wherever it's used.
 % In addition, sites are \emph{ordered}
 % by a total order $<_a$ with a an agent type
@@ -484,7 +490,7 @@ flip rules are then parametrised by the agent type
 $a := r_{L,\agents}(u) = r_{R,\agents}(u)$ of $u$ in $C$,
 the site type $i := r_{L,\sites}(x) = r_{R,\sites}(x)$ of $x$,
 the internal state vector $\sitestates \in \set{0,1}^I$ of $u$,
-% TODO: how do i get the internal state vector of the neighbour?
+% TODO: type of the internal state vector of the neighbour?
 and the binding state vector $\neighbours \in
 ((\agents_C \times \sites_C) \union \set{\star})^I$
 % ((\agents_C \times \sites_C \times \set{0,1}^I) \union \set{\star})^I
@@ -738,10 +744,11 @@ on the sites of an agent type $a$ in the contact graph $C$.
   % or does (ii) first then (i).
   After performing (i) then (ii) or (ii) then (i)
   % the flip and bind in any of the two possible orders
-  we reach state $x_1$.\\[.09cm]
+  we reach state $x_1$.\\[.23cm]
   % \begin{center}
   % \vspace{.2cm}
-  \hspace*{-.3cm}
+  % \hspace*{-.3cm}
+  \resizebox{\linewidth}{!}{%
     \begin{tikzpicture}
       %
       % first square
@@ -824,7 +831,7 @@ on the sites of an agent type $a$ in the contact graph $C$.
       \draw[rule,transform canvas={yshift=-.09cm}] (xn+1) --
         node[below] {$\gamma^-_{a,i_n,\sitestates+i,b',j',\sitestates_{i_n}}$}
         (xnf);
-    \end{tikzpicture}
+    \end{tikzpicture}}
   % \end{center}
   % with $\neighbours_1$ the neighbour vector of $u$ in $x_1$.
   with $\neighbours_1(i) = \star$ for all $i$ except $i_1$,
@@ -888,8 +895,90 @@ on the sites of an agent type $a$ in the contact graph $C$.
   We repeat until we recover \eqn{flipbind}.
 \end{proof}
 
+Now we proceed to compute the energy function.
 
+\begin{proposition}
+  \label{prop:fb-energy}
+  Given an FB-system with detailed balance,
+  its energy function is
+  \begin{equation}
+    \label{eq:fb-energy}
+    % E(x) = \sum_{u \in \agents_{\anon{x}}
+    % \sum_{s \in \sitemap_{\anon{x}}^{-1}(u)}
+    E(x) = \sum_{s \in \sites_{\anon{x}}}
+    \ln\,\Lambda_{a,i,\sitestates_u(i),\emptyvec} +
+    \sum_{(s,t) \in \edges_{\anon{x}}}
+    \ln\,\Gamma_{a,i,\sitestate_x(u),b,j,\sitestate_x(v)}
+  \end{equation}
+  where $u = \sitemap_{\anon{x}}(s)$, $v = \sitemap_{\anon{x}}(t)$,
+  $a = x_\agents(u)$, $b = x_\agents(v)$,
+  $i = x_\sites(s)$, $j = x_\sites(t)$,
+  and $\sitestates_w: \sites_C \to \set{0,1}^I$
+  a family of functions indexed by $w \in \agents_{\anon{x}}$,
+  with $I = \sitemap_C^{-1}(x_\agents(w))$,
+  defined as
+  \begin{equation*}
+    \sitestates_u(i)(j) = \begin{cases}
+      \sitestate_x(u)(j) & \text{if $j <_{x_\agents(u)} i$} \\
+      0 & \text{otherwise}
+    \end{cases}
+  \end{equation*}
+\end{proposition}
+\begin{proof}
+  Let $x_0$ be the state where all nodes are disconnected
+  and the internal state of their sites is set to $0$.
+  We set $E(x_0) = 0$
+  and construct a canonical path from $x_0$ to $x$
+  to assign an energy $E(x)$ to a state $x$
+  % by constructing a canonical path from $x_0$ to $x$
+  as the sum of the energy contributions of each step along the path.
+  The canonical path starts by performing all flips first
+  (in the order set by $<_a$) and then all bindings.
+  % In an FB-system there is at most
+  % one transition between any two states.
+  Using $E(y) - E(x) = \ln\,q(y,x) - \ln\,q(x,y)$ to compute
+  the energy contribution of each flip and bind,
+  we obtain \eqn{fb-energy}.
+\end{proof}
 
+Finally, we would like to know when an FB-system
+has detailed balance.
+
+\begin{proposition}
+  An FB-system has detailed balance if and only if
+  \eqns{flipflip}{flipbind} hold for all states,
+  nodes and sites in the system.
+\end{proposition}
+\begin{proof}
+  By \lems{flipflip}{flipbind},
+  the forward direction has been already proved.
+  The backward direction amounts to proving that
+  the definition of \eqn{fb-energy}
+  is independent of the choice of path,
+  \ie that any alternative energy function $E'$
+  that uses a non-canonical path for its definition
+  is equivalent to $E$ as defined in \prop{fb-energy}.
+  In a non-canonical path
+  we might have two types of non-canonical flips:
+  those that occur after a bind and those that happen in
+  an order different to the one specified by $<_a$.
+  The terms contributed by the latter can be transformed into
+  canonical ones using \eqn{flipflip}
+  and those contributed by the former using \eqn{flipbind}.
+  % This last transformation is equivalent to swapping the order
+  % in which the events occurred along the path.
+  Non-canonical binds that occur before a flip
+  can be transformed into canonical binds by a similar argument.
+\end{proof}
+
+% It is easy to see how an ANC model can be encoded as an FB-system
+% by flattening the hierarchy of sites.
+
+% Although a cooperative assembly system can be \emph{approximated}
+% by an FB-system where the degree of a node is encoded in
+% the number of sites in some fixed state, % in state 1,
+% it is yet unclear if an FB-system can simulate
+% a cooperative assembly system exactly.
 
 
 %%% Local Variables:
