@@ -200,8 +200,47 @@
 \author{Ricardo Honorato-Zimmer}
 
 % Abstract
-\if0
 \abstract{
+  We explore the direct and inverse problem of thermodynamics
+  in the context of rule-based modelling.
+  The direct problem can be concisely stated as
+  obtaining the rewriting rules and their rates
+  from the description of the energy landscape.
+  To tackle this problem,
+  we describe an energy function as
+  a finite set of connected patterns $\shapes$
+  and an energy cost function $\cost$
+  which associates real values to each of these energy patterns.
+  We use a finite set of reversible
+  graph rewriting rules $\generators$
+  to define the qualitative dynamics
+  by showing which transformations are possible.
+  Given $\generators$ and $\shapes$,
+  we construct a finite set of rules $\generators_{\shapes}$ which
+  i) has the same qualitative transition system as $\generators$ and
+  ii) when equipped with rates according to $\cost$,
+  defines a continuous-time Markov chain
+  that has detailed balance with respect to
+  the invariant \pmf determined by the energy function.
+  The construction relies on a technique for rule refinement
+  described in earlier work
+  and allows us to represent
+  thermodynamically consistent models
+  of biochemical interaction networks
+  in a concise manner.
+
+  The inverse problem, on the other hand,
+  is to i) check whether a rule-based model
+  has an energy function that describes its asymptotic behaviour
+  and if so ii) obtain the energy function
+  from the graph rewriting rules and their rates.
+  Although this problem is known to be undecidable
+  in the general case,
+  we find two suitable subsets of Kappa,
+  our rule-based modelling framework of choice,
+  were this question can be answer positively
+  and the form of their energy functions described analytically.
+  \if0
   We develop a new thermodynamic approach to stochastic graph rewriting.
   The ingredients are a finite set of reversible
   graph rewriting rules $\generators$ (called generating rules),
@@ -243,8 +282,8 @@
   % again an important point in some applications.
   an important point in the application of stochastic graph rewriting
   to the modelling of biochemical interaction networks.
+  \fi
 }
-\fi
 
 \begin{document}
 
